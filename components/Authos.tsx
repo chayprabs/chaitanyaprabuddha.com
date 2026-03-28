@@ -1,70 +1,46 @@
-const stats = [
-  { label: "Status", value: "In alpha" },
-  { label: "Stack", value: "AI / LLMs / Agents" },
-  { label: "Built for", value: "Founders / SaaS / Indies" }
-];
-
 export default function Authos() {
   return (
     <section
       id="authos"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
+      className="w-full py-[48px]"
     >
       <div className="container">
-        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
-          AUTHOS
-        </p>
-
-        <div className="rounded-[8px] bg-[#ECEAE6] p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            <div>
-              <h2 className="text-[22px] font-bold leading-tight text-[#1a1a18]">
+        <div className="rounded-[6px] bg-[#ECEAE5] px-[28px] py-[24px]">
+          <div className="flex items-start justify-between gap-6">
+            <div className="max-w-[520px]">
+              <h2 className="mb-1 text-[20px] font-semibold leading-tight text-[#1a1a18]">
                 Authos
               </h2>
-              <p className="mt-2 max-w-[420px] text-[15px] font-light leading-[1.85] text-[#6b6860]">
+              <p className="text-[15px] font-normal leading-[1.7] text-[#6b6860]">
                 SEO is still slow, still manual, and still a full time job for
                 most teams. Authos replaces it entirely.
               </p>
+              <p className="mt-2 text-[14px] font-light leading-[1.8] text-[#6b6860]">
+                An autonomous SEO and GEO agent that handles the full content
+                pipeline using LLMs, built for indie hackers, founders, and
+                SaaS companies who want to rank without thinking about it.
+              </p>
             </div>
 
-            <span className="w-fit text-[12px] font-light text-[#9a9890]">
+            <span className="shrink-0 text-[12px] font-normal text-[#9a9890]">
               Founder
             </span>
           </div>
 
-          <div className="my-6 border-t-[0.5px] border-t-[var(--color-border)]" />
+          <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <p className="text-[13px] font-light leading-[1.8] text-[#9a9890]">
+              Founders · SaaS · Indies
+            </p>
 
-          <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
-            An autonomous SEO and GEO agent that handles the full content
-            pipeline using LLMs, built for indie hackers, founders, and SaaS
-            companies who want to rank without thinking about it.
-          </p>
-
-          <div className="my-6 border-t-[0.5px] border-t-[var(--color-border)]" />
-
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {stats.map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#9a9890]">
-                    {stat.label}
-                  </p>
-                  <p className="mt-1 whitespace-nowrap text-[15px] font-medium leading-[1.8] text-[#1a1a18]">
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <span className="inline-flex items-center gap-2 rounded-[4px] bg-[#1a1a18] px-[14px] py-[6px] text-[12px] font-normal text-white">
-                <span className="h-[6px] w-[6px] rounded-full bg-[#c84b2f]" />
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="inline-flex items-center gap-2 text-[12px] font-normal text-[#4a8a1e]">
+                <span className="h-[6px] w-[6px] rounded-full bg-[#4a8a1e]" />
                 Live in alpha
               </span>
 
               <a
                 href="#contact"
-                className="text-[13px] font-normal text-[#1a1a18] transition-all duration-200 ease-in-out hover:underline"
+                className="rounded-[4px] border border-[rgba(0,0,0,0.2)] bg-transparent px-[14px] py-[6px] text-[12px] font-normal text-[#1a1a18] transition-colors duration-150 ease-in-out hover:bg-[rgba(0,0,0,0.04)]"
               >
                 Join waitlist &rarr;
               </a>

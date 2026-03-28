@@ -57,10 +57,10 @@ export default function Now() {
   return (
     <section
       id="now"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
+      className="w-full py-[48px]"
     >
       <div className="container">
-        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="section-label mb-4">
           NOW
         </p>
 
@@ -102,7 +102,7 @@ export default function Now() {
           </span>
         </div>
 
-        <div className="my-12 border-t-[0.5px] border-t-[var(--color-border)]" />
+        <div className="my-8" />
 
         <div className="grid gap-10 md:grid-cols-3">
           {infoColumns.map((column) => (

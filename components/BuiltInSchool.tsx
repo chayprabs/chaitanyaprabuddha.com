@@ -35,19 +35,19 @@ const writingBadges = [
 export default function BuiltInSchool() {
   return (
     <section
-      id="built-in-school"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
+      id="beforebits"
+      className="w-full py-[48px]"
     >
       <div className="container">
-        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
-          BUILT IN SCHOOL
+        <p className="section-label mb-4">
+          BEFORE BITS
         </p>
 
         <div>
           {schoolProjects.map((project, index) => (
             <article
               key={project.name}
-              className={`py-7 ${
+              className={`pt-5 pb-4 ${
                 index > 0 ? "border-t-[0.5px] border-t-[var(--color-border)]" : ""
               }`}
             >
@@ -84,7 +84,7 @@ export default function BuiltInSchool() {
             </article>
           ))}
 
-          <div className="border-t-[0.5px] border-t-[var(--color-border)] pt-7">
+          <div className="pt-4">
             <h3 className="font-bebas mb-6 text-[13px] font-medium uppercase tracking-[0.1em] text-[#9a9890]">
               Writing
             </h3>

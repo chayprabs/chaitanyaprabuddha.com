@@ -50,6 +50,39 @@ svg {
   padding-inline: 20px;
 }
 
+.section-label {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9a9890;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-section-link {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 13px;
+  color: #9a9890;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transition: color 0.15s ease-in-out;
+}
+
+.hero-section-link:hover {
+  color: #1a1a18;
+}
+
 .font-bebas,
 .font-jost,
 .font-lato,

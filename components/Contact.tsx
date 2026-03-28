@@ -28,7 +28,7 @@ const contactLinks = [
     )
   },
   {
-    href: "https://linkedin.com/in/chaitanyaprabuddha",
+    href: "https://linkedin.com/in/chaitanya-prabuddha-bits94",
     label: "LinkedIn",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-[18px] w-[18px]">
@@ -40,7 +40,7 @@ const contactLinks = [
     )
   },
   {
-    href: "mailto:your@email.com",
+    href: "mailto:hi@chaitanyaprabuddha.com",
     label: "Email",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-[18px] w-[18px]">
@@ -67,23 +67,27 @@ export default function Contact() {
     >
       {isExpanded ? (
         <div className="flex items-start gap-3 sm:gap-5">
-          {contactLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={link.label}
-              className="flex min-w-[48px] flex-col items-center"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18]">
-                {link.icon}
-              </span>
-              <span className="font-lato mt-1.5 text-[10px] text-[#6b6860] sm:text-[11px]">
-                {link.label}
-              </span>
-            </a>
-          ))}
+          {contactLinks.map((link) => {
+            const isEmail = link.href.startsWith("mailto:");
+
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                target={isEmail ? undefined : "_blank"}
+                rel={isEmail ? undefined : "noopener noreferrer"}
+                aria-label={link.label}
+                className="flex min-w-[48px] flex-col items-center"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18]">
+                  {link.icon}
+                </span>
+                <span className="font-lato mt-1.5 text-[10px] text-[#6b6860] sm:text-[11px]">
+                  {link.label}
+                </span>
+              </a>
+            );
+          })}
         </div>
       ) : (
         <div className="flex items-center gap-1">

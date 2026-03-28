@@ -24,7 +24,7 @@ const socialLinks = [
     )
   },
   {
-    href: "https://linkedin.com/in/chaitanyaprabuddha",
+    href: "https://linkedin.com/in/chaitanya-prabuddha-bits94",
     label: "LinkedIn",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-[18px] w-[18px]">
@@ -36,7 +36,7 @@ const socialLinks = [
     )
   },
   {
-    href: "mailto:your@email.com",
+    href: "mailto:hi@chaitanyaprabuddha.com",
     label: "Email",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-[18px] w-[18px]">
@@ -55,10 +55,10 @@ export default function About() {
   return (
     <section
       id="about"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
+      className="w-full pt-[36px] pb-[48px]"
     >
       <div className="container">
-        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="section-label mb-4">
           ABOUT
         </p>
 
@@ -73,23 +73,27 @@ export default function About() {
               actually do.
             </p>
 
-            <p className="mt-4 text-[13px] font-light leading-[1.85] text-[#9a9890]">
+            <p className="mt-3 text-[13px] font-light leading-[1.85] text-[#9a9890]">
               B.E. Computer Science - BITS Pilani - Pilani, Rajasthan
             </p>
 
-            <div className="mt-5 flex items-center gap-5 text-[#6b6860]">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={link.label}
-                  className="transition-colors duration-200 ease-in-out hover:text-[#1a1a18]"
-                >
-                  {link.icon}
-                </a>
-              ))}
+            <div className="mt-3 flex items-center gap-5 text-[#6b6860]">
+              {socialLinks.map((link) => {
+                const isEmail = link.href.startsWith("mailto:");
+
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={isEmail ? undefined : "_blank"}
+                    rel={isEmail ? undefined : "noopener noreferrer"}
+                    aria-label={link.label}
+                    className="transition-colors duration-200 ease-in-out hover:text-[#1a1a18]"
+                  >
+                    {link.icon}
+                  </a>
+                );
+              })}
             </div>
           </div>
 

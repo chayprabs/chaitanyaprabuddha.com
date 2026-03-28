@@ -21,10 +21,10 @@ export default function Achievements() {
   return (
     <section
       id="achievements"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
+      className="w-full py-[48px]"
     >
       <div className="container">
-        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="section-label mb-4">
           ACHIEVEMENTS
         </p>
 
@@ -32,12 +32,8 @@ export default function Achievements() {
           {achievements.map((achievement, index) => (
             <article
               key={achievement.name}
-              className={`grid gap-6 py-7 md:grid-cols-[120px_1fr] md:gap-8 ${
-                index > 0 ? "border-t-[0.5px] border-t-[var(--color-border)] " : ""
-              }${
-                index === achievements.length - 1
-                  ? "border-b-[0.5px] border-b-[var(--color-border)]"
-                  : ""
+              className={`grid gap-6 py-5 md:grid-cols-[120px_1fr] md:gap-8 ${
+                index > 0 ? "border-t-[0.5px] border-t-[var(--color-border)]" : ""
               }`}
             >
               <div>
