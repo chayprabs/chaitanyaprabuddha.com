@@ -1,26 +1,25 @@
-# Personal Website
+# chaitanyaprabuddha.com
 
-My personal website — built to share who I am, what I'm working on, and what I've built.
+Personal website of Chaitanya Prabuddha — CS student at BITS Pilani, AI/ML researcher, and founder of [Authos](https://authos.com).
+
+## What's on it
+
+- **About** — who I am, what I'm working on, and where to find me
+- **Projects** — LocalYapper (on-device voice dictation), StemLM (browser extension for structured LLM responses), IPL2026-LM (cricket prediction engine)
+- **Research** — EdgeLM (C inference engine for 3B LLMs on consumer hardware), and ongoing LLM-as-computer research at BITS Pilani under Dr. Dhruv Kumar
+- **Achievements** — 1st at Solve for Pilani (Apogee Fest), 3rd at BITSpreneur
+- **Before BITS** — Developernoon (42 DA, 15k/mo), Monial ($450+ MRR), and writing that front-paged Hacker News
+- **Beyond the Code** — music, chess, books
+- **Authos** — my current startup: autonomous SEO/GEO agent for founders and SaaS teams
 
 ## Stack
 
-- **Next.js** (App Router)
+- **Next.js 15** (App Router)
+- **React 19**
 - **TypeScript**
-- **Tailwind CSS**
+- **Tailwind CSS v4**
 
-## Sections
-
-- **Hero** — tagline and intro
-- **About** — background, links, and a bit about me
-- **Projects** — things I've shipped
-- **Research** — AI/ML work
-- **Achievements** — highlights
-- **Now** — what I'm currently up to
-- **Authos** — my startup
-- **Built In School** — things built during college
-- **Contact** — get in touch
-
-## Running Locally
+## Running locally
 
 ```bash
 npm install
