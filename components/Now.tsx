@@ -46,31 +46,39 @@ function getLevel(week: number, day: number) {
 const cells = Array.from({ length: 36 * 7 }, (_, index) => {
   const week = Math.floor(index / 7);
   const day = index % 7;
-  const level = getLevel(week, day);
 
   return {
     key: `${week}-${day}`,
-    level
+    level: getLevel(week, day)
   };
 });
 
 export default function Now() {
   return (
-    <section id="now" className="w-full border-t border-black/[0.07] px-10 py-[72px]">
+    <section
+      id="now"
+      className="w-full border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] px-5 py-[72px] md:px-10"
+    >
       <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
         NOW
       </p>
 
-      <p className="mb-4 text-[13px] text-[#6b6960] [font-family:var(--font-satoshi)]">
+      <p className="mb-4 text-[13px] leading-[1.7] text-[#6b6960] [font-family:var(--font-satoshi)]">
         days something clicked
       </p>
 
       <div className="overflow-x-auto">
-        <div className="grid w-fit grid-flow-col grid-cols-[repeat(36,13px)] grid-rows-7 gap-1">
+        <div
+          className="grid w-fit gap-1"
+          style={{
+            gridTemplateColumns: "repeat(36, 13px)",
+            gridTemplateRows: "repeat(7, 13px)"
+          }}
+        >
           {cells.map((cell) => (
             <div key={cell.key} className="group relative">
               <div
-                className={`h-[13px] w-[13px] cursor-pointer rounded-[2px] ${LEVEL_STYLES[cell.level as keyof typeof LEVEL_STYLES]}`}
+                className={`h-[13px] w-[13px] cursor-pointer rounded-[2px] transition-opacity duration-200 ease-in-out hover:opacity-90 ${LEVEL_STYLES[cell.level as keyof typeof LEVEL_STYLES]}`}
               />
               <div className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-[8px] bg-[#1a1a18] px-2 py-1 text-[11px] text-[#F7F4EE] opacity-0 transition-opacity duration-150 ease-in-out group-hover:opacity-100 [font-family:var(--font-satoshi)]">
                 {LEVEL_LABELS[cell.level as keyof typeof LEVEL_LABELS]}
@@ -88,11 +96,12 @@ export default function Now() {
         <span className="h-[13px] w-[13px] rounded-[2px] bg-[#4A8A1E]" />
         <span>More</span>
         <span className="ml-2">
-          0 = routine · 1 = read something · 2 = went deep · 3 = something clicked
+          0 = routine &middot; 1 = read something &middot; 2 = went deep
+          &middot; 3 = something clicked
         </span>
       </div>
 
-      <div className="my-12 border-t border-black/[0.07]" />
+      <div className="my-12 border-t-[0.5px] border-t-[rgba(0,0,0,0.07)]" />
 
       <div className="grid gap-10 md:grid-cols-3">
         {infoColumns.map((column) => (

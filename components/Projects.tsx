@@ -2,7 +2,7 @@ const projects = [
   {
     name: "LocalYapper",
     description:
-      "Fully local, offline voice dictation. Open source alternative to Wispr Flow — runs on local models, zero API calls, nothing leaves your machine.",
+      "Fully local, offline voice dictation. Open source alternative to Wispr Flow - runs on local models, zero API calls, nothing leaves your machine.",
     tags: ["Local LLMs", "Voice", "Offline"]
   },
   {
@@ -23,7 +23,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="w-full border-t border-black/[0.07] px-10 py-[72px]"
+      className="w-full border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] px-5 py-[72px] md:px-10"
     >
       <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
         PROJECTS
@@ -34,17 +34,19 @@ export default function Projects() {
       </p>
 
       <div>
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <article
             key={project.name}
-            className="mb-[10px] rounded-[10px] border border-black/[0.1] bg-[#FDFAF5] px-[22px] py-5 transition-colors duration-200 ease-in-out hover:border-black/[0.22]"
+            className={`rounded-[10px] border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[var(--color-card)] px-[22px] py-5 transition-colors duration-200 ease-in-out hover:border-[rgba(0,0,0,0.22)] ${
+              index !== projects.length - 1 ? "mb-[10px]" : ""
+            }`}
           >
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
                 <h3 className="text-[15px] font-medium text-[#1a1a18] [font-family:var(--font-satoshi)]">
                   {project.name}
                 </h3>
-                <p className="mt-[6px] max-w-[760px] text-[13px] leading-[1.6] text-[#6b6960] [font-family:var(--font-satoshi)]">
+                <p className="mt-[6px] max-w-[760px] text-[13px] leading-[1.7] text-[#6b6960] [font-family:var(--font-satoshi)]">
                   {project.description}
                 </p>
 

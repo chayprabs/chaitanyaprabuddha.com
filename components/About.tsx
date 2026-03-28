@@ -55,55 +55,57 @@ export default function About() {
       id="about"
       className="w-full border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] px-5 py-[72px] md:px-10"
     >
-      <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
-        ABOUT
-      </p>
+      <div className="container">
+        <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
+          ABOUT
+        </p>
 
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_180px] md:items-center md:gap-12">
-        <div className="order-last md:order-first">
-          <p className="text-[15px] leading-[1.7] text-[#3d3b36] [font-family:var(--font-satoshi)]">
-            I&apos;m Chaitanya, CS student at BITS Pilani, AI/ML researcher
-            &mdash; while constantly vibe shipping. At 16, my technical writing
-            hit 80k+ readers and front-paged Hacker News. That obsession never
-            left. Today I&apos;m founding Authos, shipping open source, and
-            sitting somewhere at the frontier of what these models can actually
-            do.
-          </p>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_180px] md:items-center md:gap-12">
+          <div className="order-last md:order-first">
+            <p className="text-[15px] leading-[1.7] text-[#3d3b36] [font-family:var(--font-satoshi)]">
+              I&apos;m Chaitanya, CS student at BITS Pilani, AI/ML researcher
+              &mdash; while constantly vibe shipping. At 16, my technical writing
+              hit 80k+ readers and front-paged Hacker News. That obsession never
+              left. Today I&apos;m founding Authos, shipping open source, and
+              sitting somewhere at the frontier of what these models can actually
+              do.
+            </p>
 
-          <p className="mt-4 text-[13px] leading-[1.7] text-[#a09d95] [font-family:var(--font-satoshi)]">
-            B.E. Computer Science &middot; BITS Pilani &middot; Pilani,
-            Rajasthan
-          </p>
+            <p className="mt-4 text-[13px] leading-[1.7] text-[#a09d95] [font-family:var(--font-satoshi)]">
+              B.E. Computer Science &middot; BITS Pilani &middot; Pilani,
+              Rajasthan
+            </p>
 
-          <div className="mt-4 flex items-center gap-5 text-[#6b6960]">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="transition-colors duration-200 ease-in-out hover:text-[#1a1a18]"
-              >
-                {link.icon}
-              </a>
-            ))}
+            <div className="mt-4 flex items-center gap-5 text-[#6b6960]">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="transition-colors duration-200 ease-in-out hover:text-[#1a1a18]"
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="order-first flex justify-center md:order-last md:justify-end">
-          <div className="group relative h-[120px] w-[120px] md:h-[180px] md:w-[180px]">
-            <div className="pointer-events-none absolute -left-6 top-5 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
-              late night builder
-            </div>
-            <div className="pointer-events-none absolute -right-7 top-1 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out delay-75 group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
-              chess player
-            </div>
-            <div className="pointer-events-none absolute -right-10 bottom-5 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out delay-150 group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
-              music obsessed
-            </div>
+          <div className="order-first flex justify-center md:order-last md:justify-end">
+            <div className="group relative h-[120px] w-[120px] md:h-[180px] md:w-[180px]">
+              <div className="pointer-events-none absolute -left-6 top-5 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
+                late night builder
+              </div>
+              <div className="pointer-events-none absolute -right-7 top-1 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out delay-75 group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
+                chess player
+              </div>
+              <div className="pointer-events-none absolute -right-10 bottom-5 hidden rounded-[20px] bg-[#EDE8DF] px-[10px] py-1 text-[11px] text-[#7a6b4e] opacity-0 transition-all duration-300 ease-in-out delay-150 group-hover:-translate-y-1 group-hover:opacity-100 md:block [font-family:var(--font-satoshi)]">
+                music obsessed
+              </div>
 
-            <div className="h-[120px] w-[120px] rounded-full bg-[#E8E4DC] transition-transform duration-300 ease-in-out group-hover:-translate-y-[6px] md:h-[180px] md:w-[180px]" />
+              <div className="h-[120px] w-[120px] rounded-full bg-[#E8E4DC] transition-transform duration-300 ease-in-out group-hover:-translate-y-[6px] md:h-[180px] md:w-[180px]" />
+            </div>
           </div>
         </div>
       </div>

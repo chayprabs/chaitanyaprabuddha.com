@@ -1,7 +1,8 @@
 const schoolProjects = [
   {
     name: "Developernoon",
-    url: "developernoon.com",
+    url: "https://developernoon.com",
+    displayUrl: "developernoon.com",
     description:
       "A technical publishing platform for developers. Reached a domain authority of 42 and 15,000 monthly visitors within 4 months of launch.",
     stats: [
@@ -12,7 +13,8 @@ const schoolProjects = [
   },
   {
     name: "Monial",
-    url: "trymonial.app",
+    url: "https://trymonial.app",
+    displayUrl: "trymonial.app",
     description:
       "A testimonial SaaS for founders with a one-line integration. Grew to 10+ paying customers and $300+ MRR. Built and shut down during JEE prep.",
     stats: [
@@ -34,9 +36,9 @@ export default function BuiltInSchool() {
   return (
     <section
       id="built-in-school"
-      className="w-full border-t border-black/[0.07] px-10 py-[72px]"
+      className="w-full border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] px-5 py-[72px] md:px-10"
     >
-      <p className="mb-10 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
+      <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
         BUILT IN SCHOOL
       </p>
 
@@ -44,22 +46,27 @@ export default function BuiltInSchool() {
         {schoolProjects.map((project) => (
           <article
             key={project.name}
-            className="border-t border-black/[0.07] py-7"
+            className="border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] py-7 transition-colors duration-200 ease-in-out hover:bg-[#FDFAF5]"
           >
             <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
               <h3 className="text-[15px] font-medium text-[#1a1a18] [font-family:var(--font-satoshi)]">
                 {project.name}
               </h3>
-              <span className="text-[12px] text-[#a09d95] [font-family:var(--font-satoshi)]">
-                {project.url}
-              </span>
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] text-[#a09d95] transition-colors duration-200 ease-in-out hover:text-[#1a1a18] [font-family:var(--font-satoshi)]"
+              >
+                {project.displayUrl}
+              </a>
             </div>
 
-            <p className="mt-3 mb-[18px] max-w-[840px] text-[14px] leading-[1.7] text-[#4a4842] [font-family:var(--font-satoshi)]">
+            <p className="mb-[18px] mt-3 max-w-[840px] text-[14px] leading-[1.7] text-[#4a4842] [font-family:var(--font-satoshi)]">
               {project.description}
             </p>
 
-            <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:gap-10">
+            <div className="flex flex-wrap gap-6 md:gap-10">
               {project.stats.map((stat) => (
                 <div key={stat.label}>
                   <p className="text-[22px] text-[#1a1a18] [font-family:var(--font-serif)]">
@@ -74,7 +81,7 @@ export default function BuiltInSchool() {
           </article>
         ))}
 
-        <div className="border-t border-black/[0.07] pt-7">
+        <div className="border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] pt-7">
           <h3 className="mb-[10px] text-[15px] font-medium text-[#1a1a18] [font-family:var(--font-satoshi)]">
             Writing
           </h3>
@@ -88,7 +95,7 @@ export default function BuiltInSchool() {
             {writingBadges.map((badge) => (
               <div
                 key={badge.label}
-                className="flex items-center gap-[7px] whitespace-nowrap rounded-[20px] border border-black/[0.12] bg-[#FDFAF5] px-[14px] py-[7px] text-[12px] font-medium"
+                className="flex items-center gap-[7px] whitespace-nowrap rounded-[20px] border-[0.5px] border-[rgba(0,0,0,0.12)] bg-[var(--color-card)] px-[14px] py-[7px] text-[12px] font-medium"
                 style={{ color: badge.text }}
               >
                 <span
