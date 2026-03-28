@@ -32,11 +32,11 @@ export default function Achievements() {
           {achievements.map((achievement, index) => (
             <article
               key={achievement.name}
-              className={`py-5 ${
+              className={`${
                 index > 0 ? "border-t-[0.5px] border-t-[var(--color-border)]" : ""
               }`}
             >
-              <div className="rounded-[6px] border-[0.5px] border-transparent p-4 transition-[background,border-color] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[rgba(0,0,0,0.03)]">
+              <div className="rounded-[8px] border-[0.5px] border-transparent bg-transparent p-4 transition-all duration-200 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[#EDEAE5]">
                 <div className="mb-[6px] flex items-center justify-between gap-4">
                   <h3 className="font-jost text-[15px] font-semibold text-[#1a1a18]">
                     {achievement.name}

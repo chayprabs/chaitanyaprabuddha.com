@@ -59,43 +59,65 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className={`fixed bottom-6 left-1/2 z-[100] flex max-w-[calc(100vw-24px)] -translate-x-1/2 overflow-hidden rounded-[24px] border-[0.5px] border-[rgba(0,0,0,0.12)] bg-[rgba(250,250,248,0.95)] transition-all duration-300 ease-in-out ${
-        isExpanded ? "px-4 py-4 sm:px-6" : "px-5 py-2.5"
+      className={`fixed bottom-6 left-1/2 z-[100] max-w-[calc(100vw-24px)] min-w-[120px] -translate-x-1/2 overflow-hidden rounded-[24px] border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[rgba(244,242,238,0.96)] backdrop-blur-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] ${
+        isExpanded ? "px-4 py-4 sm:px-6" : "px-5 py-3"
       }`}
+      style={{
+        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+      }}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {isExpanded ? (
-        <div className="flex items-start gap-3 sm:gap-5">
-          {contactLinks.map((link) => {
-            const isEmail = link.href.startsWith("mailto:");
+      <div className="relative">
+        <div
+          className={`origin-bottom transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isExpanded
+              ? "pointer-events-none absolute inset-0 opacity-0 scale-[0.95]"
+              : "opacity-100 scale-100"
+          } flex items-center justify-center gap-2`}
+        >
+          <span className="contact-pulse h-[6px] w-[6px] rounded-full bg-[#4a8a1e]" />
+          <span className="text-[12px] font-normal text-[#6b6860]">
+            say hello
+          </span>
+        </div>
 
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target={isEmail ? undefined : "_blank"}
-                rel={isEmail ? undefined : "noopener noreferrer"}
-                aria-label={link.label}
-                className="flex min-w-[48px] flex-col items-center"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18]">
-                  {link.icon}
-                </span>
-                <span className="font-lato mt-1.5 text-[10px] text-[#6b6860] sm:text-[11px]">
-                  {link.label}
-                </span>
-              </a>
-            );
-          })}
+        <div
+          className={`origin-bottom transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isExpanded
+              ? "opacity-100 scale-100"
+              : "pointer-events-none absolute inset-0 opacity-0 scale-[0.95]"
+          }`}
+        >
+          <p className="mb-3 text-center text-[10px] font-normal uppercase tracking-[0.15em] text-[#9a9890]">
+            reach out
+          </p>
+
+          <div className="flex items-start gap-3 sm:gap-5">
+            {contactLinks.map((link) => {
+              const isEmail = link.href.startsWith("mailto:");
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={isEmail ? undefined : "_blank"}
+                  rel={isEmail ? undefined : "noopener noreferrer"}
+                  aria-label={link.label}
+                  className="flex min-w-[48px] flex-col items-center"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18] transition-transform duration-150 ease-in-out hover:-translate-y-[2px]">
+                    {link.icon}
+                  </span>
+                  <span className="font-lato mt-1.5 text-[10px] text-[#6b6860] sm:text-[11px]">
+                    {link.label}
+                  </span>
+                </a>
+              );
+            })}
+          </div>
         </div>
-      ) : (
-        <div className="flex items-center gap-1">
-          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
-          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
-          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
-        </div>
-      )}
+      </div>
     </section>
   );
 }

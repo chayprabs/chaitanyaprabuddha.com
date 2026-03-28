@@ -4,7 +4,8 @@ export default function Hero() {
     { href: "#projects", label: "Projects" },
     { href: "#research", label: "Research" },
     { href: "#achievements", label: "Achievements" },
-    { href: "#beforebits", label: "Before BITS" }
+    { href: "#beforebits", label: "Before BITS" },
+    { href: "#beyondthecode", label: "Beyond the Code" }
   ];
 
   return (

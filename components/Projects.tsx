@@ -38,7 +38,7 @@ export default function Projects() {
                 index > 0 ? "border-t-[0.5px] border-t-[rgba(0,0,0,0.08)]" : ""
               }`}
             >
-              <div className="rounded-[6px] border-[0.5px] border-transparent p-4 transition-[background,border-color] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[rgba(0,0,0,0.03)]">
+              <div className="rounded-[8px] border-[0.5px] border-transparent bg-transparent p-4 transition-all duration-200 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[#EDEAE5]">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div>
                     <h3 className="font-jost text-[16px] font-semibold leading-[1.8] text-[#1a1a18]">
