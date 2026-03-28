@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf8;
-  --foreground: #1a1a18;
+  --background: #f1f0ee;
+  --foreground: #3a3a38;
   --muted: #6b6860;
   --hint: #9a9890;
   --color-card: #f4f2ee;
   --color-border: rgba(0, 0, 0, 0.1);
   --color-accent: #c84b2f;
-  --font-serif: Georgia, "Times New Roman", serif;
 }
 
 * {
   box-sizing: border-box;
+  font-family: var(--font-inter);
 }
 
 html {
@@ -25,9 +25,10 @@ body {
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-lato);
+  font-family: var(--font-inter);
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.85;
+  font-weight: 300;
   overflow-x: hidden;
 }
 
@@ -44,19 +45,14 @@ svg {
 
 .container {
   width: 100%;
-  max-width: 860px;
+  max-width: 800px;
   margin: 0 auto;
   padding-inline: 20px;
 }
 
-.font-bebas {
-  font-family: var(--font-bebas);
-}
-
-.font-jost {
-  font-family: var(--font-jost);
-}
-
-.font-lato {
-  font-family: var(--font-lato);
+.font-bebas,
+.font-jost,
+.font-lato,
+.font-inter {
+  font-family: var(--font-inter);
 }

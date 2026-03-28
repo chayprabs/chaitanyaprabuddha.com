@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Caveat, Jost, Lato } from "next/font/google";
+import { Caveat, Inter } from "next/font/google";
 
 import "./globals.css";
 
-const bebas = Bebas_Neue({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-bebas"
-});
-
-const jost = Jost({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-jost"
-});
-
-const lato = Lato({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["100", "300", "400", "700", "900"],
-  variable: "--font-lato"
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter"
 });
 
 const caveat = Caveat({
@@ -42,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bebas.variable} ${jost.variable} ${lato.variable} ${caveat.variable} min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--foreground)] antialiased`}
+        className={`${inter.variable} ${caveat.variable} min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--foreground)] antialiased`}
       >
         {children}
       </body>

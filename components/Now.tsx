@@ -1,8 +1,8 @@
 const LEVEL_STYLES = {
-  0: "bg-[#E8E6E0]",
-  1: "bg-[#B8B5AD]",
-  2: "bg-[#787570]",
-  3: "bg-[#2C2A28]"
+  0: "bg-[#E8E4DC]",
+  1: "bg-[#C8D9A0]",
+  2: "bg-[#8BBF56]",
+  3: "bg-[#4A8A1E]"
 } as const;
 
 const LEVEL_LABELS = {
@@ -57,14 +57,14 @@ export default function Now() {
   return (
     <section
       id="now"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[88px]"
+      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
     >
       <div className="container">
-        <p className="font-bebas mb-8 text-[11px] uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
           NOW
         </p>
 
-        <p className="font-bebas mb-4 text-[13px] leading-[1.8] text-[#6b6860]">
+        <p className="font-bebas mb-4 text-[13px] font-light leading-[1.85] text-[#9a9890]">
           days something clicked
         </p>
 
@@ -89,12 +89,12 @@ export default function Now() {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] text-[#9a9890]">
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] font-light text-[#9a9890]">
           <span>Less</span>
-          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#E8E6E0]" />
-          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#B8B5AD]" />
-          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#787570]" />
-          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#2C2A28]" />
+          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#E8E4DC]" />
+          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#C8D9A0]" />
+          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#8BBF56]" />
+          <span className="h-[13px] w-[13px] rounded-[2px] bg-[#4A8A1E]" />
           <span>More</span>
           <span className="ml-2">
             0 = routine / 1 = read something / 2 = went deep / 3 = something
@@ -107,10 +107,10 @@ export default function Now() {
         <div className="grid gap-10 md:grid-cols-3">
           {infoColumns.map((column) => (
             <div key={column.label}>
-              <p className="font-jost mb-3 text-[11px] uppercase tracking-[0.15em] text-[#9a9890]">
+              <p className="font-jost mb-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
                 {column.label}
               </p>
-              <p className="text-[15px] leading-[1.8] text-[#1a1a18]">
+              <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
                 {column.text}
               </p>
             </div>

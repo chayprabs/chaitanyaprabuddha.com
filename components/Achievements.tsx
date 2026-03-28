@@ -21,10 +21,10 @@ export default function Achievements() {
   return (
     <section
       id="achievements"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[88px]"
+      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
     >
       <div className="container">
-        <p className="font-bebas mb-8 text-[11px] uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
           ACHIEVEMENTS
         </p>
 
@@ -32,7 +32,9 @@ export default function Achievements() {
           {achievements.map((achievement, index) => (
             <article
               key={achievement.name}
-              className={`grid gap-6 border-t-[0.5px] border-t-[var(--color-border)] py-7 md:grid-cols-[120px_1fr] md:gap-8 ${
+              className={`grid gap-6 py-7 md:grid-cols-[120px_1fr] md:gap-8 ${
+                index > 0 ? "border-t-[0.5px] border-t-[var(--color-border)] " : ""
+              }${
                 index === achievements.length - 1
                   ? "border-b-[0.5px] border-b-[var(--color-border)]"
                   : ""
@@ -45,19 +47,16 @@ export default function Achievements() {
                 >
                   {achievement.placement}
                 </p>
-                <p className="font-jost mt-2 text-[11px] uppercase tracking-[0.06em] text-[#9a9890]">
-                  Place
-                </p>
               </div>
 
               <div>
-                <h3 className="font-jost text-[16px] font-medium leading-[1.8] text-[#1a1a18]">
+                <h3 className="font-jost text-[16px] font-semibold leading-[1.8] text-[#1a1a18]">
                   {achievement.name}
                 </h3>
-                <p className="mb-2 mt-1 text-[12px] leading-[1.8] text-[#6b6860]">
+                <p className="mb-2 mt-1 text-[13px] font-light leading-[1.85] text-[#9a9890]">
                   {achievement.org}
                 </p>
-                <p className="text-[15px] leading-[1.8] text-[#1a1a18]">
+                <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
                   {achievement.description}
                 </p>
               </div>

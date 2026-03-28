@@ -55,16 +55,16 @@ export default function About() {
   return (
     <section
       id="about"
-      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[88px]"
+      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[72px]"
     >
       <div className="container">
-        <p className="font-bebas mb-8 text-[11px] uppercase tracking-[0.15em] text-[#9a9890]">
+        <p className="font-bebas mb-6 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
           ABOUT
         </p>
 
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-[minmax(0,1fr)_180px] md:items-center">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_160px] md:items-start">
           <div className="order-last md:order-first">
-            <p className="text-[15px] leading-[1.8] text-[#1a1a18]">
+            <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
               I&apos;m Chaitanya, CS student at BITS Pilani, AI/ML researcher -
               while constantly vibe shipping. At 16, my technical writing hit
               80k+ readers and front-paged Hacker News. That obsession never
@@ -73,7 +73,7 @@ export default function About() {
               actually do.
             </p>
 
-            <p className="mt-4 text-[13px] leading-[1.8] text-[#6b6860]">
+            <p className="mt-4 text-[13px] font-light leading-[1.85] text-[#9a9890]">
               B.E. Computer Science - BITS Pilani - Pilani, Rajasthan
             </p>
 
@@ -94,7 +94,7 @@ export default function About() {
           </div>
 
           <div className="order-first flex justify-center md:order-last md:justify-end">
-            <div className="group relative h-[120px] w-[120px] md:h-[180px] md:w-[180px]">
+            <div className="group relative h-[140px] w-[140px]">
               <div className="hidden md:block">
                 <div className="font-jost pointer-events-none absolute -left-6 top-5 rounded-[2px] border-[0.5px] border-[rgba(0,0,0,0.2)] bg-transparent px-[10px] py-1 text-[11px] text-[#6b6860] opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:opacity-100">
                   {floatingTags[0]}
@@ -107,7 +107,7 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="h-[120px] w-[120px] rounded-full border-[0.5px] border-[var(--color-border)] bg-[#f4f2ee] transition-transform duration-300 ease-in-out group-hover:-translate-y-[6px] md:h-[180px] md:w-[180px]" />
+              <div className="h-[140px] w-[140px] rounded-full border-[0.5px] border-[var(--color-border)] bg-[#f4f2ee] transition-transform duration-300 ease-in-out group-hover:-translate-y-[6px]" />
             </div>
           </div>
         </div>
