@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const socialLinks = [
   {
     href: "https://github.com/chayprabs",
@@ -49,8 +51,6 @@ const socialLinks = [
   }
 ];
 
-const floatingTags = ["late night builder", "chess player", "music obsessed"];
-
 export default function About() {
   return (
     <section
@@ -62,7 +62,7 @@ export default function About() {
           ABOUT
         </p>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_160px] md:items-start">
+        <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[1fr_180px]">
           <div className="order-last md:order-first">
             <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
               I&apos;m Chaitanya, CS student at BITS Pilani, AI/ML researcher -
@@ -98,20 +98,29 @@ export default function About() {
           </div>
 
           <div className="order-first flex justify-center md:order-last md:justify-end">
-            <div className="group relative h-[140px] w-[140px]">
-              <div className="hidden md:block">
-                <div className="font-jost pointer-events-none absolute -left-6 top-5 rounded-[2px] border-[0.5px] border-[rgba(0,0,0,0.2)] bg-transparent px-[10px] py-1 text-[11px] text-[#6b6860] opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:opacity-100">
-                  {floatingTags[0]}
-                </div>
-                <div className="font-jost pointer-events-none absolute -right-7 top-1 rounded-[2px] border-[0.5px] border-[rgba(0,0,0,0.2)] bg-transparent px-[10px] py-1 text-[11px] text-[#6b6860] opacity-0 transition-all duration-300 ease-in-out delay-75 group-hover:-translate-y-1 group-hover:opacity-100">
-                  {floatingTags[1]}
-                </div>
-                <div className="font-jost pointer-events-none absolute -right-10 bottom-5 rounded-[2px] border-[0.5px] border-[rgba(0,0,0,0.2)] bg-transparent px-[10px] py-1 text-[11px] text-[#6b6860] opacity-0 transition-all duration-300 ease-in-out delay-150 group-hover:-translate-y-1 group-hover:opacity-100">
-                  {floatingTags[2]}
-                </div>
-              </div>
-
-              <div className="h-[140px] w-[140px] rounded-full border-[0.5px] border-[var(--color-border)] bg-[#f4f2ee] transition-transform duration-300 ease-in-out group-hover:-translate-y-[6px]" />
+            <div
+              style={{
+                width: "168px",
+                height: "168px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                flexShrink: 0,
+                border: "4px solid #E0DBD3",
+                boxShadow: "0 0 0 1px rgba(0,0,0,0.04)"
+              }}
+            >
+              <Image
+                src="/pfp.png"
+                alt="Chaitanya Prabuddha"
+                width={168}
+                height={168}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center 15%"
+                }}
+              />
             </div>
           </div>
         </div>
