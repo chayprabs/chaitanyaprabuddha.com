@@ -11,7 +11,7 @@ import Research from "@/components/Research";
 
 export default function HomePage() {
   return (
-    <div id="top" className="min-h-screen overflow-x-hidden bg-[var(--color-cream)]">
+    <div id="top" className="min-h-screen overflow-x-hidden bg-[var(--background)]">
       <Nav />
       <main className="overflow-x-hidden pt-[60px]">
         <Hero />

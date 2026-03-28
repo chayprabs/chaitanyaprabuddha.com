@@ -17,37 +17,43 @@ export default function Research() {
   return (
     <section
       id="research"
-      className="w-full border-t-[0.5px] border-t-[rgba(0,0,0,0.07)] px-5 py-[72px] md:px-10"
+      className="w-full border-t-[0.5px] border-t-[var(--color-border)] py-[88px]"
     >
-      <p className="mb-8 text-[11px] uppercase tracking-[0.12em] text-[#a09d95] [font-family:var(--font-satoshi)]">
-        RESEARCH
-      </p>
+      <div className="container">
+        <p className="font-bebas mb-8 text-[11px] uppercase tracking-[0.15em] text-[#9a9890]">
+          RESEARCH
+        </p>
 
-      <div>
-        {researchEntries.map((entry, index) => (
-          <article
-            key={entry.title}
-            className={`${index !== 0 ? "border-t-[0.5px] border-t-[rgba(0,0,0,0.07)]" : ""} py-6`}
-          >
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-              <div>
-                <h3 className="text-[15px] font-medium text-[#1a1a18] [font-family:var(--font-satoshi)]">
-                  {entry.title}
-                </h3>
-                <p className="mb-[10px] mt-1 text-[12px] text-[#a09d95] [font-family:var(--font-satoshi)]">
-                  {entry.meta}
-                </p>
-                <p className="max-w-[920px] text-[13px] leading-[1.7] text-[#6b6960] [font-family:var(--font-satoshi)]">
-                  {entry.description}
-                </p>
+        <div>
+          {researchEntries.map((entry, index) => (
+            <article
+              key={entry.title}
+              className={`py-6 ${
+                index === 0
+                  ? "border-t-[0.5px] border-t-[var(--color-border)]"
+                  : "border-y-[0.5px] border-y-[var(--color-border)]"
+              }`}
+            >
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <h3 className="font-jost text-[16px] font-medium leading-[1.8] text-[#1a1a18]">
+                    {entry.title}
+                  </h3>
+                  <p className="mb-[10px] mt-1 text-[12px] leading-[1.8] text-[#6b6860]">
+                    {entry.meta}
+                  </p>
+                  <p className="max-w-[920px] text-[15px] leading-[1.8] text-[#1a1a18]">
+                    {entry.description}
+                  </p>
+                </div>
+
+                <span className="font-jost inline-flex w-fit shrink-0 rounded-[2px] border-[0.5px] border-[rgba(0,0,0,0.2)] bg-transparent px-[10px] py-[3px] text-[11px] text-[#6b6860]">
+                  Work in progress
+                </span>
               </div>
-
-              <span className="inline-flex w-fit shrink-0 rounded-[20px] bg-[#EDEAE3] px-[10px] py-[3px] text-[11px] text-[#a09d95] [font-family:var(--font-satoshi)]">
-                Work in progress
-              </span>
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,17 +1,31 @@
 import type { Metadata } from "next";
-import { Caveat, Playfair_Display } from "next/font/google";
+import { Bebas_Neue, Caveat, Jost, Lato } from "next/font/google";
 
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
+const bebas = Bebas_Neue({
   subsets: ["latin"],
-  weight: ["500"],
-  variable: "--font-playfair-display"
+  weight: ["400"],
+  variable: "--font-bebas"
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-jost"
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["100", "300", "400", "700", "900"],
+  variable: "--font-lato"
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["500"],
   variable: "--font-caveat"
 });
 
@@ -28,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfairDisplay.variable} ${caveat.variable} min-h-screen overflow-x-hidden bg-[var(--color-cream)] text-[#4a4842] antialiased`}
+        className={`${bebas.variable} ${jost.variable} ${lato.variable} ${caveat.variable} min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--foreground)] antialiased`}
       >
         {children}
       </body>

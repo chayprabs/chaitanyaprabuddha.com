@@ -59,7 +59,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className={`fixed bottom-6 left-1/2 z-[100] flex max-w-[calc(100vw-24px)] -translate-x-1/2 overflow-hidden rounded-[24px] border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[rgba(247,244,238,0.9)] backdrop-blur-[8px] transition-all duration-300 ease-in-out ${
+      className={`fixed bottom-6 left-1/2 z-[100] flex max-w-[calc(100vw-24px)] -translate-x-1/2 overflow-hidden rounded-[24px] border-[0.5px] border-[rgba(0,0,0,0.12)] bg-[rgba(250,250,248,0.95)] transition-all duration-300 ease-in-out ${
         isExpanded ? "px-4 py-4 sm:px-6" : "px-5 py-2.5"
       }`}
       onMouseEnter={() => setIsExpanded(true)}
@@ -67,31 +67,29 @@ export default function Contact() {
     >
       {isExpanded ? (
         <div className="flex items-start gap-3 sm:gap-5">
-          {contactLinks.map((link) => {
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="flex min-w-[48px] flex-col items-center"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#FDFAF5] text-[#1a1a18] transition-all duration-300 ease-in-out">
-                  {link.icon}
-                </span>
-                <span className="mt-1.5 text-[10px] text-[#6b6960] sm:text-[11px] [font-family:var(--font-satoshi)]">
-                  {link.label}
-                </span>
-              </a>
-            );
-          })}
+          {contactLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.label}
+              className="flex min-w-[48px] flex-col items-center"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18]">
+                {link.icon}
+              </span>
+              <span className="font-lato mt-1.5 text-[10px] text-[#6b6860] sm:text-[11px]">
+                {link.label}
+              </span>
+            </a>
+          ))}
         </div>
       ) : (
         <div className="flex items-center gap-1">
-          <span className="h-[5px] w-[5px] rounded-full bg-[#a09d95]" />
-          <span className="h-[5px] w-[5px] rounded-full bg-[#a09d95]" />
-          <span className="h-[5px] w-[5px] rounded-full bg-[#a09d95]" />
+          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
+          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
+          <span className="h-[5px] w-[5px] rounded-full bg-[#9a9890]" />
         </div>
       )}
     </section>
