@@ -24,13 +24,22 @@ export default function Now() {
           BEYOND THE CODE
         </p>
 
+        <p
+          className="mb-6 text-[18px] italic text-[#9a9890]"
+          style={{ fontFamily: "var(--font-caveat)" }}
+        >
+          When I&apos;m not building —
+        </p>
+
+        <div className="mb-7 h-[0.5px] w-full bg-[rgba(0,0,0,0.08)]" />
+
         <div className="grid gap-10 md:grid-cols-3">
           {infoColumns.map((column) => (
             <div key={column.label}>
-              <p className="font-jost mb-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[#9a9890]">
+              <p className="font-jost mb-[10px] text-[11px] font-normal uppercase tracking-[0.12em] text-[#9a9890]">
                 {column.label}
               </p>
-              <p className="text-[15px] font-light leading-[1.85] text-[#3a3a38]">
+              <p className="text-[14px] font-light leading-[1.8] text-[#6b6860]">
                 {column.text}
               </p>
             </div>

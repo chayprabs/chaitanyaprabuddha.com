@@ -60,7 +60,7 @@ export default function Contact() {
     <section
       id="contact"
       className={`fixed bottom-6 left-1/2 z-[100] max-w-[calc(100vw-24px)] min-w-[120px] -translate-x-1/2 overflow-hidden rounded-[24px] border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[rgba(244,242,238,0.96)] backdrop-blur-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] ${
-        isExpanded ? "px-4 py-4 sm:px-6" : "px-5 py-3"
+        isExpanded ? "px-4 py-4 sm:px-6" : "px-4 py-2"
       }`}
       style={{
         transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
@@ -76,8 +76,8 @@ export default function Contact() {
               : "opacity-100 scale-100"
           } flex items-center justify-center gap-2`}
         >
-          <span className="contact-pulse h-[6px] w-[6px] rounded-full bg-[#4a8a1e]" />
-          <span className="text-[12px] font-normal text-[#6b6860]">
+          <span className="contact-pulse h-[5px] w-[5px] rounded-full bg-[#4a8a1e]" />
+          <span className="text-[11px] font-normal text-[#6b6860]">
             say hello
           </span>
         </div>
