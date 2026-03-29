@@ -99,9 +99,8 @@ export default function About() {
 
           <div className="order-first flex justify-center md:order-last md:justify-end">
             <div
+              className="mx-auto h-[120px] w-[120px] md:h-[168px] md:w-[168px]"
               style={{
-                width: "168px",
-                height: "168px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 flexShrink: 0,

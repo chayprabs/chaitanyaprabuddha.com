@@ -43,7 +43,7 @@ export default function BuiltInSchool() {
               }`}
             >
               <div className="rounded-[8px] border-[0.5px] border-transparent bg-transparent p-4 transition-all duration-200 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[#EDEAE5]">
-                <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div className="flex flex-col gap-[2px] md:flex-row md:items-start md:justify-between md:gap-2">
                   <h3 className="font-jost text-[16px] font-semibold leading-[1.8] text-[#1a1a18]">
                     {project.name}
                   </h3>
@@ -72,7 +72,7 @@ export default function BuiltInSchool() {
                 <div className="flex flex-wrap gap-6 md:gap-10">
                   {project.stats.map((stat) => (
                     <div key={stat.label}>
-                      <p className="font-bebas text-[26px] font-bold leading-[1.4] text-[#1a1a18]">
+                      <p className="font-bebas text-[22px] font-bold leading-[1.4] text-[#1a1a18] md:text-[26px]">
                         {stat.value}
                       </p>
                       <p className="font-jost mt-[3px] text-[11px] font-normal uppercase tracking-[0.1em] text-[#9a9890]">

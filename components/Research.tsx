@@ -36,7 +36,7 @@ export default function Research() {
             >
               <div className="rounded-[8px] border-[0.5px] border-transparent bg-transparent p-4 transition-all duration-200 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[#EDEAE5]">
                 <div>
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between md:gap-4">
                     <h3 className="font-jost text-[16px] font-semibold leading-[1.8] text-[#1a1a18]">
                       {entry.title}
                     </h3>
@@ -47,7 +47,7 @@ export default function Research() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${entry.title} GitHub repository`}
-                        className="shrink-0 text-[#9a9890] transition-colors duration-200 ease-in-out hover:text-[#1a1a18]"
+                        className="mt-[6px] shrink-0 text-[#9a9890] transition-colors duration-200 ease-in-out hover:text-[#1a1a18] md:mt-0"
                       >
                         <svg
                           viewBox="0 0 24 24"
@@ -59,7 +59,7 @@ export default function Research() {
                         </svg>
                       </a>
                     ) : (
-                      <span className="shrink-0 text-[12px] font-light text-[#9a9890]">
+                      <span className="mt-[6px] shrink-0 text-[12px] font-light text-[#9a9890] md:mt-0">
                         {entry.status}
                       </span>
                     )}
