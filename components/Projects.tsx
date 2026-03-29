@@ -40,7 +40,7 @@ export default function Projects() {
             >
               <div className="rounded-[8px] border-[0.5px] border-transparent bg-transparent p-3 transition-all duration-200 ease-in-out hover:border-[rgba(0,0,0,0.1)] hover:bg-[#EDEAE5] md:p-4">
                 <div>
-                  <div className="flex flex-col items-start md:flex-row md:items-start md:justify-between">
+                  <div className="flex items-start justify-between">
                     <h3 className="font-jost text-[15px] font-semibold leading-[1.8] text-[#1a1a18] md:text-[16px]">
                       {project.name}
                     </h3>
@@ -50,7 +50,7 @@ export default function Projects() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${project.name} GitHub repository`}
-                      className="mb-2 mt-[6px] text-[#9a9890] transition-colors duration-200 ease-in-out hover:text-[#1a1a18] md:mb-0 md:mt-0"
+                      className="mb-0 mt-[6px] shrink-0 text-[#9a9890] transition-colors duration-200 ease-in-out hover:text-[#1a1a18] md:mt-0"
                     >
                       <svg
                         viewBox="0 0 24 24"

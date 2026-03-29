@@ -9,7 +9,7 @@ const infoColumns = [
   },
   {
     label: "BOOKS",
-    text: "Currently: Sapiens. Generally: biographies, anything that reframes how I see things. I read weird combinations and I'm not sorry."
+    text: "Currently: Sapiens. Generally: biographies, anything that reframes how I see things."
   }
 ];
 
@@ -25,7 +25,7 @@ export default function Now() {
         </p>
 
         <p
-          className="mb-6 text-[16px] italic text-[#9a9890] md:text-[18px]"
+          className="mb-6 text-[22px] italic text-[#9a9890] md:text-[26px]"
           style={{ fontFamily: "var(--font-caveat)" }}
         >
           When I&apos;m not building &mdash;
