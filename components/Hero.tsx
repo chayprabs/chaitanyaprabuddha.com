@@ -1,11 +1,10 @@
 export default function Hero() {
   const sectionLinks = [
     { href: "#about", label: "About" },
+    { href: "#blog", label: "Blog" },
     { href: "#projects", label: "Projects" },
     { href: "#research", label: "Research" },
-    { href: "#achievements", label: "Achievements" },
-    { href: "#beforebits", label: "Before BITS" },
-    { href: "#beyondthecode", label: "Beyond the Code" }
+    { href: "#achievements", label: "Achievements" }
   ];
 
   return (

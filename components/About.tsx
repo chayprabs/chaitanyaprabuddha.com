@@ -53,14 +53,9 @@ const socialLinks = [
 
 export default function About() {
   return (
-    <section
-      id="about"
-      className="w-full pt-[36px] pb-[48px]"
-    >
+    <section id="about" className="w-full pt-[36px] pb-[48px]">
       <div className="container">
-        <p className="section-label mb-4">
-          ABOUT
-        </p>
+        <p className="section-label mb-4">ABOUT</p>
 
         <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[1fr_180px]">
           <div className="order-last md:order-first">
@@ -73,11 +68,22 @@ export default function About() {
               actually do.
             </p>
 
-            <p className="mt-3 text-[13px] font-light leading-[1.85] text-[#9a9890]">
-              B.E. Computer Science - BITS Pilani - Pilani, Rajasthan
-            </p>
+            <div className="mt-3 mb-5 flex items-center gap-2 text-[13px] font-light leading-[1.85] text-[#9a9890]">
+              <img
+                src="https://www.bits-pilani.ac.in/favicon.ico"
+                alt=""
+                width={16}
+                height={16}
+                className="h-4 w-4 shrink-0"
+                aria-hidden="true"
+              />
+              <span>
+                B.E. Computer Science {"\u00b7"} BITS Pilani {"\u00b7"} Pilani,
+                Rajasthan
+              </span>
+            </div>
 
-            <div className="mt-3 flex items-center gap-5 text-[#6b6860]">
+            <div className="flex items-center gap-5 text-[#6b6860]">
               {socialLinks.map((link) => {
                 const isEmail = link.href.startsWith("mailto:");
 
