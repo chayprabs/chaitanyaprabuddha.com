@@ -8,7 +8,7 @@ const projects = [
   },
   {
     name: "StemLM",
-    href: "https://chayprabs.github.io/stemLM/",
+    href: "https://stemlm.app",
     linkType: "website",
     description:
       "A browser extension that injects a 2-3kb subject-aware playbook into any LLM query, routing the model through a subject-chapter-topic-subtopic tree. Response comes back keyed, extension captures it, matches keys, renders a structured step-by-step breakdown in split view."
