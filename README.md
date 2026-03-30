@@ -1,6 +1,6 @@
 # chaitanyaprabuddha.com
 
-Personal website of Chaitanya Prabuddha — CS student at BITS Pilani, AI/ML researcher, and founder of [Authos](https://authos.com).
+Personal website of Chaitanya Prabuddha — CS student at BITS Pilani, AI/ML researcher, and founder of Authos.
 
 ## What's on it
 
