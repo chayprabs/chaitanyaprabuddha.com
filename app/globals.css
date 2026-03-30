@@ -106,6 +106,132 @@ svg {
   animation: contactPulse 2s ease-in-out infinite;
 }
 
+.blog-content p {
+  margin: 0 0 24px;
+  font-size: 17px;
+  line-height: 1.8;
+  font-weight: 400;
+  color: #1a1a18;
+  text-align: left;
+}
+
+.blog-content h2 {
+  margin: 40px 0 16px;
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #1a1a18;
+}
+
+.blog-content h3 {
+  margin: 32px 0 12px;
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #1a1a18;
+}
+
+.blog-content pre {
+  margin: 0 0 24px;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: #eceae5;
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1a1a18;
+}
+
+.blog-content pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+.blog-content p code {
+  border-radius: 3px;
+  background: #eceae5;
+  padding: 2px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 13px;
+}
+
+.blog-content ul,
+.blog-content ol {
+  margin: 0 0 24px;
+  padding-left: 22px;
+}
+
+.blog-content li {
+  margin-bottom: 10px;
+  font-size: 17px;
+  line-height: 1.8;
+  font-weight: 400;
+  color: #1a1a18;
+}
+
+.blog-content .blog-table-wrap {
+  margin: 0 0 24px;
+  overflow-x: auto;
+}
+
+.blog-content table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.blog-content th,
+.blog-content td {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-content th {
+  font-weight: 600;
+  color: #1a1a18;
+}
+
+.blog-content td {
+  font-weight: 300;
+  color: #3a3a38;
+}
+
+.blog-content blockquote {
+  margin: 0 0 24px;
+  border-left: 3px solid #c84b2f;
+  padding-left: 16px;
+  font-style: italic;
+  color: #6b6860;
+}
+
+.blog-content .blog-citation-meta {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-style: normal;
+  color: #9a9890;
+}
+
+.blog-content .blog-faq-item + .blog-faq-item {
+  margin-top: 24px;
+}
+
+.blog-content a {
+  color: #c84b2f;
+  transition: text-decoration-color 0.15s ease-in-out;
+}
+
+.blog-content a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   html {
     overflow-x: hidden;
@@ -126,5 +252,17 @@ svg {
 
   .section-label {
     font-size: 10px;
+  }
+
+  .blog-content p {
+    font-size: 15px;
+  }
+
+  .blog-content li {
+    font-size: 15px;
+  }
+
+  .blog-content table {
+    min-width: 560px;
   }
 }

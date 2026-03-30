@@ -54,7 +54,9 @@ const contactLinks = [
 ];
 
 export default function Contact() {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPinnedOpen, setIsPinnedOpen] = useState(false);
+  const isExpanded = isHovered || isPinnedOpen;
 
   return (
     <section
@@ -65,33 +67,53 @@ export default function Contact() {
       style={{
         transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
       }}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setIsPinnedOpen(false);
+        }
+      }}
     >
       <div className="relative">
-        <div
+        <button
+          type="button"
+          aria-expanded={isExpanded}
+          aria-controls="contact-links"
+          onClick={() => setIsPinnedOpen((current) => !current)}
           className={`origin-bottom transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isExpanded
               ? "pointer-events-none absolute inset-0 opacity-0 scale-[0.95]"
               : "opacity-100 scale-100"
-          } flex items-center justify-center gap-2`}
+          } flex w-full items-center justify-center gap-2 border-0 bg-transparent p-0 text-center`}
         >
           <span className="contact-pulse h-[5px] w-[5px] rounded-full bg-[#4a8a1e]" />
           <span className="text-[11px] font-normal text-[#6b6860]">
             say hello
           </span>
-        </div>
+        </button>
 
         <div
+          id="contact-links"
           className={`origin-bottom transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isExpanded
               ? "opacity-100 scale-100"
               : "pointer-events-none absolute inset-0 opacity-0 scale-[0.95]"
           }`}
         >
-          <p className="mb-3 text-center text-[10px] font-normal uppercase tracking-[0.15em] text-[#9a9890]">
-            reach out
-          </p>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="m-0 text-center text-[10px] font-normal uppercase tracking-[0.15em] text-[#9a9890]">
+              reach out
+            </p>
+            <button
+              type="button"
+              aria-label="Close contact links"
+              onClick={() => setIsPinnedOpen(false)}
+              className="rounded-full px-1 text-[14px] leading-none text-[#9a9890] transition-colors duration-150 ease-in-out hover:text-[#1a1a18] md:hidden"
+            >
+              ×
+            </button>
+          </div>
 
           <div className="flex items-start gap-3 sm:gap-5">
             {contactLinks.map((link) => {
@@ -105,6 +127,7 @@ export default function Contact() {
                   rel={isEmail ? undefined : "noopener noreferrer"}
                   aria-label={link.label}
                   className="flex min-w-[48px] flex-col items-center"
+                  onClick={() => setIsPinnedOpen(false)}
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-[rgba(0,0,0,0.1)] bg-[#f4f2ee] text-[#1a1a18] transition-transform duration-150 ease-in-out hover:-translate-y-[2px]">
                     {link.icon}

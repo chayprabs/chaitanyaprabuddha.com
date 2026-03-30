@@ -5,11 +5,12 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.5.9",
     "lucide-react": "^1.7.0",
     "next": "^15.5.3",
     "react": "^19.1.1",

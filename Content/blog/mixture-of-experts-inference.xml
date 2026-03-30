@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blog-post>
+  <metadata>
+    <title>Mixture of Experts Inference: How to Run Sparse MoE Models Efficiently on Commodity Hardware</title>
+    <slug>mixture-of-experts-inference-sparse-moe</slug>
+    <meta-description>Sparse MoE models like Mixtral have 47B parameters but only activate 13B per token. A deep technical guide to MoE routing, expert activation patterns, memory layout strategies, and running Mixtral and Qwen-MoE efficiently on limited hardware.</meta-description>
+    <primary-keyword>mixture of experts inference</primary-keyword>
+    <secondary-keywords>
+      <keyword>sparse MoE LLM</keyword>
+      <keyword>Mixtral inference</keyword>
+      <keyword>expert routing transformer</keyword>
+      <keyword>MoE model memory requirements</keyword>
+      <keyword>Qwen MoE inference</keyword>
+      <keyword>DeepSeek MoE</keyword>
+      <keyword>expert parallelism</keyword>
+      <keyword>MoE vs dense model</keyword>
+      <keyword>sparse activation LLM</keyword>
+    </secondary-keywords>
+    <pillar>Edge Inference</pillar>
+    <word-count>5200</word-count>
+    <reading-time>20 min</reading-time>
+    <date>2026-03-29</date>
+    <author>Chait</author>
+    <schema-type>TechArticle</schema-type>
+  </metadata>
+
+  <seo>
+    <title-tag>Mixture of Experts Inference: Running Sparse MoE Models Efficiently (2025)</title-tag>
+    <meta-description>How sparse MoE models work: expert routing, activation patterns, memory layout, and inference optimization. Mixtral 47B activates only 13B parameters per token. Full technical guide with implementation patterns.</meta-description>
+    <suggested-internal-links>
+      <link>Memory Bandwidth Is All You Need: Why FLOPS Are Irrelevant for LLM Inference</link>
+      <link>KV Cache Internals: Compression, Quantization and Eviction</link>
+      <link>BitNet 1.58-bit Inference in Pure C</link>
+    </suggested-internal-links>
+  </seo>
+
+  <content>
+    <introduction>
+Mixtral 8x7B has 47 billion parameters. When you run it, it uses 13 billion of them (about 28%). The other 72% are dormant for any given token, waiting for a different input that will activate a different expert combination.
+
+This is the sparse mixture-of-experts (MoE) architecture: multiple parallel "expert" feedforward networks at each layer, with a routing network that selects which 2 (or K) experts to activate for each token. The model has the knowledge of a large model (stored in its distributed expert network) but the compute cost of a much smaller model. Only a fraction of the parameters execute on any given forward pass.
+
+The appeal is obvious. The inference challenge is less obvious: those dormant parameters still occupy GPU memory even though they're not being used for the current token. Mixtral at full precision needs 90+ GB to fit the weights (more than a single A100 80GB card). The active-parameter compute advantage is negated if you cannot fit the model in the first place.
+
+The MoE architecture works differently than dense models. The routing algorithm determines inference efficiency. Memory layout challenges differ from dense models. Expert parallelism enables multi-GPU deployment. Practical strategies exist for running Mixtral, Qwen-MoE, and DeepSeek-MoE efficiently on available hardware: whether you have a cluster of H100s or a single high-memory consumer GPU.
+    </introduction>
+
+    <table-of-contents>
+      <item href="#moe-architecture">MoE Architecture: From Dense FFN to Sparse Expert Selection</item>
+      <item href="#routing-algorithm">The Routing Algorithm: Top-K Gating and Load Balancing</item>
+      <item href="#compute-analysis">Compute Analysis: Why Active Parameters Are What Matter</item>
+      <item href="#memory-layout">Memory Layout: The Challenge Naive Dense Intuition Gets Wrong</item>
+      <item href="#expert-parallelism">Expert Parallelism: Multi-GPU Routing for MoE</item>
+      <item href="#quantization-moe">Quantization for MoE: Different Tradeoffs Than Dense Models</item>
+      <item href="#activation-patterns">Expert Activation Patterns: What Actually Gets Routed Where</item>
+      <item href="#moe-models-comparison">MoE Models in 2025: Mixtral, Qwen, DeepSeek Compared</item>
+      <item href="#implementation-patterns">Implementation Patterns: Running MoE Models in Practice</item>
+      <item href="#when-to-use-moe">When to Use MoE vs Dense Models</item>
+      <item href="#key-takeaways">Key Takeaways</item>
+      <item href="#faq">FAQ</item>
+    </table-of-contents>
+
+    <section id="moe-architecture">
+      <h2>MoE Architecture: From Dense FFN to Sparse Expert Selection</h2>
+
+In a standard transformer, each layer has a feedforward network (FFN) that applies to every token:
+
+```
+Standard FFN:
+hidden = GELU(input @ W_gate) * (input @ W_up)
+output = hidden @ W_down
+
+Parameters: 3 × d_model × d_ffn (for SwiGLU variant)
+Active parameters: all of them, for every token
+```
+
+In an MoE transformer, the FFN is replaced by N parallel expert networks, each identical in structure but with independent weights, plus a router:
+
+```
+MoE FFN:
+router_scores = softmax(input @ W_router)  # [vocab_size × N_experts]
+top_k_experts = topk(router_scores, k=2)   # Select 2 experts
+
+output = Σ router_scores[i] × Expert_i(input)  # Weighted sum of top-K expert outputs
+```
+
+Each expert is an independent FFN with its own W_gate, W_up, W_down weight matrices. The router's top-K selection activates only K of the N experts, with the output being a weighted average of the selected experts' outputs.
+
+**Mixtral 8x7B architecture specifics:**
+
+```python
+@dataclass
+class MixtralConfig:
+    hidden_size: int = 4096
+    intermediate_size: int = 14336     # FFN hidden dimension per expert
+    num_hidden_layers: int = 32
+    num_attention_heads: int = 32
+    num_key_value_heads: int = 8       # GQA: 8 KV heads
+
+    # MoE parameters
+    num_local_experts: int = 8         # 8 experts per layer
+    num_experts_per_tok: int = 2       # Top-2 routing (K=2)
+    router_aux_loss_coef: float = 0.02 # Load balancing loss weight
+
+    # Derived statistics
+    @property
+    def total_params(self):
+        # Attention: same as dense
+        attn_params = 4 * self.hidden_size ** 2  # Q, K, V, O projections
+        # FFN: N_experts × 3 × hidden × intermediate
+        ffn_params_per_layer = self.num_local_experts * 3 * self.hidden_size * self.intermediate_size
+        return self.num_hidden_layers * (attn_params + ffn_params_per_layer)
+
+    @property
+    def active_params_per_token(self):
+        attn_params = 4 * self.hidden_size ** 2
+        ffn_params_active = self.num_experts_per_tok * 3 * self.hidden_size * self.intermediate_size
+        return self.num_hidden_layers * (attn_params + ffn_params_active)
+
+config = MixtralConfig()
+print(f"Total parameters: {config.total_params / 1e9:.1f}B")     # 46.7B
+print(f"Active per token: {config.active_params_per_token / 1e9:.1f}B")  # 12.9B
+print(f"Active fraction:  {config.active_params_per_token / config.total_params:.1%}")  # 27.7%
+```
+    </section>
+
+    <section id="routing-algorithm">
+      <h2>The Routing Algorithm: Top-K Gating and Load Balancing</h2>
+
+The router is a simple linear layer that maps from hidden_size to N_experts. At each token, it produces N expert scores, selects the top-K, normalizes those K scores, and uses them as weights for combining the K expert outputs.
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class MoERouter(nn.Module):
+    """
+    Top-K router for mixture of experts.
+    Implements Mixtral-style routing with load balancing.
+    """
+
+    def __init__(self, hidden_size: int, num_experts: int, top_k: int = 2):
+        super().__init__()
+        self.num_experts = num_experts
+        self.top_k = top_k
+        self.router = nn.Linear(hidden_size, num_experts, bias=False)
+
+    def forward(self, hidden_states: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """
+        Route tokens to experts.
+
+        hidden_states: [batch, seq_len, hidden_size]
+        Returns:
+          - routing_weights: [batch * seq_len, top_k] normalized weights
+          - selected_experts: [batch * seq_len, top_k] expert indices
+          - router_logits: [batch * seq_len, num_experts] for auxiliary loss
+        """
+        batch_size, seq_len, hidden = hidden_states.shape
+        flat = hidden_states.view(-1, hidden)  # [batch*seq, hidden]
+
+        # Router: [batch*seq, num_experts]
+        router_logits = self.router(flat)
+
+        # Select top-K experts
+        routing_weights, selected_experts = torch.topk(
+            router_logits, self.top_k, dim=-1
+        )
+
+        # Normalize routing weights (softmax over top-K only)
+        routing_weights = F.softmax(routing_weights, dim=-1)
+
+        return routing_weights, selected_experts, router_logits
+
+
+class MoELayer(nn.Module):
+    """Full MoE layer: router + N expert FFNs."""
+
+    def __init__(self, config: MixtralConfig):
+        super().__init__()
+        self.num_experts = config.num_local_experts
+        self.top_k = config.num_experts_per_tok
+
+        self.router = MoERouter(config.hidden_size, self.num_experts, self.top_k)
+        self.experts = nn.ModuleList([
+            SwiGLUExpert(config.hidden_size, config.intermediate_size)
+            for _ in range(self.num_experts)
+        ])
+
+    def forward(self, hidden_states: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        batch, seq, hidden = hidden_states.shape
+        flat = hidden_states.view(-1, hidden)
+        n_tokens = flat.shape[0]
+
+        # Route
+        routing_weights, selected_experts, router_logits = self.router(hidden_states)
+
+        # Dispatch tokens to experts
+        # More efficient approaches exist (grouped GEMM, expert parallelism)
+        # This is the conceptually clear implementation
+        output = torch.zeros_like(flat)
+
+        for expert_idx in range(self.num_experts):
+            # Which tokens go to this expert?
+            expert_mask = (selected_experts == expert_idx)  # [n_tokens, top_k]
+            token_indices = expert_mask.any(dim=-1).nonzero(as_tuple=True)[0]
+
+            if len(token_indices) == 0:
+                continue  # This expert receives no tokens this forward pass
+
+            # Get routing weights for this expert's tokens
+            weight_mask = expert_mask[token_indices]  # [n_to_expert, top_k]
+            expert_weights = routing_weights[token_indices] * weight_mask  # [n_to_expert, top_k]
+            expert_weights = expert_weights.sum(dim=-1, keepdim=True)  # [n_to_expert, 1]
+
+            # Forward through expert
+            expert_output = self.experts[expert_idx](flat[token_indices])
+
+            # Accumulate weighted output
+            output[token_indices] += expert_weights * expert_output
+
+        return output.view(batch, seq, hidden), router_logits
+
+
+class SwiGLUExpert(nn.Module):
+    """Single FFN expert with SwiGLU activation (Mixtral-style)."""
+
+    def __init__(self, hidden_size: int, intermediate_size: int):
+        super().__init__()
+        self.gate = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.up = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.down = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.down(F.silu(self.gate(x)) * self.up(x))
+```
+
+**The load balancing problem:** Without auxiliary constraints, the router tends to collapse. It learns to always route to the same 1-2 experts because the gradient signal reinforces popular experts (they get more training signal) while ignoring sparse experts. This produces a model where most "experts" are never used.
+
+The fix: auxiliary load balancing loss that penalizes uneven expert assignment:
+
+```python
+def auxiliary_load_balancing_loss(
+    router_logits: torch.Tensor,     # [n_tokens, num_experts]
+    selected_experts: torch.Tensor,  # [n_tokens, top_k]
+    num_experts: int,
+    top_k: int,
+) -> torch.Tensor:
+    """
+    Switch Transformer / Mixtral load balancing loss.
+    Penalizes routing imbalance across experts.
+    """
+    n_tokens = router_logits.shape[0]
+
+    # Fraction of tokens routed to each expert
+    expert_usage = torch.zeros(num_experts, device=router_logits.device)
+    for k in range(top_k):
+        expert_usage.scatter_add_(0, selected_experts[:, k],
+                                   torch.ones(n_tokens, device=router_logits.device))
+    f_i = expert_usage / (n_tokens * top_k)  # Fraction routing to expert i
+
+    # Mean routing probability per expert (soft version)
+    p_i = F.softmax(router_logits, dim=-1).mean(dim=0)
+
+    # Loss: inner product of usage fraction and mean probability
+    # Minimizing this encourages uniform distribution
+    return num_experts * (f_i * p_i).sum()
+```
+    </section>
+
+    <section id="compute-analysis">
+      <h2>Compute Analysis: Why Active Parameters Are What Matter</h2>
+
+The MoE efficiency claim rests on a crucial distinction: **total parameters (memory cost) vs. active parameters (compute cost)**.
+
+For Mixtral 8x7B:
+- Total parameters: 46.7B (determines memory requirement)
+- Active parameters per token: 12.9B (determines compute per token)
+
+A comparably-sized dense model like Llama 3.1 13B has:
+- Total parameters: 13B (memory and compute)
+
+Mixtral runs at roughly the same compute speed as Llama 13B per token (similar active parameters) while achieving quality closer to Llama 70B (similar total parameter count times training signal). This is the MoE efficiency proposition: the model learns from 47B parameters during training, but inference costs 13B parameters per token.
+
+```python
+def moe_compute_comparison():
+    """Compare MoE vs dense compute at inference."""
+    # Model specs
+    models = {
+        "Llama 3.1 8B (dense)": {"total": 8e9, "active": 8e9},
+        "Llama 3.1 70B (dense)": {"total": 70e9, "active": 70e9},
+        "Mixtral 8x7B (MoE)":    {"total": 47e9, "active": 13e9},
+        "Mixtral 8x22B (MoE)":   {"total": 141e9, "active": 39e9},
+        "DeepSeek-V3 (MoE)":     {"total": 671e9, "active": 37e9},
+    }
+
+    # Memory bandwidth (A100 80GB: 2 TB/s)
+    bandwidth_gb_s = 2000.0
+
+    print(f"{'Model':<30} {'Total (GB)':>12} {'Active (GB)':>12} {'Max tok/s':>12}")
+    print("-" * 68)
+    for name, m in models.items():
+        total_gb = m["total"] * 2 / 1e9   # float16
+        active_gb = m["active"] * 2 / 1e9  # float16 active weights
+        max_tok_s = bandwidth_gb_s / (active_gb)  # Bandwidth-limited throughput
+
+        print(f"{name:<30} {total_gb:>12.1f} {active_gb:>12.1f} {max_tok_s:>12.1f}")
+
+moe_compute_comparison()
+# Output:
+# Model                          Total (GB)  Active (GB)    Max tok/s
+# Llama 3.1 8B (dense)                16.0         16.0        125.0
+# Llama 3.1 70B (dense)               140.0        140.0         14.3
+# Mixtral 8x7B (MoE)                   94.0         26.0         76.9
+# Mixtral 8x22B (MoE)                 282.0         78.0         25.6
+# DeepSeek-V3 (MoE)                  1342.0         74.0         27.0
+```
+
+The throughput formula from the roofline model: `tokens_per_second ≈ bandwidth_GB_s / active_weights_GB`. Mixtral 8x7B at 76.9 tok/s sits between 8B dense (125 tok/s) and 70B dense (14.3 tok/s), delivering performance close to 8B models despite having 70B-class quality.
+    </section>
+
+    <section id="memory-layout">
+      <h2>Memory Layout: The Challenge Naive Dense Intuition Gets Wrong</h2>
+
+The MoE memory challenge is that total parameters determine storage requirements, not active parameters. You must load all 47B parameters to run Mixtral even though only 13B activate per token.
+
+Mixtral 8x7B memory requirements by precision:
+
+| Precision | Weight size | KV cache (4K ctx) | Total (batch=1) |
+|---|---|---|---|
+| float32 | 186 GB | 2 GB | 188 GB |
+| bfloat16 | 93 GB | 1 GB | 94 GB |
+| int8 | 47 GB | 0.5 GB | 47.5 GB |
+| int4 (GPTQ/AWQ) | 24 GB | 0.5 GB | 24.5 GB |
+
+At int4 quantization, Mixtral fits on a 32GB GPU (like a consumer RTX 4090) or a 40GB A100. This is the key threshold that made Mixtral practically deployable on non-datacenter hardware when it was released.
+
+**Expert offloading** is a technique specific to MoE models that exploits the sparse activation pattern. Since only 2 of 8 experts activate per token, the other 6 experts' weights are unnecessary for the current forward pass. Expert offloading stores inactive expert weights in CPU DRAM (cheaper, larger) and loads them to GPU VRAM only when the router selects them.
+
+```python
+class ExpertOffloadingManager:
+    """
+    Manage expert weight offloading for MoE models on memory-constrained hardware.
+    Keeps the N most recently used experts on GPU; offloads the rest to CPU.
+    """
+
+    def __init__(self, num_experts: int, n_gpu_resident: int = 2):
+        """
+        num_experts: total experts per layer
+        n_gpu_resident: how many experts to keep resident on GPU
+        """
+        self.num_experts = num_experts
+        self.n_gpu = n_gpu_resident
+        self.gpu_residents: list[int] = []   # Currently on GPU
+        self.cpu_cache: dict[int, dict] = {} # Expert weights on CPU
+
+    def prefetch(self, expert_indices: list[int]):
+        """
+        Before the forward pass, prefetch the needed experts to GPU.
+        Called after routing decision, before expert computation.
+        """
+        for idx in expert_indices:
+            if idx not in self.gpu_residents:
+                # Load from CPU to GPU (async)
+                self._load_to_gpu(idx)
+
+                # Evict least recently used if over budget
+                if len(self.gpu_residents) > self.n_gpu:
+                    self._evict_lru()
+
+    def _load_to_gpu(self, expert_idx: int):
+        if expert_idx in self.cpu_cache:
+            weights = self.cpu_cache[expert_idx]
+            # Move to GPU asynchronously
+            for key, tensor in weights.items():
+                weights[key] = tensor.cuda(non_blocking=True)
+            self.gpu_residents.append(expert_idx)
+
+    def _evict_lru(self):
+        if self.gpu_residents:
+            evict_idx = self.gpu_residents.pop(0)
+            # Move back to CPU pinned memory
+            if evict_idx in self.cpu_cache:
+                for key, tensor in self.cpu_cache[evict_idx].items():
+                    self.cpu_cache[evict_idx][key] = tensor.cpu().pin_memory()
+```
+
+**Expert offloading performance**: With 2 GPU-resident experts (matching the top-2 routing), PCIe bandwidth becomes the bottleneck for the 0% cache hit case (new experts needed every token). At PCIe 5.0 (64 GB/s), loading one Mixtral expert (approximately 1.8 GB in float16) takes about 28ms. Too slow for interactive generation.
+
+The practical solution: expert prefetching based on predicted next token routing. Since the current token's expert selection is correlated with the previous token's selection (experts tend to cluster by input type), prefetching the previous token's expert pair achieves 60-80% cache hits, reducing average expert load time to 5-10ms.
+    </section>
+
+    <section id="expert-parallelism">
+      <h2>Expert Parallelism: Multi-GPU Routing for MoE</h2>
+
+For datacenter deployments with multiple GPUs, expert parallelism distributes each expert to a different GPU. With 8 experts across 8 GPUs, each GPU holds one expert's full weights, fitting comfortably on a single GPU.
+
+```
+Expert Parallelism Layout (8 GPUs, 8 experts):
+
+GPU 0: Expert 0 weights    GPU 1: Expert 1 weights
+GPU 2: Expert 2 weights    GPU 3: Expert 3 weights
+GPU 4: Expert 4 weights    GPU 5: Expert 5 weights
+GPU 6: Expert 6 weights    GPU 7: Expert 7 weights
+
+All GPUs: Shared attention weights (tensor parallelism or replicated)
+
+For each token:
+1. Route on GPU 0 (or broadcast router, each GPU routes independently)
+2. Send token to the 2 GPUs holding its selected experts (all-to-all)
+3. Each GPU computes its expert's output
+4. Return results to original GPU (all-to-all)
+5. Weighted sum of outputs
+```
+
+The communication cost: 2 all-to-all operations per layer, each transferring the hidden states for routed tokens. For a batch of B tokens, T layers, hidden_size H (float16):
+
+```
+Communication per layer = 2 × B × H × 2 bytes × (1 - 1/N_gpus)
+```
+
+For Mixtral at B=32, H=4096, 8 GPUs per layer:
+- Per all-to-all: 32 × 4096 × 2 × 0.875 bytes ≈ 229 KB
+- NVLink bandwidth (600 GB/s): 229 KB / 600 GB/s = 0.38 μs
+
+At NVLink speeds, the communication overhead is negligible. At PCIe (64 GB/s), the same transfer takes 3.6 μs (still modest for typical batch sizes). Expert parallelism is efficient on NVLink-connected GPU clusters (A100/H100 NVLink) but adds noticeable overhead in PCIe-only configurations.
+    </section>
+
+    <section id="quantization-moe">
+      <h2>Quantization for MoE: Different Tradeoffs Than Dense Models</h2>
+
+MoE quantization is more complex than dense model quantization because expert weight quality is not uniform. Some experts are "generalist" experts that handle high-frequency input patterns. Others are specialist experts that activate rarely for specific inputs. Aggressive quantization affects specialist experts disproportionately because their weights have less redundancy to absorb quantization error.
+
+Practical quantization recommendations for MoE models:
+
+**Router weights: never quantize**. The router is 0.01% of total parameters but has disproportionate impact. A miscalibrated router sends tokens to the wrong experts, corrupting the entire forward pass. Keep router weights in float16 or float32.
+
+**Expert weights: quantize safely to int8 or int4**. Most implementations quantize all experts uniformly. More sophisticated approaches (not yet widely deployed) use per-expert calibration datasets to identify which experts are most sensitive and use higher precision for those.
+
+```python
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+import torch
+
+def load_mixtral_quantized(
+    model_id: str = "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    quantization: str = "int4",  # "int8" or "int4"
+) -> AutoModelForCausalLM:
+    """Load Mixtral with quantization."""
+
+    if quantization == "int8":
+        # int8: 2x memory reduction, minimal quality loss
+        config = BitsAndBytesConfig(
+            load_in_8bit=True,
+            llm_int8_threshold=6.0,
+            # Keep attention and norm layers in float16
+            llm_int8_skip_modules=["lm_head", "embed_tokens"],
+        )
+    elif quantization == "int4":
+        # int4: 4x memory reduction, small quality loss
+        config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_use_double_quant=True,   # 2x quantization for further compression
+            bnb_4bit_quant_type="nf4",         # NormalFloat4: better quality than int4
+            # CRITICAL: Never quantize router layers
+            llm_int8_skip_modules=["gate", "lm_head"],
+        )
+    else:
+        config = None
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        quantization_config=config,
+        device_map="auto",
+        torch_dtype=torch.bfloat16,
+    )
+    return model
+
+# Memory after quantization:
+# int8: ~47 GB (fits on 2× A100 40GB or 1× A100 80GB)
+# int4: ~24 GB (fits on 1× RTX 4090 24GB or 1× A100 40GB)
+```
+
+**GPTQ and AWQ for MoE**: Both GPTQ (post-training quantization using Hessian information) and AWQ (activation-aware weight quantization) work with MoE models. AWQ produces better results at int4 for MoE than naive int4 because it accounts for the activation distribution when scaling weights, partially compensating for the specialist expert problem.
+
+Quality impact of int4 quantization on Mixtral 8x7B:
+- MMLU: 70.6% (full) to 69.1% (int4, approximately 1.5% degradation)
+- HumanEval: 40.2% (full) to 38.4% (int4, approximately 1.8% degradation)
+- MATH: 28.4% (full) to 26.1% (int4, approximately 2.3% degradation)
+    </section>
+
+    <section id="activation-patterns">
+      <h2>Expert Activation Patterns: What Actually Gets Routed Where</h2>
+
+Research on expert activation patterns in trained MoE models reveals structure with practical implications for inference optimization:
+
+**Finding 1: Expert specialization by token type.** Different experts specialize in different linguistic functions. In Mixtral, some experts handle syntactic structure tokens (prepositions, articles, punctuation), others handle domain-specific vocabulary (code tokens vs. natural language tokens), and others handle positional patterns (tokens at the beginning of sentences).
+
+**Finding 2: Routing consistency across similar inputs.** Tokens from the same domain or context type tend to route to the same expert subset. A paragraph of Python code consistently routes to 2-3 "code expert" indices; a paragraph of prose routes to a different subset.
+
+**Practical implication: prefetching based on input type.**
+
+```python
+class InputTypeExpertPredictor:
+    """
+    Predict which experts will be needed based on input type,
+    before the full forward pass computes actual routing decisions.
+    Enables prefetching to hide expert loading latency.
+    """
+
+    def __init__(self, expert_affinity_map: dict[str, list[int]]):
+        """
+        expert_affinity_map: {input_type: [likely_expert_indices]}
+        Built from profiling data on representative inputs.
+        """
+        self.affinity = expert_affinity_map
+
+    def predict_likely_experts(self, input_text: str,
+                                n_predict: int = 4) -> list[int]:
+        """
+        Quickly classify input type and predict likely experts.
+        Uses simple heuristics; no model call needed.
+        """
+        input_lower = input_text.lower()
+
+        # Code detection
+        code_indicators = ["def ", "import ", "class ", "{", "}", "//", "/*", "#!/"]
+        if any(ind in input_text for ind in code_indicators):
+            return self.affinity.get("code", [])[:n_predict]
+
+        # Mathematical content
+        math_indicators = ["∑", "∫", "²", "√", "≤", "≥", "equation", "formula"]
+        if any(ind in input_text for ind in math_indicators):
+            return self.affinity.get("math", [])[:n_predict]
+
+        # Default: general text
+        return self.affinity.get("general", [])[:n_predict]
+
+    def build_affinity_map_from_profiling(
+        self, input_samples: dict[str, list[str]],
+        model_with_routing_stats: callable,
+    ) -> dict[str, list[int]]:
+        """
+        Profile the model to build the affinity map.
+        input_samples: {input_type: [sample_texts]}
+        """
+        affinity = {}
+        for input_type, samples in input_samples.items():
+            expert_counts = {}
+            for sample in samples:
+                routing_decisions = model_with_routing_stats(sample)
+                for layer_decisions in routing_decisions:
+                    for expert_idx in layer_decisions:
+                        expert_counts[expert_idx] = expert_counts.get(expert_idx, 0) + 1
+
+            # Sort by frequency, return top experts
+            sorted_experts = sorted(expert_counts.items(), key=lambda x: x[1], reverse=True)
+            affinity[input_type] = [idx for idx, _ in sorted_experts[:6]]
+
+        return affinity
+```
+    </section>
+
+    <section id="moe-models-comparison">
+      <h2>MoE Models in 2025: Mixtral, Qwen, DeepSeek Compared</h2>
+
+| Model | Total params | Active params | Experts/layer | Top-K | Context | Notable feature |
+|---|---|---|---|---|---|---|
+| Mixtral 8x7B | 47B | 13B | 8 | 2 | 32K | Pioneer open MoE |
+| Mixtral 8x22B | 141B | 39B | 8 | 2 | 64K | Strong code/math |
+| Qwen1.5-MoE | 14.3B | 2.7B | 64 | 4 | 32K | Fine-grained experts |
+| DeepSeek-MoE 16B | 16.4B | 2.8B | 64 | 6 | 4K | Shared experts |
+| DeepSeek-V3 | 671B | 37B | 256 | 8 | 128K | Largest open MoE |
+
+**DeepSeek-V3** is the most architecturally interesting: 671B total parameters but only 37B active (a 95% sparsity rate). It introduces "shared experts": a small number of experts (2-4) that always activate alongside the top-K routed experts, providing stable cross-domain features while specialized experts handle domain-specific patterns.
+
+**Qwen-MoE**: Fine-grained routing with 64 experts per layer (vs. 8 for Mixtral) provides more specialization options but increases router complexity. The 4 active out of 64 means each token activates only 6.25% of expert weights per layer. Higher sparsity than Mixtral's 25%.
+    </section>
+
+    <section id="implementation-patterns">
+      <h2>Implementation Patterns: Running MoE Models in Practice</h2>
+
+**Single-GPU deployment (RTX 4090 24GB or A100 40GB):**
+
+```python
+# Best setup for single-GPU Mixtral 8x7B
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import BitsAndBytesConfig
+import torch
+
+model = AutoModelForCausalLM.from_pretrained(
+    "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    quantization_config=BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_quant_type="nf4",
+    ),
+    device_map="auto",
+    torch_dtype=torch.bfloat16,
+    attn_implementation="flash_attention_2",  # Use FA2 for attention
+)
+# Memory: approximately 24 GB, fits on RTX 4090
+# Throughput: ~15-20 tok/s
+
+# For vLLM (recommended for production):
+# vllm serve mistralai/Mixtral-8x7B-Instruct-v0.1 \
+#   --quantization awq \                        # AWQ int4 quantization
+#   --gpu-memory-utilization 0.95 \
+#   --max-model-len 32768
+```
+
+**Multi-GPU deployment (2× A100 40GB):**
+
+```python
+# 2 A100 40GB: expert parallelism or tensor parallelism
+# vLLM handles this automatically:
+# vllm serve mistralai/Mixtral-8x7B-Instruct-v0.1 \
+#   --tensor-parallel-size 2 \    # Split experts across 2 GPUs
+#   --dtype bfloat16              # Full precision (fits across 2× 40GB)
+```
+    </section>
+
+    <key-takeaways>
+      <item>MoE models have two distinct parameter counts: total parameters (determines memory storage requirements) and active parameters per token (determines compute and throughput). Mixtral 8x7B has 47B total but only 13B active. It runs at roughly the compute cost of Llama 13B while achieving quality close to Llama 70B.
+      <item>The router is the most critical component and should never be quantized. The router is less than 0.01% of total parameters but determines which experts activate. Router miscalibration routes tokens to wrong experts, corrupting all subsequent computation. Always keep router weights in float16 or bfloat16.</item>
+      <item>Load balancing is non-trivial. Without auxiliary loss, MoE routers collapse to always activating the same 1-2 experts, wasting the architecture's capacity. The Switch Transformer auxiliary loss (penalizing the inner product of usage fraction and routing probability) maintains uniform expert utilization during training.</item>
+      <item>Expert offloading enables Mixtral deployment on hardware with less VRAM than total weight size. Inactive expert weights are stored in CPU DRAM and loaded to GPU VRAM only when selected by the router. With expert prefetching based on input type classification, cache hit rates of 60-80% reduce average loading overhead to acceptable levels.</item>
+      <item>At int4 quantization (AWQ or GPTQ), Mixtral 8x7B fits in 24 GB VRAM: a single RTX 4090 or A100 40GB. The quality degradation is approximately 1.5-2.3% on standard benchmarks, acceptable for most production deployments that cannot afford the $10,000+ cost of an A100 80GB or H100.</item>
+      <item>Expert activation patterns have structure: code tokens consistently route to "code experts," mathematical content to "math experts." Profiling your workload to build an input-type → expected-expert affinity map enables prefetching that hides expert loading latency and improves throughput significantly for expert-offloaded deployments.</item>
+    </key-takeaways>
+
+    <faq>
+      <item>
+        <question>How does mixture of experts work in LLMs?</question>
+        <answer>In a mixture-of-experts (MoE) LLM, the feedforward network in each transformer layer is replaced by N parallel expert networks and a router. For each input token, the router (a simple linear layer) computes a score for each of the N experts and selects the top K (typically 2) experts to process that token. The final output is a weighted average of the selected experts' outputs, weighted by the router's confidence scores. Different tokens may be routed to different expert combinations, allowing each expert to specialize in different patterns or domains over training. The key benefit: total parameters determine the model's knowledge capacity (N experts worth), but active parameters per token are just K experts worth, enabling high-quality models with proportionally lower inference compute cost.</answer>
+      </item>
+      <item>
+        <question>How much memory does Mixtral 8x7B require?</question>
+        <answer>Mixtral 8x7B requires approximately 93 GB of GPU VRAM in bfloat16, 47 GB in int8 quantization, and 24 GB in int4 quantization (AWQ or GPTQ). The int4 size is the practically important threshold: it allows Mixtral to run on a single RTX 4090 (24 GB) or A100 40GB. Without quantization, running Mixtral requires 2× A100 80GB cards. The int4 quality degradation is approximately 1.5-2% on standard benchmarks, making it acceptable for most production deployments. For production inference at scale, vLLM with AWQ quantization provides the best throughput-quality tradeoff for single-GPU Mixtral deployment.</answer>
+      </item>
+      <item>
+        <question>What is expert parallelism in mixture of experts models?</question>
+        <answer>Expert parallelism is a multi-GPU deployment strategy for MoE models where different experts are placed on different GPUs. For an 8-expert model across 8 GPUs, each GPU holds one expert's weights. During inference, the router determines which experts each token needs, and tokens are dispatched to the GPUs holding those experts via all-to-all communication, processed by the experts, then returned. Expert parallelism allows each GPU to hold a proportionally smaller set of weights, enabling larger MoE models to run across GPU clusters where no single GPU has sufficient memory. The communication overhead is two all-to-all operations per layer, each transferring batch_size × hidden_size tensors (negligible on NVLink-connected clusters at 600 GB/s, but more significant on PCIe-only configurations).</answer>
+      </item>
+    </faq>
+
+    <conclusion>
+MoE models are not yet mainstream infrastructure. Most production deployments still run dense models, but the trajectory is clear. DeepSeek-V3 at 671B total parameters with 37B active demonstrates that the MoE architecture scales to capabilities competitive with closed frontier models, at inference costs close to 70B-scale dense models.
+
+The practical challenge for teams evaluating MoE adoption is the memory-compute split. You cannot reason about MoE deployment costs the same way you reason about dense model costs. Total parameters determine how much VRAM you need. Active parameters determine how fast it runs. The two are independent. Efficient deployment requires optimizing for both simultaneously.
+
+The production path: int4 quantization for memory, FlashAttention for attention (works identically to dense models), and vLLM for serving (expert parallelism handled automatically). This stack runs Mixtral 8x7B on hardware available to most ML teams, at quality competitive with Llama 3.1 70B on most benchmarks.
+
+The more interesting question is whether MoE architectures continue to scale favorably at the largest sizes. DeepSeek-V3 is a significant data point suggesting they do.
+    </conclusion>
+  </content>
+</blog-post>

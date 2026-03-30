@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import Achievements from "@/components/Achievements";
 import About from "@/components/About";
 import Authos from "@/components/Authos";
@@ -7,6 +9,31 @@ import Hero from "@/components/Hero";
 import Now from "@/components/Now";
 import Projects from "@/components/Projects";
 import Research from "@/components/Research";
+
+const HOME_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
+const HOME_DESCRIPTION =
+  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos. Projects, research, writing, and achievements.";
+
+export const metadata: Metadata = {
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "/",
+    siteName: "Chaitanya Prabuddha",
+    type: "website"
+  },
+  twitter: {
+    card: "summary",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    creator: "@chayprabs"
+  }
+};
 
 export default function HomePage() {
   return (

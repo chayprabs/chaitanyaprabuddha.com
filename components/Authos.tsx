@@ -41,7 +41,7 @@ export default function Authos() {
               </span>
 
               <a
-                href="#contact"
+                href="mailto:authos@chaitanyaprabuddha.com?subject=Authos%20Waitlist"
                 className="rounded-[4px] border border-[rgba(0,0,0,0.2)] bg-transparent px-[12px] py-[5px] text-[12px] font-normal text-[#1a1a18] transition-colors duration-150 ease-in-out hover:bg-[rgba(0,0,0,0.04)]"
               >
                 Join waitlist &rarr;
