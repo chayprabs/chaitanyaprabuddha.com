@@ -538,6 +538,9 @@ function buildFrontmatter({ title, description, date, tags, readTimeText, slug }
 function main() {
   const sourceDir = getSourceDirectory();
   const files = readdirSync(sourceDir).filter((file) => file.toLowerCase().endsWith(".xml"));
+  const overwriteExisting = process.argv.includes("--overwrite");
+  let migratedCount = 0;
+  let skippedCount = 0;
 
   mkdirSync(TARGET_DIR, { recursive: true });
 
@@ -578,10 +581,24 @@ function main() {
     const markdown = `${frontmatter}\n\n${body}\n`;
     const targetPath = path.join(TARGET_DIR, `${slug}.md`);
 
+    try {
+      readFileSync(targetPath, "utf8");
+
+      if (!overwriteExisting) {
+        skippedCount += 1;
+        continue;
+      }
+    } catch {
+      // The markdown file does not exist yet, so continue.
+    }
+
     writeFileSync(targetPath, markdown, "utf8");
+    migratedCount += 1;
   }
 
-  console.log(`Migrated ${files.length} posts into ${TARGET_DIR}`);
+  console.log(
+    `Migrated ${migratedCount} XML posts into ${TARGET_DIR}${skippedCount > 0 ? ` (${skippedCount} existing markdown files skipped)` : ""}`
+  );
 }
 
 main();

@@ -5,6 +5,11 @@
     "node": ">=20.9.0"
   },
   "scripts": {
+    "blog:migrate": "node scripts/migrate-blog-xml-to-markdown.mjs",
+    "blog:prepare": "node scripts/prepare-blog-posts.mjs",
+    "blog:sync": "node scripts/migrate-blog-xml-to-markdown.mjs && node scripts/prepare-blog-posts.mjs",
+    "predev": "npm run blog:sync",
+    "prebuild": "npm run blog:sync",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start"
