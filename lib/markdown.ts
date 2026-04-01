@@ -1,18 +1,11 @@
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePrettyCode, { type LineElement } from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-
-type PrettyCodeNode = {
-  children: Array<{ type: string; value: string }>;
-  properties: {
-    className?: string[];
-  };
-};
 
 export async function markdownToHtml(content: string): Promise<string> {
   const result = await unified()
@@ -33,12 +26,12 @@ export async function markdownToHtml(content: string): Promise<string> {
         light: "github-light"
       },
       keepBackground: false,
-      onVisitLine(node: PrettyCodeNode) {
+      onVisitLine(node: LineElement) {
         if (node.children.length === 0) {
           node.children = [{ type: "text", value: " " }];
         }
       },
-      onVisitHighlightedLine(node: PrettyCodeNode) {
+      onVisitHighlightedLine(node: LineElement) {
         const classNames = node.properties.className ?? [];
         classNames.push("highlighted");
         node.properties.className = classNames;
