@@ -48,7 +48,7 @@ That is the full loop. Every production concern here exists to make steps 3 and 
 
 Create a new project directory and install dependencies:
 
-```
+```bash
 mkdir my-mcp-server && cd my-mcp-server
 python -m venv .venv && source .venv/bin/activate
 
@@ -61,7 +61,7 @@ pip install pytest pytest-asyncio
 
 Your project structure:
 
-```
+```plaintext
 my-mcp-server/
 ├── server.py          # Main server definition
 ├── tools/
@@ -82,7 +82,7 @@ Keeping tools in separate files pays off fast. MCP servers grow. A single `serve
 
 Here is the minimal working MCP server with one tool: a web search wrapper using the Brave Search API:
 
-```
+```python
 # server.py
 import asyncio
 import httpx
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
 This works. Test it by adding it to Claude Desktop's config:
 
-```
+```json
 {
   "mcpServers": {
     "my-server": {
@@ -183,7 +183,7 @@ The JSON Schema in your tool definition tells the LLM what arguments to send. It
 
 Validate every tool call before touching business logic. Use Pydantic:
 
-```
+```python
 # tools/web_search.py
 from pydantic import BaseModel, Field, field_validator
 
@@ -204,7 +204,7 @@ class SearchArgs(BaseModel):
 
 Update `call_tool` to validate before dispatching:
 
-```
+```python
 from pydantic import ValidationError
 from tools.web_search import SearchArgs
 
@@ -238,7 +238,7 @@ Three categories of inputs that require specific attention:
 
 **3. File paths**: If any tool accepts a file path, canonicalize it and verify it falls within your allowed directory. The path traversal attack (`../../etc/passwd`) is trivial to construct and catastrophic to miss.
 
-```
+```python
 import os
 from pathlib import Path
 
@@ -257,7 +257,7 @@ The failure mode I see most often is when a tool raises an exception, the MCP se
 
 Every tool handler needs two layers of error handling: expected failures (the API returned a 404, the file does not exist) and unexpected failures (exceptions you did not anticipate).
 
-```
+```python
 import logging
 import traceback
 from enum import Enum
@@ -329,7 +329,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
 
 stdio is right for local tools. The moment you need your MCP server to be reachable by multiple clients, or by a cloud-hosted Claude deployment, you need SSE/HTTP transport.
 
-```
+```python
 # server_remote.py
 import uvicorn
 from mcp.server.sse import SseServerTransport
@@ -369,7 +369,7 @@ The `/sse` endpoint is where MCP clients connect to receive server-sent events. 
 
 A remote MCP server without authentication is a public API for anyone who discovers the URL. Starlette middleware makes it straightforward to require API key authentication on every request.
 
-```
+```python
 # middleware/auth.py
 import hmac
 import hashlib
@@ -411,7 +411,7 @@ class APIKeyAuthMiddleware(BaseHTTPMiddleware):
 
 Add the middleware and health check to your Starlette app:
 
-```
+```python
 from starlette.middleware import Middleware
 from middleware.auth import APIKeyAuthMiddleware
 
@@ -438,7 +438,7 @@ For multi-tenant deployments where different clients should have different acces
 
 Without rate limiting, a single runaway agent can exhaust your upstream API quotas and degrade service for everyone else. Use `slowapi`, a rate limiting library built on top of `limits` that integrates cleanly with Starlette:
 
-```
+```python
 # middleware/rate_limit.py
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -459,7 +459,7 @@ def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
 
 Apply rate limits per endpoint:
 
-```
+```python
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.middleware import SlowAPIMiddleware
 
@@ -485,7 +485,7 @@ Rate limits to start with: **60 requests/minute per IP** for the SSE connection 
 
 **Tool-level timeouts** are separate from rate limiting. Wrap every external call in an `asyncio.wait_for`:
 
-```
+```python
 import asyncio
 
 async def handle_search(args: SearchArgs) -> list[types.TextContent]:
@@ -509,7 +509,7 @@ Set timeouts at the tool level (not just the HTTP client level) so that even a s
 
 Print statements do not work in stdio transport. The server communicates over stdout, so any `print()` output corrupts the MCP message stream. Use stderr for all logging output, and use structured logging (JSON lines) so your logs are queryable.
 
-```
+```python
 # logging_config.py
 import sys
 import structlog
@@ -532,7 +532,7 @@ log = structlog.get_logger()
 
 Log every tool call with enough context to debug failures:
 
-```
+```python
 import time
 from logging_config import log
 
@@ -570,7 +570,7 @@ Most MCP server tests in the wild test tool logic directly, bypassing the protoc
 
 Test tool logic directly with pytest:
 
-```
+```python
 # tests/test_tools.py
 import pytest
 from unittest.mock import AsyncMock, patch
@@ -622,7 +622,7 @@ def test_search_args_rejects_oversized_results():
 
 Test the full call_tool routing layer separately:
 
-```
+```python
 @pytest.mark.asyncio
 async def test_unknown_tool_returns_error_content():
     from server import call_tool
@@ -645,7 +645,7 @@ Run tests in CI with `pytest tests/ -v`. Add `--tb=short` for cleaner output. Co
 
 For remote MCP servers, Docker plus a process manager is the standard path.
 
-```
+```dockerfile
 # Dockerfile
 FROM python:3.12-slim
 
@@ -674,7 +674,7 @@ CMD ["python", "-m", "uvicorn", "server_remote:starlette_app",
 
 Pass secrets via environment variables, never baked into the image:
 
-```
+```bash
 docker build -t my-mcp-server .
 docker run -d \
   --name mcp-server \
@@ -687,7 +687,7 @@ docker run -d \
 
 For Claude Desktop to use a remote server, add it to the MCP config:
 
-```
+```json
 {
   "mcpServers": {
     "my-remote-server": {

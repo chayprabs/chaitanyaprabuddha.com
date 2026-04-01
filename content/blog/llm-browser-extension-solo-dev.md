@@ -43,7 +43,7 @@ This seems straightforward. The complexity is in steps 4 and 5: streaming across
 
 The content script is injected into every page that matches your manifest's `matches` patterns. It runs in an isolated JavaScript environment: same DOM as the page, separate JS scope. This is your only way to read page content.
 
-```
+```js
 // content.js: injected into matching pages
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "extractContent") {
@@ -88,7 +88,7 @@ The 8,000-character slice is deliberate. A full-page extraction can easily excee
 
 All external API calls must go through the service worker. Content scripts and UI contexts cannot make cross-origin requests to LLM APIs directly; they are blocked by CSP. The service worker has full network access.
 
-```
+```js
 // service-worker.js
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -139,7 +139,7 @@ You have two primary UI options: a popup (appears when the extension icon is cli
 
 For LLM extensions, the side panel wins in almost every case. LLM responses take 2–10 seconds to generate. A popup that closes when the user clicks back to the page (which they almost certainly will) kills the in-flight request and discards the partial response. The side panel stays open.
 
-```
+```js
 // manifest.json: enabling side panel
 {
   "manifest_version": 3,
@@ -160,7 +160,7 @@ For LLM extensions, the side panel wins in almost every case. LLM responses take
 }
 ```
 
-```
+```js
 // Open the side panel when the extension icon is clicked
 chrome.action.onClicked.addListener(async (tab) => {
   await chrome.sidePanel.open({ tabId: tab.id });
@@ -177,7 +177,7 @@ The challenge: `chrome.runtime.sendMessage` does not support streaming. Each cal
 
 In the side panel, listen for chunk messages and append to the UI:
 
-```
+```js
 // sidepanel.js
 let responseBuffer = "";
 const responseEl = document.getElementById("response");
@@ -204,7 +204,7 @@ chrome.runtime.onMessage.addListener((message) => {
 
 **Performance note:** Sending one `chrome.runtime.sendMessage` per token can cause jank for fast models. Claude Sonnet generates at about 80 tokens/second, which is 80 inter-process messages per second. Batch chunks into 50ms windows:
 
-```
+```js
 // In service-worker.js: batch chunks to reduce IPC overhead
 let chunkBuffer = "";
 let flushTimeout = null;
@@ -233,7 +233,7 @@ The quality of your LLM responses depends on the quality of context you extract.
 
 A better extraction strategy uses a priority order:
 
-```
+```js
 function extractPageContent() {
   // Priority 1: article or main content element
   const semanticContent = document.querySelector(
@@ -267,7 +267,7 @@ function cleanText(raw) {
 
 For pages where the user has selected text, always prefer the selection over full-page extraction. Selected text is explicit user intent about what context matters:
 
-```
+```js
 const selectedText = window.getSelection()?.toString().trim();
 if (selectedText && selectedText.length > 50) {
   return { text: selectedText, source: "selection" };
@@ -285,7 +285,7 @@ Content Security Policy (CSP) is the most common source of mysterious failures i
 
 **Side panel / popup** scripts run in the extension's origin and CAN make fetch calls if you declare the host in `manifest.json`:
 
-```
+```json
 {
   "host_permissions": [
     "https://api.anthropic.com/*"
@@ -303,7 +303,7 @@ Manifest V3 (MV3) replaced V2 as Chrome's required extension standard in 2023. S
 
 **Service workers terminate after 30 seconds of inactivity.** LLM API calls can take 10–30 seconds for long responses. If the service worker starts a stream and the user switches tabs, the worker may be terminated mid-stream. Use `chrome.storage.session` to save partial state:
 
-```
+```js
 // Keep service worker alive during long LLM calls with a keep-alive ping
 let keepAliveInterval;
 
@@ -326,7 +326,7 @@ function endLLMCall() {
 
 LLM extensions that ship with a hardcoded API key will have that key extracted and abused within days of Web Store publication. The correct model: users supply their own API key, stored in `chrome.storage.local` (encrypted by Chrome, scoped to the extension).
 
-```
+```js
 // settings.js: API key management
 const STORAGE_KEY = "anthropic_api_key";
 

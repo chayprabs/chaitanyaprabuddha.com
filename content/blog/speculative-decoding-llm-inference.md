@@ -114,7 +114,7 @@ Acceptance rate is the dominant variable. It is determined by how well the draft
 
 A clean reference implementation using HuggingFace Transformers:
 
-```
+```python
 import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -219,7 +219,7 @@ Code completion and constrained generation have high acceptance rates because th
 
 **N-gram draft models**: For tasks where the next token frequently repeats patterns from the input (RAG, summarization), an n-gram model built from the input context can serve as a draft model with near-zero memory overhead and 10–100x faster inference than any neural model. This is called "prompt lookup decoding" and is available in HuggingFace Transformers.
 
-```
+```python
 # Prompt lookup decoding: n-gram draft from the input context
 # Zero additional model memory, 10-15% speedup for RAG workloads
 from transformers import GenerationConfig
@@ -245,7 +245,7 @@ Acceptance rate is not a fixed property of a draft-target pair. It depends on th
 
 **How to measure and monitor acceptance rate in production:**
 
-```
+```python
 class SpeculativeDecodingMonitor:
     def __init__(self):
         self.total_draft_tokens = 0

@@ -50,7 +50,7 @@ Every interaction is synchronous from the client's perspective. You send a reque
 
 **MCP Tools** are the primary primitive. A tool has a name, a description, and a JSON Schema input spec. When called, it returns a list of content items (text, image, binary). The tool is a typed remote function call.
 
-```
+```json
 // MCP: tools/call request
 {
   "jsonrpc": "2.0",
@@ -93,7 +93,7 @@ The central concepts:
 
 **Agent Card**: A JSON document served at `/.well-known/agent.json` that describes what an agent can do. Unlike MCP's tool list (which requires a live connection to retrieve), Agent Cards are discoverable via standard HTTP. No integration required to learn what an agent offers.
 
-```
+```json
 // A2A: Agent Card (served at /.well-known/agent.json)
 {
   "name": "SEO Research Agent",
@@ -122,7 +122,7 @@ The central concepts:
 
 **Task**: The core interaction primitive in A2A. A client agent sends a task to a remote agent. The task has a lifecycle: `submitted → working → completed | failed | cancelled`. The client can poll for status, stream progress updates via SSE, or receive push notifications on completion.
 
-```
+```json
 // A2A: Send task request (POST /tasks/send)
 {
   "id": "task-abc-123",
@@ -193,7 +193,7 @@ The lack of standardized authentication in MCP is a known gap. Each implementati
 
 A2A uses standard HTTPS for all communication. Authentication is declared in the Agent Card and enforced per-request:
 
-```
+```json
 // Agent Card authentication declaration
 "authentication": {
   "schemes": ["bearer"],
@@ -240,7 +240,7 @@ The practical answer is that they are mostly complementary. An agent that uses M
 
 A realistic multi-agent architecture for an autonomous SEO system might look like this:
 
-```
+```plaintext
 Orchestrator Agent (Claude-based)
 │
 ├── MCP Connections (local capabilities)
@@ -260,7 +260,7 @@ The orchestrator uses MCP for fast, synchronous local operations (read this file
 
 The orchestrator (an LLM with MCP tool access) is itself accessible via A2A. External clients delegate tasks to the orchestrator via A2A task submission. The orchestrator's internal operation uses MCP. The boundary between A2A and MCP is the boundary between the orchestrator's external interface and its internal tooling.
 
-```
+```python
 # Orchestrator: receive a task via A2A, fulfill it using MCP tools
 async def handle_a2a_task(task: A2ATask) -> A2AArtifact:
     # Task received from a client agent via A2A

@@ -394,6 +394,26 @@ function joinBlocks(blocks) {
   );
 }
 
+function normalizeCodeLanguage(value) {
+  const language = normalizeInlineWhitespace(String(value ?? "")).toLowerCase();
+
+  if (!language) {
+    return "";
+  }
+
+  const aliases = {
+    javascript: "js",
+    typescript: "ts",
+    shell: "bash",
+    sh: "bash",
+    text: "plaintext",
+    plaintext: "plaintext",
+    yml: "yaml"
+  };
+
+  return aliases[language] ?? language;
+}
+
 function renderNode(node, parentTag = "root") {
   if (typeof node?.["#text"] === "string") {
     return squeezeBlankLines(restoreLiteralMarkup(node["#text"]));
@@ -427,7 +447,9 @@ function renderNode(node, parentTag = "root") {
       return blockquote(extractRawText(children));
     case "code-block": {
       const code = restoreLiteralMarkup(extractRawText(children)).replace(/\r/g, "").replace(/^\n+|\n+$/g, "");
-      return `\`\`\`\n${code}\n\`\`\``;
+      const language = normalizeCodeLanguage(attrs.lang);
+      const fence = language ? `\`\`\`${language}` : "```";
+      return `${fence}\n${code}\n\`\`\``;
     }
     case "table":
       return renderTable(children);

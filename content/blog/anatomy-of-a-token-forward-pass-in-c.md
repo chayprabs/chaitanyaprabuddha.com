@@ -53,7 +53,7 @@ The weights for Llama 3.2 1B in float32 occupy 4.4 GB. At float16, that is 2.2 G
 
 In C, we represent the model as a flat struct of float pointers:
 
-```
+```c
 typedef struct {
     // Embedding table: [vocab_size, dim]
     float *token_embed;
@@ -83,7 +83,7 @@ We will return to that analysis at the end. First, let us trace the token.
 
 The embedding table is a matrix of shape [vocab_size × dim]. Each row is the learned floating-point representation of one token. Token embedding is a table lookup, nothing more.
 
-```
+```c
 // Embed a token: copy row token_id from the embedding table into out
 void token_embed(float *out, int token_id, TransformerWeights *w, int dim) {
     float *row = w->token_embed + token_id * dim;
@@ -105,7 +105,7 @@ RMSNorm (Root Mean Square Layer Normalization) stabilizes activations before att
 
 The math: given input x, compute RMS(x) = sqrt(mean(x²) + ε), then output = (x / RMS(x)) × weight.
 
-```
+```c
 void rmsnorm(float *out, const float *x, const float *weight, int dim) {
     // Pass 1: compute sum of squares
     float ss = 0.0f;
@@ -134,7 +134,7 @@ Attention requires three derived vectors from the normalized token representatio
 
 In Llama 3.2 1B with Grouped Query Attention (GQA), Q has shape [dim=2048], while K and V have shape [kv_dim=512]: four query heads per KV head pair, reducing KV cache size by 4x versus standard multi-head attention.
 
-```
+```c
 // Matrix-vector multiplication: out[out_dim] = W[out_dim, in_dim] * x[in_dim]
 // W is stored row-major.
 void matmul(float *out, const float *x, const float *W,
@@ -176,7 +176,7 @@ freq_i = 1 / (10000 ^ (2i / head_dim))
 theta  = pos * freq_i
 ```
 
-```
+```c
 void rope(float *q, float *k, int pos, int head_dim,
           int n_heads, int n_kv_heads) {
     // Rotate query heads
@@ -228,7 +228,7 @@ In autoregressive generation, we compute attention for only the *new* token agai
 
 The KV cache stores K and V vectors for all previous positions, across all layers and all KV heads:
 
-```
+```c
 typedef struct {
     // Layout: [n_layers][max_seq_len][n_kv_heads][head_dim]
     float *key_cache;
@@ -251,7 +251,7 @@ For Llama 3.2 7B at 4096 context length: 32 layers × 4096 positions × 8 KV hea
 
 For one query head against all cached KV positions:
 
-```
+```c
 void single_head_attention(float *out, const float *q,
                             const float *k_cache,  // [max_seq_len, head_dim]
                             const float *v_cache,  // [max_seq_len, head_dim]
@@ -294,7 +294,7 @@ Three sequential passes over the context: dot products, softmax, weighted sum. A
 
 Running all heads, respecting GQA's shared KV heads:
 
-```
+```c
 void multihead_attention(float *out, const float *q,
                           KVCache *cache, int layer, int pos,
                           int n_heads, int n_kv_heads, int head_dim, int dim,
@@ -335,7 +335,7 @@ FFN_SwiGLU(x) = W_down × (silu(W_gate × x) ⊙ (W_up × x))
 
 Where `silu(x) = x × sigmoid(x)` is the SiLU (Swish) activation.
 
-```
+```c
 static inline float silu(float x) {
     // SiLU: x * sigmoid(x). Fast approximation possible, but exact is fine here.
     return x / (1.0f + expf(-x));
@@ -371,7 +371,7 @@ But there is a catch: SwiGLU requires three weight matrices instead of two. To k
 
 The residual add after FFN is two lines:
 
-```
+```c
 // Add FFN output back to the residual stream
 for (int i = 0; i < dim; i++) {
     x[i] += ffn_out[i];
@@ -388,7 +388,7 @@ After all N layers, the residual stream holds a contextual representation of the
 
 **Language Model Head (lm_head)**: A linear projection from [dim] to [vocab_size]. The result is raw logits: one score per vocabulary token.
 
-```
+```c
 float *logits = s->logits;  // [vocab_size]
 
 // Final normalization
@@ -403,7 +403,7 @@ matmul(logits, s->xb, w->lm_head, dim, vocab_size);
 
 After the projection, `logits[i]` is the unnormalized score for token i. To sample the next token:
 
-```
+```c
 // Greedy decoding: pick highest-scoring token
 int argmax(const float *logits, int vocab_size) {
     int best_i = 0;
@@ -432,7 +432,7 @@ The lm_head matmul over 128K vocabulary tokens at dim=4096 costs 128,256 × 4096
 
 Every piece above slots into a single `forward()` function. Here it is, complete:
 
-```
+```c
 // Run one forward pass. Returns pointer to logits[vocab_size].
 float *forward(Transformer *t, int token, int pos) {
     TransformerWeights *w = &t->weights;
@@ -499,7 +499,7 @@ Andrej Karpathy's llama2.c was the first public single-file C implementation in 
 
 Each call to `forward()` produces one token's worth of logits. Generation is a loop:
 
-```
+```c
 int token = tokenize(prompt)[0];  // first token
 for (int pos = 0; pos < max_new_tokens; pos++) {
     float *logits = forward(&transformer, token, pos);

@@ -60,7 +60,7 @@ We represent each ternary value using 2 bits:
 
 This wastes one combination (`11` is unused) but gives us clean bit manipulation. Four ternary values pack into one int8 byte.
 
-```
+```c
 // Encode a single ternary value as 2 bits
 // val must be -1, 0, or +1
 static inline uint8_t encode_ternary(int val) {
@@ -121,7 +121,7 @@ The packing is done once at model load time. The packed weights are stored along
 
 During inference, we unpack 4 weights at a time from each byte. The unpacking logic is the inner loop hot path. It needs to be fast.
 
-```
+```c
 // Decode a packed byte into 4 ternary values: -1, 0, or +1
 // Output as int8_t for efficient SIMD processing
 static inline void unpack_ternary(uint8_t packed, int8_t *out) {
@@ -152,7 +152,7 @@ The key insight is that a ternary multiply-add reduces to a conditional add/subt
 - w=+1: accumulator += x
 - w=-1: accumulator -= x
 
-```
+```c
 // Ternary matrix-vector multiply: out = W_ternary * x (before scaling)
 // W_packed: [out_dim, ceil(in_dim/4)] packed ternary weights
 // x_int8: int8-quantized input vector [in_dim]
@@ -192,7 +192,7 @@ This inner loop has no multiplications. On a CPU where integer addition takes 1 
 
 For better performance, rewrite the inner loop to use a lookup table keyed on the packed byte.
 
-```
+```c
 // Lookup table approach: precompute contribution of each packed byte
 // for each possible 8-bit input activation value
 // Foundation of the SIMD-friendly kernel
@@ -218,7 +218,7 @@ void build_ternary_lut(TernaryLUT *lut) {
 
 BitNet uses 8-bit activation quantization. The input to each linear layer is quantized from float32/float16 to int8 before the ternary matmul, then dequantized afterward.
 
-```
+```c
 // Quantize float activation vector to int8
 // Uses per-tensor absmax scaling: scale = 127 / max(|x|)
 float quantize_activation(
@@ -261,7 +261,7 @@ y_float[i] = out_int32[i] / x_scale / alpha_inv
 
 Where `alpha_inv = 1/alpha` (precomputed at model load time to avoid division at inference time).
 
-```
+```c
 // Full linear layer: float in, float out
 // Internally: quantize activations -> ternary matmul -> dequantize
 void bitnet_linear(
@@ -294,7 +294,7 @@ This function replaces the standard `matmul` in the forward pass, with the same 
 
 A BitNet transformer forward pass is identical to a standard Llama forward pass with one substitution: every `matmul` call is replaced by `bitnet_linear`. The RMSNorm, RoPE, attention mechanics, and SwiGLU activation are unchanged.
 
-```
+```c
 // BitNet weights struct (extends standard TransformerWeights)
 typedef struct {
     // Packed ternary weight matrices [out_dim, ceil(in_dim/4)]

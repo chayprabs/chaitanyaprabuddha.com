@@ -25,6 +25,9 @@ export async function markdownToHtml(content: string): Promise<string> {
         dark: "github-dark",
         light: "github-light"
       },
+      defaultLang: {
+        block: "plaintext"
+      },
       keepBackground: false,
       onVisitLine(node: LineElement) {
         if (node.children.length === 0) {
