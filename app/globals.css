@@ -108,6 +108,25 @@ svg {
   animation: contactPulse 2s ease-in-out infinite;
 }
 
+.blog-content {
+  color: #1a1a18;
+  --tw-prose-body: #1a1a18;
+  --tw-prose-headings: #1a1a18;
+  --tw-prose-links: #c84b2f;
+  --tw-prose-bold: #1a1a18;
+  --tw-prose-counters: #6b6860;
+  --tw-prose-bullets: rgba(200, 75, 47, 0.65);
+  --tw-prose-hr: rgba(0, 0, 0, 0.08);
+  --tw-prose-quotes: #6b6860;
+  --tw-prose-quote-borders: #c84b2f;
+  --tw-prose-captions: #9a9890;
+  --tw-prose-code: #1a1a18;
+  --tw-prose-pre-code: #1a1a18;
+  --tw-prose-pre-bg: transparent;
+  --tw-prose-th-borders: rgba(0, 0, 0, 0.1);
+  --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
+}
+
 .blog-content p {
   margin: 0 0 24px;
   font-size: 17px;
