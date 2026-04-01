@@ -1,0 +1,731 @@
+---
+title: "Structured Outputs and Constrained Decoding: Building LLM Pipelines That Never Return Broken JSON"
+description: "The practical result: 100% format validity, at the cost of some computational overhead and occasional semantic degradation when the format constraint is tight."
+date: "2026-03-29"
+tags: ["Dev Tools","structured outputs LLM","constrained decoding LLM"]
+readTime: "24 min read"
+ogImage: "/og/structured-outputs-constrained-decoding.png"
+canonical: "https://chaitanyaprabuddha.com/blog/structured-outputs-constrained-decoding"
+published: true
+---
+
+The most common cause of AI agent failures in production is not model quality. It is output format. The agent calls a tool with a JSON payload that has a missing field. The parser throws an exception. The agent retries. The same thing happens. The pipeline halts.
+
+The standard solution is post-hoc parsing: extract what you can from the model's output, validate it, retry if validation fails. This approach accepts unreliability as a given and builds recovery mechanisms around it. The better solution is to prevent the problem at the source: constrained decoding that makes invalid output formats mathematically impossible.
+
+Constrained decoding enforces structural constraints during token generation, not after. At each generation step, the decoder maintains a set of valid next tokens given the constraint. If the constraint is a JSON schema, only tokens that can legally continue a valid JSON string are considered. Invalid tokens get probability zero before sampling. The result is that the model cannot produce malformed JSON even if it "wants to." The constraint intervenes at the sampling step.
+
+This is a meaningful architectural shift. Post-hoc parsing makes the model responsible for format and the code responsible for recovery. Constrained decoding makes the decoding mechanism responsible for format and frees the model to focus entirely on semantic content. The practical result: 100% format validity, at the cost of some computational overhead and occasional semantic degradation when the format constraint is tight.
+
+The full technical stack for constrained decoding covers how it works mathematically, the Outlines library and its alternatives, grammar-based approaches in llama.cpp and vLLM, Pydantic integration patterns, performance characteristics, and when to use each approach.
+
+## How Constrained Decoding Works: Logit Masking and FSMs
+
+The LLM token generation process at each step produces a vector of logits (one value per vocabulary token) representing the model's raw score for each possible next token. These logits are passed through softmax to produce a probability distribution, then a token is sampled from that distribution.
+
+Constrained decoding intervenes between the logit computation and the sampling step by applying a mask:
+
+```
+logits = model(context)          # [vocab_size] raw logit vector
+mask = compute_valid_mask(       # [vocab_size] binary mask
+    constraint=current_constraint,
+    current_output=generated_so_far,
+)
+masked_logits = logits + (1 - mask) * (-1e9)  # Set invalid tokens to -infinity
+token = sample(softmax(masked_logits))         # Sample only from valid tokens
+```
+
+The mask sets invalid tokens to negative infinity, which causes softmax to assign them probability zero. The sampling process then operates only over valid tokens.
+
+The constraint is implemented as a **finite state machine (FSM)**. The FSM's current state encodes where we are in the output structure. Each FSM transition corresponds to generating a token. The valid next tokens at any state are those that have at least one valid FSM transition.
+
+For JSON schema constraints:
+- State: we are currently inside a string value for field "name"
+- Valid tokens: any printable character that continues the string, or `"` to close the string
+- Invalid tokens: `{`, `}`, `,`, `:`, numbers. These would corrupt the JSON structure
+
+The FSM for a JSON schema can be large (thousands of states for complex schemas) but is precomputed at constraint setup time, not at generation time. At generation time, only the current-state lookup is needed, which is O(1).
+
+The key implementation challenge is that FSMs operate over characters or bytes, but LLMs operate over subword tokens (BPE tokens that can be 1-4 characters). A single BPE token may span multiple FSM state transitions. The mapping from tokens to FSM transitions must be precomputed and cached for generation efficiency.
+
+```python
+from typing import Optional
+import re
+from dataclasses import dataclass
+
+@dataclass
+class FSMState:
+    """State in the constrained decoding finite state machine."""
+    state_id: int
+    valid_next_chars: set[str]
+    is_terminal: bool = False
+
+class JSONConstraintFSM:
+    """
+    Simplified FSM for JSON object generation.
+    Full implementation handles nested structures, arrays, numbers, etc.
+    """
+
+    def __init__(self, schema: dict):
+        self.schema = schema
+        self.required_fields = set(schema.get("required", []))
+        self.properties = schema.get("properties", {})
+        self._build_fsm()
+
+    def _build_fsm(self):
+        # States: OPEN, IN_KEY, AFTER_KEY, IN_VALUE, AFTER_VALUE, CLOSED
+        self.states = {
+            "OPEN": {"valid": {'"', ' ', '\n'}},
+            "IN_KEY": {"valid": set("abcdefghijklmnopqrstuvwxyz_") | {'"'}},
+            "AFTER_KEY": {"valid": {':'}},
+            "IN_STRING_VALUE": {"valid": set("printable") | {'"'}},
+            "AFTER_VALUE": {"valid": {',', '}'}},
+            "CLOSED": {"valid": set()},
+        }
+        self.current_state = "OPEN"
+        self.current_key = ""
+        self.seen_fields: set[str] = set()
+
+    def get_valid_tokens(self, tokenizer, vocab) -> set[int]:
+        """Get the set of valid token IDs given the current FSM state."""
+        valid_chars = self.states[self.current_state]["valid"]
+        valid_token_ids = set()
+
+        for token_id, token_str in vocab.items():
+            if all(c in valid_chars for c in token_str):
+                valid_token_ids.add(token_id)
+
+        return valid_token_ids
+
+    def advance(self, token_str: str):
+        """Advance the FSM state based on the generated token."""
+        # State transition logic
+        if self.current_state == "OPEN":
+            if token_str.strip() == '"':
+                self.current_state = "IN_KEY"
+                self.current_key = ""
+        elif self.current_state == "IN_KEY":
+            if token_str == '"':
+                self.current_state = "AFTER_KEY"
+            else:
+                self.current_key += token_str
+        elif self.current_state == "AFTER_KEY":
+            if token_str == ":":
+                self.current_state = "IN_STRING_VALUE"
+        elif self.current_state == "IN_STRING_VALUE":
+            if token_str == '"':
+                self.seen_fields.add(self.current_key)
+                self.current_state = "AFTER_VALUE"
+        elif self.current_state == "AFTER_VALUE":
+            if token_str == ",":
+                self.current_state = "OPEN"
+            elif token_str == "}":
+                self.current_state = "CLOSED"
+```
+
+In practice, production implementations like Outlines use more sophisticated FSM construction that handles the full JSON specification including nested objects, arrays, numbers, booleans, null values, and schema-specific type constraints.
+
+## JSON Schema Constraints: Enforcing Structure at the Token Level
+
+JSON schema constraints are the most common and practically valuable form of constrained decoding. The schema specifies:
+- Required fields and their types
+- Enum values (constrained to a specific set of strings)
+- String patterns (regex-constrained string fields)
+- Numeric ranges (min/max values)
+- Nested object structures
+- Array element types and length bounds
+
+Each schema element translates to FSM states and transitions:
+
+```python
+from pydantic import BaseModel, Field
+from typing import Literal, Optional
+from enum import Enum
+
+# Example: agent tool call schema
+class Sentiment(str, Enum):
+    positive = "positive"
+    negative = "negative"
+    neutral = "neutral"
+
+class EntityExtraction(BaseModel):
+    entities: list[str] = Field(description="Named entities in the text")
+    sentiment: Sentiment
+    confidence: float = Field(ge=0.0, le=1.0, description="Confidence 0-1")
+    summary: str = Field(max_length=200)
+    requires_followup: bool
+
+class ProductReview(BaseModel):
+    product_name: str
+    rating: int = Field(ge=1, le=5)
+    pros: list[str] = Field(min_length=1, max_length=5)
+    cons: list[str] = Field(min_length=0, max_length=5)
+    recommendation: Literal["buy", "skip", "wait_for_sale"]
+    verified_purchase: bool
+```
+
+The schema constrains generation at multiple levels:
+- `rating: int = Field(ge=1, le=5)`: only tokens that could be the digit 1-5 (followed by valid JSON) are allowed
+- `sentiment: Sentiment`: only tokens "positive", "negative", "neutral" (plus quotes) are allowed
+- `pros: list[str] = Field(min_length=1)`: at least one string must be generated; the `]` token closing the array is blocked until at least one element is present
+
+This level of constraint eliminates an entire class of model errors: type errors, invalid enum values, missing required fields, out-of-range numbers. The model cannot produce these errors. The tokens needed to produce them are masked out.
+
+## The Outlines Library: Practical Constrained Generation
+
+Outlines is the most mature open-source constrained decoding library for Python. It provides a clean API for constrained generation with support for Pydantic models, JSON schemas, regex patterns, and type-based constraints.
+
+```python
+from outlines import models, generate
+from pydantic import BaseModel
+from typing import Literal
+import outlines
+
+# Load a local model
+model = models.transformers("mistralai/Mistral-7B-Instruct-v0.2")
+
+# Method 1: Constrain to a Pydantic model
+class CalendarEvent(BaseModel):
+    title: str
+    date: str          # Will be generated but not regex-constrained in basic usage
+    start_time: str
+    end_time: str
+    attendees: list[str]
+    is_recurring: bool
+    priority: Literal["high", "medium", "low"]
+
+generator = generate.json(model, CalendarEvent)
+
+result = generator(
+    "Extract the event details: Meeting with Sarah and Tom about Q2 planning, "
+    "March 15th 2025 from 2pm to 3pm, recurring weekly, high priority."
+)
+# result is a validated CalendarEvent instance, never a broken dict
+print(type(result))  # <class 'CalendarEvent'>
+print(result.priority)  # "high"
+print(result.is_recurring)  # True
+
+# Method 2: Regex constraint for structured strings
+generator_sku = generate.regex(model, r"[A-Z]{3}-[0-9]{4}-[A-Z]{2}")
+# This generator can ONLY produce strings matching the SKU pattern
+sku = generator_sku("Generate a SKU code for: Blue Widget, Product ID 1234")
+# Result is guaranteed to match [A-Z]{3}-[0-9]{4}-[A-Z]{2}
+
+# Method 3: Choice constraint (fast, finite set)
+generator_choice = generate.choice(model, ["APPROVE", "REJECT", "ESCALATE"])
+# Guaranteed to return exactly one of the three options
+decision = generator_choice(
+    "Given this customer complaint, what action should be taken? "
+    "Customer reports billing error of $45.00."
+)
+print(decision)  # "ESCALATE" (or "APPROVE" or "REJECT")
+
+# Method 4: Type constraint
+generator_int = generate.format(model, int)
+n = generator_int("How many items are in the list: apple, banana, cherry?")
+print(type(n))  # <class 'int'>
+print(n)        # 3
+
+# Method 5: Context-free grammar (most powerful, most expensive)
+arithmetic_grammar = """
+    ?start: expr
+    ?expr: expr "+" term   -> add
+         | expr "-" term   -> sub
+         | term
+    ?term: term "*" factor  -> mul
+         | term "/" factor  -> div
+         | factor
+    ?factor: NUMBER          -> number
+           | "-" factor      -> neg
+           | "(" expr ")"
+    %import common.NUMBER
+    %import common.WS
+    %ignore WS
+"""
+
+generator_arithmetic = generate.cfg(model, arithmetic_grammar)
+expression = generator_arithmetic(
+    "Write a mathematical expression for: 'The sum of 5 and 3, multiplied by 2'"
+)
+# Guaranteed to be a valid arithmetic expression: "(5 + 3) * 2"
+```
+
+**Outlines integration with vLLM and OpenAI-compatible servers**:
+
+```python
+from outlines.serve.vllm import JSONLogitsProcessor
+from vllm import LLM, SamplingParams
+from pydantic import BaseModel
+
+class AnalysisResult(BaseModel):
+    topic: str
+    key_points: list[str]
+    confidence: float
+
+# Create the logits processor from the Pydantic model
+logits_processor = JSONLogitsProcessor(AnalysisResult, llm.get_tokenizer())
+
+sampling_params = SamplingParams(
+    temperature=0.7,
+    max_tokens=500,
+    logits_processors=[logits_processor],
+)
+
+llm = LLM(model="mistralai/Mistral-7B-Instruct-v0.2")
+outputs = llm.generate(
+    ["Analyze the main themes of: " + text for text in texts],
+    sampling_params,
+)
+# Each output is guaranteed valid AnalysisResult JSON
+```
+
+## llama.cpp GBNF Grammars: Constrained Decoding on CPU
+
+For CPU inference with llama.cpp, constrained decoding is implemented through GBNF (GNOME BNF) grammar files, a variant of Backus-Naur Form that specifies the allowed output structure. This is the most flexible form of constrained generation but requires writing grammar rules.
+
+```
+# GBNF grammar for a structured customer support ticket
+root        ::= ticket
+ticket      ::= "{" ws "\"id\":" ws string "," ws
+                    "\"priority\":" ws priority "," ws
+                    "\"category\":" ws category "," ws
+                    "\"summary\":" ws string "," ws
+                    "\"resolved\":" ws boolean
+                "}"
+
+priority    ::= "\"critical\"" | "\"high\"" | "\"medium\"" | "\"low\""
+category    ::= "\"billing\"" | "\"technical\"" | "\"shipping\"" | "\"returns\""
+boolean     ::= "true" | "false"
+
+string      ::= "\"" char* "\""
+char        ::= [^"\\] | "\\" escape
+escape      ::= "\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t"
+
+ws          ::= [ \t\n]*
+```
+
+Using this grammar with the llama-cpp-python bindings:
+
+```python
+from llama_cpp import Llama
+import json
+
+llm = Llama(
+    model_path="./models/mistral-7b-instruct.gguf",
+    n_ctx=4096,
+    n_gpu_layers=-1,  # Use all GPU layers if available
+)
+
+# Grammar file as string
+TICKET_GRAMMAR = """
+root    ::= ticket
+ticket  ::= "{" ws "\\\"id\\\":" ws string "," ws
+                "\\\"priority\\\":" ws priority "," ws
+                "\\\"category\\\":" ws category "," ws
+                "\\\"summary\\\":" ws string "," ws
+                "\\\"resolved\\\":" ws boolean
+            "}"
+priority ::= "\\\"critical\\\"" | "\\\"high\\\"" | "\\\"medium\\\"" | "\\\"low\\\""
+category ::= "\\\"billing\\\"" | "\\\"technical\\\"" | "\\\"shipping\\\"" | "\\\"returns\\\""
+boolean  ::= "true" | "false"
+string   ::= "\\"" [^\\"]* "\\""
+ws       ::= [ \\t\\n]*
+"""
+
+from llama_cpp import LlamaGrammar
+
+grammar = LlamaGrammar.from_string(TICKET_GRAMMAR)
+
+response = llm(
+    "Create a support ticket for: Customer reports they were charged twice for order #1234. "
+    "This is an urgent billing issue that hasn't been resolved yet.",
+    grammar=grammar,
+    max_tokens=300,
+    temperature=0.2,
+)
+
+result = json.loads(response["choices"][0]["text"])
+print(result["priority"])   # "critical" or "high", never anything else
+print(result["category"])   # "billing", guaranteed by grammar
+```
+
+**JSON grammar generation utility**: automatically generating GBNF from a Python dict schema:
+
+```python
+def schema_to_gbnf(schema: dict) -> str:
+    """
+    Generate a GBNF grammar from a JSON schema dict.
+    Handles: object, array, string, number, integer, boolean, enum.
+    """
+    rules = []
+
+    def type_to_rule(type_name: str, type_info: dict, rule_name: str) -> str:
+        if "enum" in type_info:
+            values = " | ".join(f'"{v}"' for v in type_info["enum"])
+            return f'{rule_name} ::= {values}'
+
+        if type_info.get("type") == "string":
+            if "pattern" in type_info:
+                # Convert regex to GBNF (simplified)
+                return f'{rule_name} ::= "\\"" [^\\"]+ "\\""'
+            return f'{rule_name} ::= "\\"" [^\\"]* "\\""'
+
+        if type_info.get("type") == "integer":
+            min_v = type_info.get("minimum", "")
+            max_v = type_info.get("maximum", "")
+            return f'{rule_name} ::= [0-9]+'
+
+        if type_info.get("type") == "number":
+            return f'{rule_name} ::= [0-9]+ ("." [0-9]+)?'
+
+        if type_info.get("type") == "boolean":
+            return f'{rule_name} ::= "true" | "false"'
+
+        return f'{rule_name} ::= "\\"" [^\\"]* "\\""'  # fallback
+
+    for prop_name, prop_info in schema.get("properties", {}).items():
+        rule = type_to_rule(prop_info.get("type", "string"), prop_info, prop_name + "-val")
+        rules.append(rule)
+
+    return "\n".join(rules)
+```
+
+## vLLM Structured Outputs: HighThroughput Constrained Generation
+
+vLLM added native support for structured outputs (guided decoding) in version 0.4.0, using a similar FSM-based approach. It supports JSON schema, regex, and grammar constraints with minimal code changes from the standard vLLM API.
+
+```python
+from vllm import LLM, SamplingParams
+from vllm.sampling_params import GuidedDecodingParams
+
+llm = LLM(model="mistralai/Mistral-7B-Instruct-v0.2")
+
+# Method 1: JSON schema constraint
+json_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 0, "maximum": 150},
+        "email": {"type": "string", "pattern": r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"},
+        "tier": {"type": "string", "enum": ["free", "pro", "enterprise"]},
+    },
+    "required": ["name", "age", "email", "tier"]
+}
+
+sampling_params = SamplingParams(
+    temperature=0.7,
+    max_tokens=200,
+    guided_decoding=GuidedDecodingParams(json=json_schema),
+)
+
+outputs = llm.generate(
+    ["Extract user profile from: John Smith, 34 years old, john@example.com, Pro subscriber"],
+    sampling_params,
+)
+# Guaranteed valid JSON matching the schema
+
+# Method 2: Regex constraint in vLLM
+sampling_params_regex = SamplingParams(
+    max_tokens=50,
+    guided_decoding=GuidedDecodingParams(
+        regex=r"\d{4}-\d{2}-\d{2}"  # ISO date format
+    ),
+)
+
+# Method 3: Pydantic model (converts to JSON schema automatically)
+from pydantic import BaseModel
+from typing import Literal
+
+class CodeReview(BaseModel):
+    issues_found: int
+    severity: Literal["critical", "major", "minor", "info"]
+    files_affected: list[str]
+    blocking: bool
+    summary: str
+
+schema = CodeReview.model_json_schema()
+sampling_params_pydantic = SamplingParams(
+    temperature=0.3,
+    max_tokens=500,
+    guided_decoding=GuidedDecodingParams(json=schema),
+)
+```
+
+**vLLM structured output performance**: The guided decoding implementation in vLLM adds approximately 5-15% latency overhead compared to unguided generation for simple JSON schemas. For complex nested schemas with many enum constraints, overhead can reach 20-30%. This is acceptable for most production workloads. Format validity eliminates expensive retry cycles.
+
+## Pydantic Integration: SchemaDriven Output with Validation
+
+The cleanest production pattern combines constrained decoding with Pydantic validation. Constrained decoding guarantees format validity; Pydantic provides semantic validation (field-level constraints, cross-field validation, custom validators) that cannot be expressed in a JSON schema grammar.
+
+```python
+from pydantic import BaseModel, Field, model_validator, field_validator
+from typing import Optional
+import json
+import re
+
+class MedicalRecord(BaseModel):
+    patient_id: str = Field(pattern=r"^P-[0-9]{6}$")
+    age: int = Field(ge=0, le=150)
+    diagnosis_codes: list[str] = Field(min_length=1)
+    medications: list[str]
+    allergies: list[str]
+    follow_up_days: Optional[int] = Field(default=None, ge=1, le=365)
+    urgency: str = Field(pattern=r"^(routine|urgent|emergency)$")
+
+    @field_validator("diagnosis_codes")
+    @classmethod
+    def validate_icd_format(cls, v: list[str]) -> list[str]:
+        for code in v:
+            if not re.match(r"^[A-Z][0-9]{2}\.?[0-9A-Z]{0,4}$", code):
+                raise ValueError(f"Invalid ICD-10 code format: {code}")
+        return v
+
+    @model_validator(mode="after")
+    def emergency_requires_followup(self) -> "MedicalRecord":
+        if self.urgency == "emergency" and self.follow_up_days is None:
+            raise ValueError("Emergency cases require a follow-up schedule")
+        return self
+
+async def extract_structured_data(
+    text: str,
+    schema_class: type[BaseModel],
+    llm_client,
+    max_retries: int = 1,
+) -> BaseModel:
+    """
+    Extract structured data using constrained decoding + Pydantic validation.
+    The combination provides format + semantic validity.
+    """
+    json_schema = schema_class.model_json_schema()
+
+    # Constrained generation ensures valid JSON matching schema
+    raw_output = await llm_client.generate_json(text, schema=json_schema)
+
+    # Pydantic validation catches semantic errors that JSON schema can't
+    try:
+        return schema_class.model_validate(json.loads(raw_output))
+    except Exception as e:
+        if max_retries > 0:
+            # One correction attempt with explicit error
+            correction_prompt = f"{text}\n\nPrevious output had validation error: {e}\nPlease fix and retry."
+            raw_output = await llm_client.generate_json(correction_prompt, schema=json_schema)
+            return schema_class.model_validate(json.loads(raw_output))
+        raise
+```
+
+**Schema design principles for constrained generation**:
+
+1. **Use enums aggressively**: Replace free-text fields with enum fields wherever the valid values are finite. `status: Literal["pending", "active", "closed"]` is both constrained and semantically precise.
+
+2. **Avoid over-constraining string fields**: Regex patterns on string fields increase FSM complexity. Use them for structured formats (email, date, ID patterns) but not for natural language fields.
+
+3. **Flatten nested structures when possible**: Deep nesting (objects within arrays within objects) increases FSM state count and generation time. Prefer flat schemas with explicit references when the data structure permits.
+
+4. **Use Optional sparingly**: Optional fields mean the FSM must handle both the presence and absence of the field, increasing state count. Reserve Optional for fields that are optional in the data model.
+
+## Regex Constraints: When You Need Pattern Enforcement
+
+For outputs that are not JSON but need a specific format (phone numbers, dates, IDs, structured codes), regex constraints provide the right level of enforcement without the overhead of a full grammar.
+
+```python
+import outlines
+
+model = outlines.models.transformers("meta-llama/Llama-3.1-8B-Instruct")
+
+# Date extraction
+date_generator = outlines.generate.regex(
+    model,
+    r"(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])"
+)
+
+date = date_generator("When was the Treaty of Versailles signed?")
+# Guaranteed to be a valid-format date: "1919-06-28"
+
+# Phone number extraction
+phone_generator = outlines.generate.regex(
+    model,
+    r"\+?1?\s?[\(\-\.]?\d{3}[\)\-\.\s]\d{3}[\-\.\s]\d{4}"
+)
+
+# Version number extraction
+version_generator = outlines.generate.regex(
+    model,
+    r"\d+\.\d+\.\d+"
+)
+
+version = version_generator("What version of Python was released in October 2023?")
+# Returns "3.12.0" or similar, guaranteed to be X.Y.Z format
+
+# Multiple format choices with choice generator (faster than regex for small sets)
+country_code_generator = outlines.generate.choice(
+    model,
+    ["US", "UK", "CA", "AU", "DE", "FR", "JP", "IN", "BR", "SG"]
+)
+
+# Numeric range
+temperature_generator = outlines.generate.regex(
+    model,
+    r"-?\d{1,3}(\.\d{1,2})?"
+)
+```
+
+**When regex is better than JSON schema**:
+- Single-field outputs (one date, one phone number, one status code)
+- When the overhead of JSON structure tokens (`{`, `"`, `:`, `}`) is meaningful relative to output length
+- When the output will be used directly as a string without parsing
+- For classification tasks with few labels (use `generate.choice` for this, even faster than regex for finite sets)
+
+## Performance: Latency Overhead and Quality Impact
+
+Constrained decoding has two performance costs: computational overhead (masking and FSM transitions) and quality impact (masking out the model's preferred tokens may force it to choose suboptimal alternatives).
+
+**Computational overhead:**
+
+Based on benchmarks with Outlines on a single A10G GPU:
+
+| Constraint type | Latency overhead | Throughput overhead |
+|---|---|---|
+| No constraint | baseline | baseline |
+| Simple JSON (3-5 fields, no enums) | +8-12% | -5-10% |
+| JSON with enum fields | +10-18% | -8-15% |
+| JSON with nested objects | +15-25% | -12-20% |
+| Regex (simple pattern) | +5-10% | -3-8% |
+| CFG grammar (complex) | +25-40% | -20-35% |
+
+The overhead comes primarily from FSM state lookups and token validity computation. Modern implementations precompute the token→state transition map at constraint initialization time, reducing per-token overhead to a single dictionary lookup.
+
+**Quality impact:**
+
+This is the more subtle and important cost. When the model's preferred next token is masked out, it falls back to the next-highest probability valid token. For most cases, this produces semantically identical output. The model's second choice is nearly as good as its first. But in edge cases:
+
+- A model trained to output `null` for empty fields will be forced to output `""` if the schema specifies string type (JSON schema has no null equivalent without explicit nullable declaration)
+- A model that wants to produce a qualifier ("approximately 3-4 items") cannot when constrained to an integer field
+- Long string values may be affected if the FSM's maximum length constraint is too short
+
+**Practical quality measurement**: Run your extraction task unconstrained vs. constrained on a held-out set and measure semantic accuracy (not just format accuracy). In most production use cases the semantic accuracy difference is under 2%; it becomes significant only when schemas are so tight that they systematically force the model away from semantically correct outputs.
+
+**The break-even calculation**: Constrained decoding costs ~15% overhead but eliminates retry cycles that average 0.3-0.5 retries in unconstrained pipelines (at full model cost each). The net effect is 10-25% lower total inference cost plus lower P95 latency due to eliminated retries.
+
+## Production Patterns: Schema Design and Graceful Degradation
+
+**Pattern 1: Tiered schema strictness**
+
+Use strict schemas for pipeline-critical fields, loose schemas for descriptive fields:
+
+```python
+from pydantic import BaseModel
+from typing import Literal, Optional
+
+class StrictProductClassification(BaseModel):
+    """Strict fields: pipeline depends on these being exactly right."""
+    category: Literal["electronics", "clothing", "food", "furniture", "other"]
+    in_stock: bool
+    price_usd: float
+
+class LooseProductEnrichment(BaseModel):
+    """Loose fields: nice to have, tolerate model discretion."""
+    description: str              # Unconstrained: model has full flexibility
+    marketing_copy: str           # Unconstrained: creative latitude
+    seo_tags: list[str]           # Constrained only by type, not content
+
+# Run strict classification first (fast, highly reliable)
+classification = await generate_strict(text, StrictProductClassification)
+
+# Then run enrichment with less constraint pressure
+if classification.category != "other":  # Only enrich known categories
+    enrichment = await generate_loose(text, LooseProductEnrichment)
+```
+
+**Pattern 2: Schema versioning for API stability**
+
+When your constrained output schema is used downstream, version it explicitly. Adding a required field to a schema breaks all consumers expecting the old format.
+
+```python
+from typing import Literal
+
+class ExtractionResultV1(BaseModel):
+    schema_version: Literal["v1"] = "v1"
+    # ... V1 fields
+
+class ExtractionResultV2(BaseModel):
+    schema_version: Literal["v2"] = "v2"
+    # ... V2 fields (superset of V1)
+
+# Always include schema_version in constrained output
+# Consumers check schema_version before processing
+```
+
+**Pattern 3: Fallback to unconstrained with parsing for novel inputs**
+
+For inputs that are structurally unusual (very long texts, non-standard formatting), constrained generation may underperform. The model spends most of its budget navigating the FSM rather than reasoning about the content:
+
+```python
+async def constrained_with_fallback(text: str, schema_class, llm) -> dict:
+    """Try constrained first; fall back to unconstrained + parse on failure."""
+    try:
+        result = await generate_constrained(text, schema_class, llm)
+        return result.model_dump()
+    except Exception as constrained_err:
+        # Fall back to unconstrained generation + post-hoc parse
+        raw = await llm.complete(
+            f"{text}\n\nRespond with a JSON object with these fields: "
+            + ", ".join(schema_class.model_fields.keys())
+        )
+        try:
+            parsed = json.loads(extract_json(raw))
+            return schema_class.model_validate(parsed).model_dump()
+        except Exception:
+            return {}  # Return empty dict rather than crashing
+```
+
+## When Not to Use Constrained Decoding
+
+Constrained decoding solves format problems but can create other problems when misapplied:
+
+**When the output space is open-ended**: Code generation, story writing, technical explanations should not be constrained beyond "generate valid text." Tight schema constraints will produce technically valid but semantically degraded outputs.
+
+**When the schema is wrong or incomplete**: A constraint is only as good as the schema it enforces. A schema that doesn't cover all valid outputs will force the model to produce technically valid but semantically incorrect results. Validate your schemas on a representative sample before deployment.
+
+**When latency is the critical constraint**: For real-time chat interfaces where users expect <500ms first token latency, the FSM setup and masking overhead may be unacceptable. Consider unconstrained generation with fast post-hoc parsing for latency-sensitive paths.
+
+**When the model is too small for the task**: If a 7B model produces poor results on a task unconstrained, constraining its output to a schema will not fix the underlying quality problem. The model may produce technically valid JSON with semantically wrong content. Constrained decoding fixes format, not reasoning.
+
+## Key Takeaways
+
+- Constrained decoding enforces output format during token generation by masking invalid tokens to negative infinity probability before sampling. This makes invalid formats mathematically impossible, not just statistically unlikely. The mechanism is a finite state machine that tracks valid next tokens at each generation step.
+
+- The Outlines library provides the most accessible Python API for constrained generation: `generate.json(model, PydanticModel)` for JSON schema, `generate.regex(model, pattern)` for regex, and `generate.choice(model, options)` for fast classification. Works with local transformers models, vLLM, and OpenAI-compatible servers.
+
+- llama.cpp GBNF grammars provide constrained decoding for CPU inference. The grammar specification is more expressive than JSON schema (arbitrary CFG rules) but requires manual grammar authoring. Best for custom output formats that don't map cleanly to JSON.
+
+- Latency overhead for constrained decoding is 8-25% for typical JSON schemas. The break-even point against unconstrained + retry approaches occurs at approximately 0.15 retries per unconstrained call. This means constrained decoding is economically positive whenever the unconstrained pipeline requires retries on more than 15% of calls.
+
+- Constrained decoding and Pydantic validation are complementary, not redundant. Constrained decoding guarantees format validity (valid JSON matching schema structure). Pydantic validation catches semantic errors (cross-field constraints, custom validators, business logic) that cannot be expressed in JSON schema grammars.
+
+- Do not over-constrain. Enum fields, type constraints, and pattern fields are appropriate for pipeline-critical values. Descriptive text fields should remain unconstrained. Tight constraints on narrative fields degrade output quality by preventing the model from choosing the semantically optimal token at each step.
+
+## FAQ
+
+### What is constrained decoding in LLMs?
+
+Constrained decoding in LLMs is a generation technique that enforces output format constraints during token sampling by masking out invalid tokens before sampling occurs. At each generation step, the decoder computes which tokens are valid given the current constraint (JSON schema, regex pattern, or grammar rule) and sets all invalid tokens to probability zero. The LLM cannot produce tokens that violate the constraint, making format violations impossible rather than just unlikely. This is fundamentally different from post-hoc parsing, which generates output freely and then validates it. Constrained decoding prevents invalid output at the source. The constraint is implemented as a finite state machine that transitions states as tokens are generated, tracking which tokens are valid at each point in the output structure.
+
+### How does the Outlines library work for structured LLM outputs?
+
+Outlines enforces structured outputs by intercepting the logit computation step in the LLM generation loop and applying a validity mask before sampling. It converts the target structure (Pydantic model, JSON schema, regex pattern) into a finite state machine at initialization time. During generation, it performs a dictionary lookup from the current FSM state to the set of valid token IDs, builds a binary mask, and applies it to the logits by setting invalid token positions to negative infinity. The softmax operation then assigns zero probability to invalid tokens, and sampling proceeds over only the valid subset. Outlines supports local transformer models, llama.cpp backends, and OpenAI-compatible API servers. The FSM precomputation adds approximately 100ms setup time for typical schemas; per-token overhead is under 1ms.
+
+### What is the performance overhead of constrained decoding?
+
+Constrained decoding adds approximately 8-25% latency overhead compared to unconstrained generation, depending on schema complexity. Simple JSON schemas with basic types add 8-12% overhead. Schemas with enum fields or nested objects add 15-25%. Complex context-free grammars can add 25-40%. The overhead comes from two sources: FSM state lookup per token (O(1) with precomputed transition maps, typically under 1ms per token) and reduced effective batch size because different requests in a batch may be at different FSM states with different valid token sets, reducing GPU utilization for masked positions. The economic case for constrained decoding is that this overhead is typically smaller than the cost of retry cycles in unconstrained pipelines. Retry rates of 5-15% in production with unconstrained generation are common, and each retry costs a full model call at full latency.
+
+### Can constrained decoding affect output quality?
+
+Yes, constrained decoding can affect semantic output quality in cases where the schema constraints force the model away from its preferred token choices. When the model's highest-probability next token is masked out, it falls back to the next valid token in probability order. For most outputs this produces semantically identical results. The model's second choice is nearly as good. Quality degradation occurs when: (1) schemas are too restrictive for the task (numeric fields where the true answer is a range, enum fields that don't cover all valid categories), (2) schemas have incorrect constraints (wrong max lengths, patterns that exclude valid values), or (3) the model is too small to produce reliable outputs within the constraint space. In well-designed schemas matching the actual task, constrained decoding shows under 2% semantic accuracy degradation in most benchmarks while eliminating all format errors.
+
+The shift from post-hoc parsing to constrained decoding is, at its core, a shift from hope to enforcement. Post-hoc parsing hopes the model will produce valid format and builds recovery mechanisms for when it doesn't. Constrained decoding removes the possibility of invalid format and eliminates the recovery infrastructure entirely.
+
+For production AI pipelines (agent tool calls, data extraction, classification at scale), this shift has real engineering value. The retry infrastructure, the error handling code, the monitoring for format failures, the downstream brittleness when formats are inconsistent: all of this disappears when format validity is guaranteed at the generation step.
+
+The tradeoffs are real: computational overhead, reduced flexibility for open-ended outputs, and occasional semantic quality impact when schemas are poorly designed. But for the many tasks where output format is critical (which is most tool-calling and extraction tasks), the tradeoffs favor constrained decoding clearly.
+
+The practical path: start with JSON schema constraints via the Outlines library or vLLM guided decoding for your existing extraction pipelines. Measure the format failure rate before and after. Then measure the latency improvement from eliminating retries. The economics will be clear.

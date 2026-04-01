@@ -1,0 +1,152 @@
+---
+title: "The AI IDE Trap: Why I Switched Back to VS Code and Small Tools"
+description: "Cursor, Windsurf, and AI-native IDEs are impressive. After six months, I switched back to VS Code with targeted tools. Here's what the AI IDE market gets wrong."
+date: "2026-03-29"
+tags: ["Dev Tools","AI IDE","Cursor vs VS Code"]
+readTime: "12 min read"
+ogImage: "/og/the-ai-ide-trap.png"
+canonical: "https://chaitanyaprabuddha.com/blog/the-ai-ide-trap"
+published: true
+---
+
+Cursor is genuinely impressive. It was also making me worse at programming.
+
+I spent six months with Cursor as my primary IDE, after years of VS Code, and I shipped more code than before. I also understood that code less. I caught myself accepting completions I would not have written, adding features I did not plan, and spending 20 minutes per day fighting context window decisions instead of making architecture decisions.
+
+The AI IDE market has a framing problem. Products like Cursor, Windsurf, and GitHub Copilot Workspace are sold as "AI-native development environments." The implication is that the IDE itself is the unit to upgrade. The IDE is not the problem. The tools attached to it are.
+
+My case for VS Code with sharp, targeted AI tools over AI-native IDEs is not a Luddite argument against AI in programming. It addresses where AI adds value and where it creates drag.
+
+## What AI IDEs Get Right
+
+Direct about what I appreciate before making the contrarian case, because this is not a "AI is bad" argument.
+
+**Multi-file context is real and valuable.** When Cursor understands the structure of your entire codebase and can answer questions about how components interact, this is not a gimmick. It replaces a real cost: jumping between files, grepping for definitions, holding mental models of distant abstractions. The productivity gain for unfamiliar codebases is significant. I estimated 30-40% faster onboarding to new repos.
+
+**Inline generation for boilerplate is fast.** Scaffolding a new API handler, generating test fixtures, writing migration files: AI IDEs handle these quickly with minimal prompt engineering. The context is already there. You describe the shape, it writes the obvious implementation.
+
+**Natural language refactoring is underrated.** "Rename this variable throughout the codebase and update all the docstrings" is a task that takes 10 minutes manually and 10 seconds with Cursor. This specific capability is hard to replicate with smaller tools.
+
+These capabilities are real. The trap is not the capabilities. It is the packaging and the hidden costs that come with it.
+
+## The Trap: Where AI IDEs Create Hidden Costs
+
+The AI IDE is built around a central assumption: more context is always better. Feed the model your whole codebase, your open files, your recent edits, your tests. The more it knows, the better it performs.
+
+This assumption is partially right. For generation tasks, more context helps. For the developer's mental model, it is harmful.
+
+Understanding code requires the discipline of building a mental model. When you read a function, trace its dependencies, and map how it fits into the system, you are doing the hard cognitive work that makes you a better engineer. When you type "how does this work?" and get a paragraph explanation, you get the answer without doing the work.
+
+Over six months, I noticed a pattern. I was producing more code with less understanding of it. I would accept a multi-line completion, run the tests, see them pass, and move on, without being able to explain what the completion did. Three weeks later, debugging a related issue, I would encounter my own code as if a stranger had written it.
+
+This is not an AI problem. It is a passive consumption problem that AI IDEs optimize for at the expense of active construction.
+
+**The second cost is cognitive fragmentation.** AI IDEs want to be your main interface. They add chat panels, context explorers, commit message generators, code review flows. Each feature is individually useful. Together they fragment your attention across multiple modes in a single tool. I found myself managing the IDE as a product, deciding which features to use, keeping context windows clean, as a separate cognitive overhead from programming.
+
+## The Context Window Management Tax
+
+The hidden cost that surprised me most is that AI IDEs require active management of what goes into the context window.
+
+In Cursor, the model's performance degrades as context fills. Long sessions in a large codebase produce worse suggestions than fresh sessions in a small scope. This creates a maintenance burden: periodically clearing context, being deliberate about which files are open, structuring your work sessions around the model's limitations rather than the problem's structure.
+
+Over six months, I estimated I spent approximately 15–20 minutes per day on context hygiene: deciding what to include, noticing when quality dropped, resetting sessions. This amounts to 75–100 minutes per week of overhead that has nothing to do with the software problem I am solving.
+
+The sharp tools model inverts this. Instead of one large-context generalist model trying to understand your whole codebase, you have specific tools with specific inputs. Claude Code gets the file you are working in. A shell tool runs the specific test you care about. The search tool finds the definition you need. Each tool operates in a well-scoped context and does one thing well.
+
+The total AI capability may be smaller. The overhead is also smaller, and the scope of each tool's operation is legible. You know what it knows.
+
+## The Case for Sharp, Small Tools
+
+The Unix philosophy (small tools that do one thing well, composable through standard interfaces) is the right mental model for AI tooling in programming.
+
+The problem with AI IDEs is that they try to be everything: code generator, documentation writer, test runner, commit message author, code reviewer, codebase explorer. Each capability is reasonable. The monolithic packaging creates a system where the capabilities interfere with each other and with your workflow.
+
+Sharp tools mean:
+- **One tool for generation**: Claude Code via terminal, scoped to the current task
+- **One tool for codebase search**: ripgrep, or a purpose-built semantic search tool
+- **One tool for completion**: GitHub Copilot's inline suggestions with narrow scope, not whole-codebase context
+- **One tool for documentation**: context-specific, not always-on
+
+The key discipline is scope. A sharp tool is given exactly the context it needs for its job, no more. This constraint is productive. It forces you to be deliberate about what you are asking the AI to do and why.
+
+> Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.
+
+> Source: The Unix Philosophy, M. D. McIlroy, 1978
+
+The 45-year-old principle applies directly. AI tools that follow it (scoped, composable, with well-defined inputs and outputs) compose better into a development workflow than monolithic AI IDEs that want to replace the workflow.
+
+## My Actual Setup: VS Code + What I Use
+
+This is not a theoretical argument. The specific setup I moved to and why each piece is there:
+
+**VS Code** as the base. Not because it is the best editor in every dimension, but because its extension ecosystem is unmatched and its performance profile is predictable. I know exactly what it is doing and what it is not doing.
+
+**Claude Code** (CLI) for heavy AI tasks. When I need to write a substantial new feature, refactor a module, or understand an unfamiliar system, I run Claude Code in the terminal with explicit context (specific files, relevant interfaces). The key difference from Cursor is that I control the context manually. I know what the model knows. The interaction is deliberate, not ambient.
+
+**GitHub Copilot** (VS Code extension) for inline completion only. Narrow scope: one file at a time, short completions. I have disabled Copilot Chat. I want suggestions for the line I am typing, not a conversation partner managing my whole codebase.
+
+**Ripgrep** (rg) for codebase search. Faster than any IDE's search, scriptable, composable with other tools. When I need to understand a function's usage, `rg -n "function_name" .` with context flags gives me exactly what I need without opening a chat interface.
+
+**Custom shell scripts** for repeated AI tasks. Generating boilerplate for a new API route, creating test fixtures from a schema are stable prompts with stable inputs. I wrote shell scripts that call the Claude API directly rather than using an IDE feature that might change behavior on update.
+
+The result is slower for pure generation volume than Cursor. Faster for code I understand and can maintain. My debugging sessions are shorter because I know the code better.
+
+## Who This Does and Does Not Work For
+
+Not everyone should make this switch. The tradeoffs are real.
+
+**This setup works well if you meet these criteria:**
+- You value understanding your code over shipping volume
+- You work in mature codebases where comprehension matters more than generation speed
+- You are a solo developer or small team where code ownership is high
+- You find ambient AI suggestions more distracting than helpful
+
+**AI IDEs are better in these scenarios:**
+- You are frequently onboarding to new large codebases
+- Your work is heavily boilerplate-dense (enterprise CRUD, scaffolding)
+- You have strong discipline about accepting/rejecting suggestions
+- You work in teams where PR review catches quality issues that IDE-generated code might introduce
+
+The honest version of this argument is that AI IDEs make average developers faster. They also reduce the ceiling of what an individual developer understands about their own codebase. Whether that tradeoff is worth it depends entirely on what you are optimizing for.
+
+If you are building a startup where shipping speed is existential, use Cursor. If you are building infrastructure that you will maintain for five years, be careful about the comprehension debt you are accumulating.
+
+## Key Takeaways
+
+- AI IDEs improve generation speed but create a comprehension debt, producing code faster than it is understood. This debt compounds in maintenance and debugging over months.
+
+- Context window management is a hidden overhead cost in AI IDEs. It takes approximately 15-20 minutes per day of active hygiene (clearing context, managing file scope) that has nothing to do with the actual engineering problem.
+
+- The sharp tools model: one tool for each AI task (generation, completion, search, documentation), each given exactly the context needed for its job. Scoped, composable, legible.
+
+- Claude Code via CLI with explicit context gives you the power of a large-context model without the ambient always-on overhead. You control what it knows; you know what it knows.
+
+- AI IDEs are genuinely better for onboarding to unfamiliar codebases, boilerplate-heavy work, and natural language refactoring across many files. The case against them is not capability; it is packaging and its effect on comprehension habits.
+
+## FAQ
+
+### Is Cursor better than VS Code for AI coding?
+
+Cursor provides more integrated AI capabilities than VS Code with standard extensions. Multi-file context understanding, natural language refactoring, and codebase-wide question answering are genuinely stronger in Cursor. However, VS Code with targeted tools (Claude Code CLI, GitHub Copilot for inline completion) matches or exceeds Cursor for developers who want precise control over AI context. The choice depends on what you optimize for: Cursor is faster for generation volume and onboarding to unfamiliar codebases; VS Code with targeted tools produces code you understand better and maintain more effectively.
+
+### What is the best AI setup for VS Code in 2025?
+
+The highest-value VS Code AI setup in 2025 combines GitHub Copilot for inline completion (narrow scope, single-file context, fast), Claude Code CLI for deliberate AI-assisted generation and refactoring (you control the context explicitly), and ripgrep for codebase search (faster and more composable than IDE search). Disable Copilot Chat and equivalent always-on chat panels; they fragment attention without proportional productivity gain. Use AI tools deliberately (specific task, specific context) rather than ambially (always-on, whole-codebase context).
+
+### What is the AI IDE trap?
+
+The AI IDE trap is the pattern where developers increase code generation velocity while decreasing code comprehension, producing more code faster than they understand it. AI-native IDEs optimize for generation throughput through large-context always-on models. This makes accepting completions frictionless, which builds a comprehension debt that surfaces in slower debugging, more fragile refactoring, and reduced ability to reason about system behavior. The trap is not using AI for coding; it is using AI in a packaging that makes passive consumption the path of least resistance.
+
+### Should I use Cursor or GitHub Copilot?
+
+Use Cursor if you frequently work in large unfamiliar codebases, do substantial boilerplate work, or need natural language multi-file refactoring regularly. Cursor's whole-codebase context model is stronger for these tasks. Use GitHub Copilot if you primarily want fast inline completion in familiar codebases. Its narrower context scope is less powerful but also less likely to generate code you do not understand. For solo developers and small teams building systems they will own long-term, the comprehension quality of Copilot's narrower suggestions often produces better outcomes than Cursor's higher-volume generation.
+
+The best AI coding setup is not the one that generates the most code. It is the one that produces the best ratio of code shipped to code understood.
+
+That ratio is not fixed. It depends on your work type, your team, and your time horizon. For greenfield feature work in a familiar codebase, AI IDEs are excellent. For maintenance, debugging, and long-lived infrastructure, the comprehension debt they accumulate is expensive.
+
+The question to ask about any AI tool in your workflow is whether it makes you better at programming, or whether it makes you faster at producing programs. The answer changes the evaluation entirely.
+
+Six months into VS Code and small tools, I am writing less code per day and understanding more of it. My debugging sessions are shorter. My architectural decisions are more deliberate. For the work I do (building and maintaining systems I own for years) this is the right optimization target.
+
+Your target may be different. Choose accordingly.

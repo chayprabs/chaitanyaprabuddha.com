@@ -1,0 +1,40 @@
+/* rehype-pretty-code wrapper */
+[data-rehype-pretty-code-figure] {
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgb(229 231 235);
+}
+
+[data-rehype-pretty-code-title] {
+  background: rgb(243 244 246);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-family: monospace;
+  border-bottom: 1px solid rgb(229 231 235);
+  color: rgb(107 114 128);
+}
+
+[data-rehype-pretty-code-figure] pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+
+.highlighted {
+  background: rgba(255, 255, 0, 0.08);
+  border-left: 2px solid rgb(234 179 8);
+  margin-left: -1.25rem;
+  padding-left: calc(1.25rem - 2px);
+}
+
+/* dark mode overrides */
+.dark [data-rehype-pretty-code-figure] {
+  border-color: rgb(55 65 81);
+}
+
+.dark [data-rehype-pretty-code-title] {
+  background: rgb(31 41 55);
+  border-color: rgb(55 65 81);
+  color: rgb(156 163 175);
+}

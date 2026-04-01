@@ -1,0 +1,234 @@
+---
+title: "What Gets Cited by ChatGPT and Perplexity: The GEO Playbook"
+description: "Research shows GEO tactics boost AI search visibility by up to 40%. Here's exactly what makes content get cited by ChatGPT, Perplexity, and Google AI Overviews."
+date: "2026-03-29"
+tags: ["AI SEO/GEO","what gets cited by AI search","how to get cited by ChatGPT"]
+readTime: "16 min read"
+ogImage: "/og/what-gets-cited-by-chatgpt-and-perplexity.png"
+canonical: "https://chaitanyaprabuddha.com/blog/what-gets-cited-by-chatgpt-and-perplexity"
+published: true
+---
+
+GEO optimization can boost your content's visibility in AI-generated responses by 40%, according to the KDD 2024 paper that coined the term.
+
+Most content creators have spent the last decade optimizing for Google's ten blue links. The rules there are well understood: keywords, backlinks, page speed, structured data. AI search engines (ChatGPT with Browse, Perplexity, Google AI Overviews, Claude) work differently. They do not rank pages. They extract snippets, synthesize answers, and attribute sources. Getting cited means being extractable, not just rankable.
+
+The bad news is that most SEO advice does not transfer cleanly to AI citation. High-authority pages with thin content get overlooked. Comprehensive guides that bury their key claims in prose get skipped. Technically dense articles that make sense only in context are hard to pull from.
+
+The good news is that the citation pattern is knowable, and content structured for AI extraction has concrete, testable characteristics. This post breaks them down, with specific examples of what citation-ready content looks like versus what gets ignored, and why the difference matters for every piece you publish in 2025.
+
+## How AI Search Engines Select Sources
+
+AI search engines do not retrieve and rank documents the way Google does. They retrieve a candidate set of pages from an underlying search index, then use an LLM to synthesize an answer and attribute specific claims to specific sources.
+
+The selection of what to cite depends on two distinct steps. First, is your page retrieved at all (a traditional SEO question). Second, can the LLM extract a clean, usable snippet from it (a GEO question). Most content optimization advice addresses only the first step. This post addresses the second.
+
+Generative Engine Optimization (GEO) is the practice of structuring content so that AI systems can extract, understand, and cite it accurately. According to research published at KDD 2024 by Aggarwal et al., specific content modifications can boost visibility in AI-generated responses by up to 40%. The tactics that work are different from traditional SEO, and in some cases, opposite.
+
+> This post focuses on the citation selection step, not the retrieval step. You still need basic SEO for your pages to enter the candidate set. GEO addresses what happens after retrieval: why some retrieved pages get cited and others do not.
+
+An LLM generating an answer needs to locate a sentence or paragraph that directly answers a specific question, evaluate whether it is specific enough to be credible, and attribute it to a source. Content that passes all three tests gets cited. Content that fails any of them gets synthesized into the answer without attribution or skipped entirely.
+
+## Factor 1: Specific Statistics with Source Attribution
+
+Stat-rich sentences are the single highest-performing GEO tactic. The KDD 2024 GEO research found adding statistics boosted AI search visibility by 30–40%, the largest single-factor improvement in the study.
+
+The reason is structural. AI systems are optimized to provide accurate, verifiable information. A sentence with a specific number and a source is maximally verifiable and maximally citable.
+
+**What does not get cited:**
+> "Many organizations are adopting AI tools for content production."
+
+**What gets cited:**
+> "According to McKinsey's 2024 Global Survey, 65% of organizations are now regularly using generative AI in at least one business function, up from 33% in 2023."
+
+The second version gives the AI system a specific claim, a number, a named source, and a date. It can extract and cite this sentence without needing the surrounding context. The first version is useless to an extraction model. It says nothing attributable.
+
+**How to apply this:**
+- Include 3-5 stat-bearing sentences per 1,500 words
+- Always name the source and year inline: "According to [Source] ([Year]),..."
+- Use specific numbers: "71%" not "most", "340ms" not "significantly faster"
+- Cite primary sources when possible (research papers, official surveys, .gov/.edu data). AI systems treat these as higher-trust than secondary reporting
+
+The compounding effect is significant. A post with five cited statistics has five independently extractable, citable sentences. Each one is a potential citation surface.
+
+## Factor 2: Definitional Sentences at Section Starts
+
+AI search is heavily used for definitional queries: "what is X," "how does X work," "explain X." The content that wins these queries has one thing in common, which is a clean definitional sentence at the very start of the relevant section.
+
+GEO research found that structured definitions and explanations measurably improve citation frequency. LLMs generate responses by pattern-matching query intent against content structure. A section that opens with a definitional sentence explicitly signals "this paragraph answers the question 'what is X?'"
+
+**Weak version:**
+> "RoPE is an important technique in modern transformers. It was introduced in the RoFormer paper and has been widely adopted."
+
+**Citation-ready version:**
+> "RoPE (Rotary Position Embedding) is a positional encoding method that encodes token position by rotating query and key vectors in 2D subspaces during attention computation. Unlike absolute positional embeddings added at the input layer, RoPE applies inside each attention layer and produces attention scores that depend on relative token distance rather than absolute position."
+
+The second version is extractable in isolation. Someone asking "what is RoPE" receives a complete answer from this single paragraph. The first version requires context to be useful.
+
+**The pattern:**
+```
+[Term] is [complete definition with key properties].
+[Distinguishing characteristic vs. alternatives].
+[Why it matters or where it is used].
+```
+
+Apply this pattern at the start of every major section. Three sentences. Complete enough to stand alone.
+
+## Factor 3: Quotable Standalone Claims
+
+Beyond statistics and definitions, the third high-performing GEO tactic is writing "quotable" sentences: declarative, opinionated, specific claims that are worth repeating.
+
+The KDD 2024 research found that including quotable expert statements improved AI search visibility by 25–30%. These are sentences that work as standalone takeaways, the kind of line someone would screenshot or blockquote.
+
+The difference between a quotable claim and prose:
+
+**Prose:**
+> "There are various factors that affect how fast an LLM runs on CPU hardware, and memory bandwidth is one of the more important ones to consider."
+
+**Quotable:**
+> "The bottleneck in CPU LLM inference is not compute: it is memory bandwidth. Every other optimization is a footnote to this fact."
+
+The second version is assertive, specific, and falsifiable. An AI system generating a response about LLM inference can extract and attribute this claim. It adds credibility through specificity and conviction.
+
+Write 2-3 of these per major section. They do not need to be contrarian; they need to be definitive. State your conclusion directly. Avoid hedging language ("may," "could," "tends to") in your key claims. Reserve hedging for genuinely uncertain territory.
+
+## Factor 4: FAQ Format with Complete Answers
+
+FAQ sections are the highest-density citation surface in any piece of content. Question-and-answer format directly mirrors how AI search generates responses: a query maps to a question, and the answer is extracted and attributed.
+
+Perplexity and Google AI Overviews are particularly responsive to FAQ content because their retrieval systems are optimized to match query phrasing against question text. A page with a question that exactly matches a user query (even buried in an FAQ section) frequently gets cited.
+
+Answers must be complete and standalone. An FAQ answer that begins "As mentioned above..." fails. An AI extracting just the FAQ section has no "above" to reference. Each answer must make full sense in isolation.
+
+**Weak FAQ answer:**
+> Q: How does quantization affect inference speed?
+> A: As we discussed in the earlier section, quantization reduces weight precision and therefore improves speed.
+
+**Citation-ready FAQ answer:**
+> Q: How does quantization affect LLM inference speed?
+> A: Quantization improves LLM inference speed by reducing the number of bytes moved from memory per token, not by making arithmetic faster. A 7B model in float16 occupies 14 GB; the same model in int8 occupies 7 GB. Since inference is memory-bandwidth-bound, halving model size doubles throughput. The bandwidth formula is tokens/second = bandwidth_GB_s / model_size_GB. Modern post-training quantization at 8-bit (GPTQ, AWQ, GGUF Q8_0) achieves this 2x speedup with negligible accuracy loss on standard benchmarks.
+
+The second answer is 2-4 sentences, complete without context, and directly answers the query. It will be cited. The first will not.
+
+**How to build your FAQ section:**
+- Use Google's "People Also Ask" for your primary keyword to source real questions
+- Write answers of 3-5 sentences each
+- Never reference content elsewhere in the post within an FAQ answer
+- Include at least one specific data point per answer
+
+## Factor 5: Citing Your Own Sources
+
+Content that itself cites authoritative sources gets cited more by AI systems.
+
+The KDD 2024 research found that adding source citations improved AI search visibility by 15–20%. AI systems trained on high-quality content have learned that sources that cite sources are more reliable than sources that assert without evidence. Citing a primary source signals that the claim has been verified.
+
+The attribution format matters:
+- **Best**: "According to [named author or org], [specific claim with number]. ([Year])"
+- **Good**: "[Specific claim]. ([Source], [Year])"
+- **Weak**: "Studies show that..." or "Research suggests..."
+
+The "studies show" construction is the worst possible framing for AI citation. It signals that the author does not know which study, which is exactly what AI systems are trying to filter out.
+
+External links also signal trust to AI crawlers. Two to five outbound links to authoritative sources per post (research papers, official documentation, .gov/.edu) meaningfully improve citation rate versus posts with zero external links. AI systems can follow links and verify claims in adjacent context windows.
+
+## Factor 6: Clean Structure That AI Parsers Can Navigate
+
+AI extraction systems parse HTML structure to understand content hierarchy. Content buried in walls of prose is hard to extract. Content in clearly labeled sections with descriptive headings is easy.
+
+The GEO-optimized structure checklist:
+
+- **Heading hierarchy**: H1 → H2 → H3, never skipped. Headings should be descriptive enough that reading only headings gives a complete outline of the content.
+- **Paragraph length**: 2–4 sentences maximum. Long paragraphs reduce extractability. The key claim gets buried and is harder for a language model to identify as the lead sentence.
+- **Front-loaded paragraphs**: Put the key claim in sentence one. Many readers and AI extractors read only the first sentence of each paragraph.
+- **Lists and tables**: Structured data in tables or bullet lists is extracted with higher fidelity than equivalent information in prose. Comparison data especially should be in tables.
+- **Schema markup**: FAQPage schema for FAQ sections, Article schema with author and date, HowTo schema for step-by-step content. Structured data gives AI crawlers metadata without requiring natural language parsing.
+
+Read only the first sentence of every paragraph in your post. If those sentences together form a coherent summary of the full piece, your structure is citation-ready. If they are disconnected or vague, restructure.
+
+## Factor 7: Freshness Signals
+
+AI search systems prefer recently published or recently updated content, particularly for fast-moving topics. Google AI Overviews and Perplexity both weight recency in their source selection.
+
+Freshness signals that AI systems can detect:
+- The `datePublished` and `dateModified` fields in Article schema
+- The date in the URL slug or meta tags
+- Recent statistics (citing a 2025 study vs a 2021 study)
+- Content that references recent events or product versions
+
+Update high-performing posts every 3–6 months. Refresh the statistics to the most recent available, add a "Last updated: [date]" callout, and update the `dateModified` in your schema. This is faster than writing a new post and consistently produces citation rate improvement on posts that were previously ranking but losing citations to newer content.
+
+For competitive topics where you cannot be first, being the most recently updated authoritative piece is the next best position.
+
+## What Does Not Work (Common Mistakes)
+
+Understanding what AI systems ignore is as valuable as knowing what they favor.
+
+**Excessive hedging.** Sentences like "it could be argued that" or "some experts believe" are low-value for AI citation. They signal uncertainty without providing a citable claim. Save hedging for genuinely contested territory. State knowable conclusions directly.
+
+**Thin content with high domain authority.** AI systems extract from content, not from domain authority. A 400-word post from a high-DA site gets fewer citations than a comprehensive 2,500-word guide from a lower-DA specialist site because there is more to extract. Domain authority helps with retrieval; content depth helps with citation.
+
+**Long introductions before the first substantive claim.** AI extraction systems weight the beginning of sections heavily. A 200-word intro that does not contain a citable claim is wasted space from a GEO perspective. Lead with the claim, then provide context.
+
+**Paraphrased statistics without sources.** "Most companies have adopted AI" is uncitable. "According to Gartner's 2025 AI Adoption Report, 78% of enterprises have deployed AI in at least one business process" is citable. Never paraphrase a statistic. Cite it with full attribution or cut it.
+
+**Content that requires context to interpret.** If a paragraph only makes sense after reading three previous sections, it will not be extracted. Each paragraph should carry its own weight.
+
+## How to Test Whether You Are Being Cited
+
+GEO performance is measurable. Here is a systematic testing workflow:
+
+1. **Perplexity check**: Search your target keyword in Perplexity. Expand the sources panel. Is your domain listed? If yes, which specific section was cited?
+
+2. **ChatGPT with Browse**: Enable browsing, search your keyword, ask ChatGPT to show its sources. Note which URL and which excerpt was used.
+
+3. **Google AI Overviews**: Search in Google. When an AI Overview appears, click "Show more" to see cited sources. Track whether your domain appears.
+
+4. **Track by section**: When you do appear, note which section was cited. This tells you which GEO tactics are working in your specific post. If only your FAQ section gets cited, invest in improving the body sections.
+
+5. **Monitor changes over time**: AI citation rates change as you update content and as competing pages publish. Check monthly for high-value keywords. After any significant content update, recheck within two weeks.
+
+No commercial tool tracks AI citations reliably yet (as of early 2025), so manual checking is the current standard. Set up a simple spreadsheet tracking keyword, cited URL, cited section, and date. Patterns emerge after 4–6 weeks.
+
+## Key Takeaways
+
+- AI citation selection is a separate process from SEO ranking. Retrieval (appearing in the candidate set) requires traditional SEO. Citation (being quoted) requires GEO: structuring content for extraction.
+
+- The highest-performing GEO tactic is specific statistics with named source attribution. Each stat-bearing sentence is an independently extractable citation surface. Include 3–5 per post.
+
+- FAQ sections are the highest-density citation format. Each answer must be complete and standalone. Answers that reference other sections of the post will not be extracted correctly by AI systems.
+
+- Definitional sentences at the start of major sections directly answer "what is X" queries. The three-sentence pattern (definition → distinguishing property → significance) is reliably citable.
+
+- Content that cites its own sources gets cited more. The KDD 2024 GEO research found a 15–20% visibility boost from adding source citations. Use "According to [Source] ([Year])..." format, not "studies show."
+
+- Freshness matters for AI search as much as for traditional SEO. Update high-performing posts every 3–6 months with current statistics and a new dateModified in schema markup.
+
+## FAQ
+
+### What makes content get cited by ChatGPT and Perplexity?
+
+Content gets cited by AI search engines when it is specific, structured, and extractable. The key factors are: specific statistics with named source attribution (not vague claims), definitional sentences that answer common questions in 2–3 sentences without requiring surrounding context, FAQ sections with standalone answers, and clean heading hierarchy that allows AI parsers to locate relevant sections. According to the KDD 2024 GEO research paper, these tactics collectively boost AI search visibility by up to 40% versus unoptimized content.
+
+### How is GEO different from traditional SEO?
+
+Traditional SEO optimizes for ranking: getting your page to appear high in a list of results. GEO (Generative Engine Optimization) optimizes for citation: getting specific sentences or paragraphs from your page extracted and attributed in AI-generated answers. SEO is about the retrieval step; GEO is about the extraction step. High-authority pages with thin or vague content can rank well but get zero AI citations. Low-authority pages with specific, well-structured, stat-rich content can earn frequent citations from ChatGPT, Perplexity, and Google AI Overviews despite limited traditional SEO authority.
+
+### Does domain authority affect AI citations?
+
+Domain authority affects whether your page enters the AI system's retrieval candidate set, but has limited impact on whether it is cited once retrieved. AI systems extract content based on specificity and extractability. A comprehensive, stat-rich article on a moderate-authority domain frequently outperforms a thin article on a high-authority domain in citation frequency. This is the key difference from traditional SEO: content quality and structure matter more for citation than domain authority alone.
+
+### How do you check if your content is being cited by AI search?
+
+The most reliable method is manual testing: search your target keywords in Perplexity (which shows sources explicitly), ChatGPT with Browse enabled, and Google (for AI Overviews). For each, check whether your domain appears in the cited sources and which specific section was cited. No commercial GEO tracking tool provides reliable AI citation monitoring as of early 2025, so a simple spreadsheet tracking keyword, cited URL, cited section, and date is the current best practice. Recheck monthly or within two weeks after significant content updates.
+
+### What content format gets cited most often by AI search engines?
+
+FAQ sections with complete, standalone answers are the highest-citation-density format. Each question-answer pair is a potential citation that exactly matches how AI systems generate responses. After FAQ sections, section introductions with definitional sentences and stat-bearing paragraphs with source attribution are the most frequently cited content types. Walls of prose without clear structure, hedged claims without attribution, and paragraphs that depend on surrounding context for meaning are the least frequently cited formats across all major AI search platforms.
+
+The shift to AI search is not a disruption to the existing SEO model: it is an additional layer on top of it. You still need traditional SEO to enter the retrieval candidate set. You now also need GEO to get cited once you are there.
+
+The tactics are learnable and the results are measurable. A post with five cited statistics, definition-first section openings, and a complete FAQ section will consistently outperform a post of the same length and authority that uses vague prose throughout.
+
+Start with your highest-traffic existing posts. Run the citation test on each: search the primary keyword in Perplexity and see what comes up. Add one stat-bearing sentence with attribution per major section. Rewrite your FAQ answers to be fully standalone. Recheck in two weeks.
+
+The 40% visibility improvement from GEO is not marketing language: it is the result of a controlled study. The tactics are not mysterious. Your competitors have not implemented them yet. That gap closes fast once this becomes common knowledge.
