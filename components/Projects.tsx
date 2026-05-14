@@ -12,13 +12,6 @@ const projects = [
     linkType: "website",
     description:
       "A browser extension that injects a 2-3kb subject-aware playbook into any LLM query, routing the model through a subject-chapter-topic-subtopic tree. Response comes back keyed, extension captures it, matches keys, renders a structured step-by-step breakdown in split view."
-  },
-  {
-    name: "IPL2026-LM",
-    href: "https://github.com/chayprabs/ipl2026-LM",
-    linkType: "github",
-    description:
-      "Post-toss, pre-ball IPL prediction engine. Ingests historical data, player context, venue signals, and live bookmaker markets into a structured ML pipeline built for decision-support, not benchmark chasing."
   }
 ];
 

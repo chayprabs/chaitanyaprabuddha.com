@@ -14,37 +14,37 @@ export default function Authos() {
             </h2>
 
             <span className="shrink-0 text-[12px] font-normal text-[#9a9890]">
-              Founder &amp; CEO
+              Founder
             </span>
           </div>
 
           <p className="mb-4 mt-5 w-full text-[16px] font-medium leading-[1.5] text-[#1a1a18]">
-            Search is changing faster than most marketing teams can keep up.
-            Authos is built for what comes next.
+            Claude Code and Codex need reliable tools outside the prompt:
+            remote execution that saves tokens, cuts setup cost, and improves
+            accuracy.
           </p>
 
           <p className="mb-0 w-full text-[14px] font-light leading-[1.75] text-[#6b6860]">
-            An autonomous SEO and GEO agent that handles the full content and
-            visibility pipeline - from traditional search rankings to getting
-            cited by AI models like ChatGPT and Claude. Built for founders and
-            small teams who can&apos;t afford to fall behind.
+            Authos runs browser sessions, Office and PDF conversion, large-file
+            inspection, webhooks, sandboxes, temporary databases, logs, and
+            artifact storage in controlled infrastructure, then returns
+            structured JSON plus signed artifact links through one API and MCP
+            layer.
           </p>
 
           <div className="mt-4 flex flex-col items-start gap-[10px] md:flex-row md:items-center md:justify-between">
             <p className="w-full text-[13px] font-light leading-[1.8] text-[#9a9890] md:w-auto">
-              Founders · SMBs · Indie Hackers
+              Agent builders {"\u00b7"} Developers {"\u00b7"} Engineering teams
             </p>
 
             <div className="flex shrink-0 flex-wrap items-center gap-[10px] md:gap-3">
-              <span className="text-[12px] font-normal text-[#4a8a1e]">
-                Live in alpha
-              </span>
-
               <a
-                href="mailto:authos@chaitanyaprabuddha.com?subject=Authos%20Waitlist"
+                href="https://authors.app"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-[4px] border border-[rgba(0,0,0,0.2)] bg-transparent px-[12px] py-[5px] text-[12px] font-normal text-[#1a1a18] transition-colors duration-150 ease-in-out hover:bg-[rgba(0,0,0,0.04)]"
               >
-                Join waitlist &rarr;
+                Visit site &rarr;
               </a>
 
               <div className="group relative">

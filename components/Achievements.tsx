@@ -1,9 +1,31 @@
 const achievements = [
   {
+    tone: "silver",
+    placement: "2nd Place",
+    name: "Eightfold AI Hackathon",
+    org: "Eightfold AI - Apogee Fest 2026, BITS Pilani",
+    description: (
+      <>
+        Built{" "}
+        <a
+          href="https://github.com/chayprabs/candor"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-[#1a1a18] pb-[1px] text-[#1a1a18] transition-colors duration-150 ease-in-out hover:text-[#6b6860]"
+        >
+          Candor
+        </a>
+        , an agentic interview integrity system that detects AI-agent
+        assistance during interviews to make hiring fairer and more reliable. I
+        competed solo among 700+ teams and finished 2nd.
+      </>
+    )
+  },
+  {
     tone: "gold",
     placement: "1st Place",
     name: "Solve for Pilani",
-    org: "BITS Pilani - Apogee Fest",
+    org: "BITS Pilani - Apogee Fest 2025",
     description:
       "Marketed a professor's campus bakery at BITS Pilani's Apogee Fest and generated \u20b93L+ revenue in 5 days - with the lowest average order value in the room. Every other team ran cash only. We didn't."
   },
@@ -46,6 +68,8 @@ export default function Achievements() {
                     className={`inline-flex shrink-0 items-center gap-[5px] rounded-[20px] px-[10px] py-1 text-[11px] font-normal ${
                       achievement.tone === "gold"
                         ? "border-[0.5px] border-[rgba(201,168,76,0.3)] bg-[#FDF8ED] text-[#9a7c2a]"
+                        : achievement.tone === "silver"
+                          ? "border-[0.5px] border-[rgba(120,128,140,0.3)] bg-[#F7F7F4] text-[#6f747b]"
                         : "border-[0.5px] border-[rgba(160,120,90,0.3)] bg-[#FAF4F0] text-[#7a5a3a]"
                     }`}
                   >
@@ -61,6 +85,19 @@ export default function Achievements() {
                         <circle cx="12" cy="8" r="6" fill="#C9A84C" />
                         <path d="M8 14l-3 7h14l-3-7" fill="#C9A84C" opacity="0.6" />
                         <circle cx="12" cy="8" r="3.5" fill="#F0C93A" />
+                      </svg>
+                    ) : achievement.tone === "silver" ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="8" r="6" fill="#9AA1AA" />
+                        <path d="M8 14l-3 7h14l-3-7" fill="#9AA1AA" opacity="0.6" />
+                        <circle cx="12" cy="8" r="3.5" fill="#C9CED4" />
                       </svg>
                     ) : (
                       <svg
