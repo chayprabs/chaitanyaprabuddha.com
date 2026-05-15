@@ -108,6 +108,99 @@ svg {
   animation: contactPulse 2s ease-in-out infinite;
 }
 
+.blog-toc {
+  max-width: 680px;
+  margin: 0 0 30px;
+}
+
+.blog-toc-details {
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #eceae5;
+  padding: 14px 16px 16px;
+}
+
+.blog-toc-summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: #6b6860;
+}
+
+.blog-toc-summary::-webkit-details-marker {
+  display: none;
+}
+
+.blog-toc-summary::after {
+  content: "+";
+  display: inline-flex;
+  height: 22px;
+  width: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #1a1a18;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.blog-toc-details[open] .blog-toc-summary::after {
+  content: "-";
+}
+
+.blog-toc-list {
+  display: flex;
+  max-height: 220px;
+  flex-wrap: wrap;
+  gap: 8px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.blog-toc-item {
+  margin: 0;
+}
+
+.blog-toc-link {
+  display: inline-flex;
+  max-width: 100%;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: rgba(250, 250, 248, 0.65);
+  padding: 5px 9px;
+  color: #3a3a38;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  transition:
+    border-color 0.15s ease-in-out,
+    color 0.15s ease-in-out,
+    background 0.15s ease-in-out;
+}
+
+.blog-toc-link:hover {
+  border-color: rgba(200, 75, 47, 0.4);
+  background: rgba(250, 250, 248, 0.95);
+  color: #c84b2f;
+}
+
+.blog-toc-item[data-level="3"] .blog-toc-link {
+  color: #6b6860;
+}
+
 .blog-content {
   color: #1a1a18;
   --tw-prose-body: #1a1a18;
@@ -150,6 +243,25 @@ svg {
   line-height: 1.5;
   font-weight: 500;
   color: #1a1a18;
+}
+
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  margin: 28px 0 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #1a1a18;
+}
+
+.blog-content .anchor-heading {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-content .anchor-heading:hover {
+  text-decoration: none;
 }
 
 .blog-content pre {
@@ -224,6 +336,12 @@ svg {
   color: #3a3a38;
 }
 
+.blog-content img {
+  height: auto;
+  margin: 0 0 24px;
+  border-radius: 6px;
+}
+
 .blog-content blockquote {
   margin: 0 0 24px;
   border-left: 3px solid #c84b2f;
@@ -281,6 +399,10 @@ svg {
 
   .blog-content li {
     font-size: 15px;
+  }
+
+  .blog-toc-link {
+    font-size: 12px;
   }
 
   .blog-content table {

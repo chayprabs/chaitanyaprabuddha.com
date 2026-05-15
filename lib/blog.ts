@@ -7,7 +7,7 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 import { cache } from "react";
 
-import { markdownToHtml } from "@/lib/markdown";
+import { markdownToHtml, type TableOfContentsItem } from "@/lib/markdown";
 
 const BLOG_DIRECTORY = path.join(process.cwd(), "content", "blog");
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
@@ -28,6 +28,7 @@ export type PostFrontmatter = {
 export type Post = PostFrontmatter & {
   content: string;
   html: string;
+  tableOfContents: TableOfContentsItem[];
 };
 
 type ParsedPostRecord = {
@@ -202,12 +203,15 @@ export const getPostBySlug = cache(async (slug: string): Promise<Post> => {
     throw new Error(`Post not found for slug: ${slug}`);
   }
 
-  const html = await markdownToHtml(record.content);
+  const { html, tableOfContents } = await markdownToHtml(record.content, {
+    title: record.frontmatter.title
+  });
 
   return {
     ...record.frontmatter,
     content: record.content,
-    html
+    html,
+    tableOfContents
   };
 });
 

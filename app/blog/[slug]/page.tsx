@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import Contact from "@/components/Contact";
+import BlogTableOfContents from "@/components/BlogTableOfContents";
 import { getAdjacentPosts, getAllSlugs, getPostBySlug } from "@/lib/blog";
 
 type BlogPostPageProps = {
@@ -114,6 +115,8 @@ export default async function PostPage({ params }: BlogPostPageProps) {
             </header>
 
             <div className="my-8 max-w-[680px] border-t border-[rgba(0,0,0,0.08)]" />
+
+            <BlogTableOfContents items={post.tableOfContents} />
 
             <div className="max-w-[680px]">
               <div
