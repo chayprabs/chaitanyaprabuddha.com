@@ -9,6 +9,7 @@ import Hero from "@/components/Hero";
 import Now from "@/components/Now";
 import Projects from "@/components/Projects";
 import Research from "@/components/Research";
+import StemLM from "@/components/StemLM";
 
 const HOME_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const HOME_DESCRIPTION =
@@ -42,6 +43,7 @@ export default function HomePage() {
         <Hero />
         <About />
         <Authos />
+        <StemLM />
         <Projects />
         <Research />
         <Achievements />

@@ -7,11 +7,11 @@ const projects = [
       "A privacy-first voice dictation tool that runs entirely on-device. No cloud, no API calls, no data leaving your machine - just local models that adapt to how you speak. Open source alternative to Wispr Flow and Superwhisper."
   },
   {
-    name: "StemLM",
-    href: "https://stemlm.app",
-    linkType: "website",
+    name: "Newsroom",
+    href: "https://github.com/chayprabs/newsroom-socialmediamanager",
+    linkType: "github",
     description:
-      "A browser extension that injects a 2-3kb subject-aware playbook into any LLM query, routing the model through a subject-chapter-topic-subtopic tree. Response comes back keyed, extension captures it, matches keys, renders a structured step-by-step breakdown in split view."
+      "An editorial AI pipeline I built after ContextCon to turn live X trends into Crustdata-style data posts. Grok finds the story, Claude scores and reframes it, Crustdata proves it with real data, and GPT-Image-2 renders the final social post - with endpoint validation, prompt caching, usage logs, and per-run artifacts."
   }
 ];
 
