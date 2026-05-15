@@ -22,6 +22,68 @@ const achievements = [
     )
   },
   {
+    tone: "blue",
+    placement: "Featured Builder",
+    name: "OpenAI Codex Hackathon",
+    org: "OpenAI x GrowthX - Bengaluru",
+    description: (
+      <>
+        Selected for{" "}
+        <a
+          href="https://luma.com/x495vdw1?tk=AWqy9y&utm_source=growthx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-[#1a1a18] pb-[1px] text-[#1a1a18] transition-colors duration-150 ease-in-out hover:text-[#6b6860]"
+        >
+          OpenAI Codex Hackathon - Bengaluru
+        </a>
+        , India&apos;s first Codex hackathon, from 5,000+ applicants into a
+        100-builder offline cohort. Built{" "}
+        <a
+          href="https://github.com/chayprabs/codex-hack-bengaluru"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-[#1a1a18] pb-[1px] text-[#1a1a18] transition-colors duration-150 ease-in-out hover:text-[#6b6860]"
+        >
+          codex-hack-bengaluru
+        </a>{" "}
+        in a one-day sprint focused on agentic coding, developer tools, and
+        AI-native product workflows.
+      </>
+    )
+  },
+  {
+    tone: "slate",
+    placement: "Top 10",
+    name: "ContextCon",
+    org: "Crustdata x Y Combinator - Bengaluru",
+    description: (
+      <>
+        Selected among the top 100 participants from roughly 2,000 applicants
+        for{" "}
+        <a
+          href="https://luma.com/6ftay6mq"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-[#1a1a18] pb-[1px] text-[#1a1a18] transition-colors duration-150 ease-in-out hover:text-[#6b6860]"
+        >
+          ContextCon
+        </a>
+        , Crustdata&apos;s YC-partnered hackathon for developers, AI agent
+        builders, and technical founders. Built{" "}
+        <a
+          href="https://github.com/chayprabs/contextkings"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-[#1a1a18] pb-[1px] text-[#1a1a18] transition-colors duration-150 ease-in-out hover:text-[#6b6860]"
+        >
+          ContextKings
+        </a>{" "}
+        with Crustdata APIs in a 6-hour sprint and finished in the top 10.
+      </>
+    )
+  },
+  {
     tone: "gold",
     placement: "1st Place",
     name: "Solve for Pilani",
@@ -70,6 +132,10 @@ export default function Achievements() {
                         ? "border-[0.5px] border-[rgba(201,168,76,0.3)] bg-[#FDF8ED] text-[#9a7c2a]"
                         : achievement.tone === "silver"
                           ? "border-[0.5px] border-[rgba(120,128,140,0.3)] bg-[#F7F7F4] text-[#6f747b]"
+                          : achievement.tone === "blue"
+                            ? "border-[0.5px] border-[rgba(37,99,235,0.24)] bg-[#EEF4FF] text-[#315fa8]"
+                          : achievement.tone === "slate"
+                            ? "border-[0.5px] border-[rgba(74,92,110,0.25)] bg-[#F2F5F6] text-[#4a5c6e]"
                         : "border-[0.5px] border-[rgba(160,120,90,0.3)] bg-[#FAF4F0] text-[#7a5a3a]"
                     }`}
                   >
@@ -98,6 +164,32 @@ export default function Achievements() {
                         <circle cx="12" cy="8" r="6" fill="#9AA1AA" />
                         <path d="M8 14l-3 7h14l-3-7" fill="#9AA1AA" opacity="0.6" />
                         <circle cx="12" cy="8" r="3.5" fill="#C9CED4" />
+                      </svg>
+                    ) : achievement.tone === "blue" ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="8" r="6" fill="#4F83D1" />
+                        <path d="M8 14l-3 7h14l-3-7" fill="#4F83D1" opacity="0.55" />
+                        <circle cx="12" cy="8" r="3.5" fill="#A9C8F7" />
+                      </svg>
+                    ) : achievement.tone === "slate" ? (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="8" r="6" fill="#6F7F8F" />
+                        <path d="M8 14l-3 7h14l-3-7" fill="#6F7F8F" opacity="0.55" />
+                        <circle cx="12" cy="8" r="3.5" fill="#A7B1BC" />
                       </svg>
                     ) : (
                       <svg
