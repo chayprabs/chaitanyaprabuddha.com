@@ -24,7 +24,7 @@ export function BlogJsonLd({
     author: {
       "@type": "Person",
       name: "Chaitanya Prabuddha",
-      url: "https://chaitanyaprabuddha.com"
+      url: "https://www.chaitanyaprabuddha.com"
     }
   };
 
