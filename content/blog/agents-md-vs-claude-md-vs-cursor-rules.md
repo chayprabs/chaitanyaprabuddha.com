@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["AGENTS.md","CLAUDE.md","Cursor Rules","AI coding agents","Codex","Claude Code","Cursor","developer tools","AI instructions","coding assistant configuration"]
 readTime: "29 min read"
 ogImage: "/og/agents-md-vs-claude-md-vs-cursor-rules.png"
-canonical: "https://chaitanyaprabuddha.com/blog/agents-md-vs-claude-md-vs-cursor-rules"
+canonical: "https://www.chaitanyaprabuddha.com/blog/agents-md-vs-claude-md-vs-cursor-rules"
 published: true
 ---
 

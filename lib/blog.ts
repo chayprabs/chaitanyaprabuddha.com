@@ -10,7 +10,7 @@ import { cache } from "react";
 import { markdownToHtml } from "@/lib/markdown";
 
 const BLOG_DIRECTORY = path.join(process.cwd(), "content", "blog");
-const SITE_URL = "https://chaitanyaprabuddha.com";
+const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const MARKDOWN_EXTENSIONS = new Set([".md", ".mdx"]);
 
 export type PostFrontmatter = {
@@ -84,6 +84,65 @@ function normaliseTags(value: unknown) {
   return [];
 }
 
+function normaliseCanonical(value: unknown, slug: string) {
+  const fallback = `${SITE_URL}/blog/${slug}`;
+  const canonical = normaliseString(value, fallback);
+
+  try {
+    const url = new URL(canonical, SITE_URL);
+
+    if (
+      url.hostname === "chaitanyaprabuddha.com" ||
+      url.hostname === "www.chaitanyaprabuddha.com"
+    ) {
+      return new URL(url.pathname, SITE_URL).toString();
+    }
+
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return fallback;
+  }
+}
+
+function publicFileExists(publicPath: string) {
+  const safePath = publicPath
+    .split("/")
+    .filter(Boolean)
+    .map((part) => decodeURIComponent(part));
+
+  return existsSync(path.join(process.cwd(), "public", ...safePath));
+}
+
+function normaliseOgImage(value: unknown, slug: string) {
+  const fallback = `/og/${slug}.png`;
+  const image = normaliseString(value, fallback);
+
+  try {
+    const url = new URL(image, SITE_URL);
+
+    if (
+      (url.hostname === "chaitanyaprabuddha.com" ||
+        url.hostname === "www.chaitanyaprabuddha.com") &&
+      !publicFileExists(url.pathname)
+    ) {
+      return "";
+    }
+
+    if (
+      url.hostname === "chaitanyaprabuddha.com" ||
+      url.hostname === "www.chaitanyaprabuddha.com"
+    ) {
+      return url.pathname;
+    }
+
+    return url.toString();
+  } catch {
+    return publicFileExists(fallback) ? fallback : "";
+  }
+}
+
 function parsePostFile(fileName: string): ParsedPostRecord {
   const filePath = path.join(getBlogDirectory(), fileName);
   const rawFile = readFileSync(filePath, "utf8");
@@ -102,8 +161,8 @@ function parsePostFile(fileName: string): ParsedPostRecord {
       date: normaliseString(data.date, "1970-01-01"),
       tags: normaliseTags(data.tags),
       readTime: normaliseString(data.readTime, readingTime(content).text),
-      ogImage: normaliseString(data.ogImage, `/og/${slug}.png`),
-      canonical: normaliseString(data.canonical, `${SITE_URL}/blog/${slug}`),
+      ogImage: normaliseOgImage(data.ogImage, slug),
+      canonical: normaliseCanonical(data.canonical, slug),
       published: data.published !== false,
       slug
     },

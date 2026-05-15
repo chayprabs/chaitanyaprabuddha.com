@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["coding agent security","Codex internet access","MCP prompt injection","Cursor background agents","Claude Code","sandboxing","network policies","AI security","agentic coding","MCP security"]
 readTime: "33 min read"
 ogImage: "/og/safest-way-to-give-coding-agents-internet-access.png"
-canonical: "https://chaitanyaprabuddha.com/blog/safest-way-to-give-coding-agents-internet-access"
+canonical: "https://www.chaitanyaprabuddha.com/blog/safest-way-to-give-coding-agents-internet-access"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","AI IDE","Cursor vs VS Code"]
 readTime: "12 min read"
 ogImage: "/og/the-ai-ide-trap.png"
-canonical: "https://chaitanyaprabuddha.com/blog/the-ai-ide-trap"
+canonical: "https://www.chaitanyaprabuddha.com/blog/the-ai-ide-trap"
 published: true
 ---
 

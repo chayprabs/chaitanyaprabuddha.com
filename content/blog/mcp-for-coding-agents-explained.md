@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["MCP","Model Context Protocol","coding agents","Claude Code","Cursor","Codex","AI tools","developer productivity","agentic coding"]
 readTime: "30 min read"
 ogImage: "/og/mcp-for-coding-agents-explained.png"
-canonical: "https://chaitanyaprabuddha.com/blog/mcp-for-coding-agents-explained"
+canonical: "https://www.chaitanyaprabuddha.com/blog/mcp-for-coding-agents-explained"
 published: true
 ---
 

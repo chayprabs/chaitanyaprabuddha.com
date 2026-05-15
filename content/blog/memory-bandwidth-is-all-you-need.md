@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","memory bandwidth LLM inference","roofline model LLM inference"]
 readTime: "17 min read"
 ogImage: "/og/memory-bandwidth-is-all-you-need.png"
-canonical: "https://chaitanyaprabuddha.com/blog/memory-bandwidth-is-all-you-need"
+canonical: "https://www.chaitanyaprabuddha.com/blog/memory-bandwidth-is-all-you-need"
 published: true
 ---
 

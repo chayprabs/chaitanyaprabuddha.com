@@ -529,7 +529,7 @@ function buildFrontmatter({ title, description, date, tags, readTimeText, slug }
     `tags: ${JSON.stringify(tags)}`,
     `readTime: ${toQuotedYamlString(readTimeText)}`,
     `ogImage: ${toQuotedYamlString(`/og/${slug}.png`)}`,
-    `canonical: ${toQuotedYamlString(`https://chaitanyaprabuddha.com/blog/${slug}`)}`,
+    `canonical: ${toQuotedYamlString(`https://www.chaitanyaprabuddha.com/blog/${slug}`)}`,
     "published: true",
     "---"
   ].join("\n");

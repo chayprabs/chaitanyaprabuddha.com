@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI SEO/GEO","autonomous SEO","AI SEO agent"]
 readTime: "16 min read"
 ogImage: "/og/founders-guide-to-autonomous-seo.png"
-canonical: "https://chaitanyaprabuddha.com/blog/founders-guide-to-autonomous-seo"
+canonical: "https://www.chaitanyaprabuddha.com/blog/founders-guide-to-autonomous-seo"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["Codex subagents","Claude Code subagents","parallel coding agents","multi-agent coding","OpenAI Codex","Claude Code","context isolation","AI coding agents","agentic coding","developer tools"]
 readTime: "35 min read"
 ogImage: "/og/codex-subagents-vs-claude-code-subagents.png"
-canonical: "https://chaitanyaprabuddha.com/blog/codex-subagents-vs-claude-code-subagents"
+canonical: "https://www.chaitanyaprabuddha.com/blog/codex-subagents-vs-claude-code-subagents"
 published: true
 ---
 

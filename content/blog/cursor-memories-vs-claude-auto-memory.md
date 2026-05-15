@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["cursor","claude","ai memory","coding agents","developer tools","ai coding","context management","llm memory"]
 readTime: "35 min read"
 ogImage: "/og/cursor-memories-vs-claude-auto-memory.png"
-canonical: "https://chaitanyaprabuddha.com/blog/cursor-memories-vs-claude-auto-memory"
+canonical: "https://www.chaitanyaprabuddha.com/blog/cursor-memories-vs-claude-auto-memory"
 published: true
 ---
 

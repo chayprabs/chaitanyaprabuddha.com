@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","advanced RAG techniques","contextual retrieval RAG"]
 readTime: "22 min read"
 ogImage: "/og/advanced-rag-contextual-retrieval-late-chunking.png"
-canonical: "https://chaitanyaprabuddha.com/blog/advanced-rag-contextual-retrieval-late-chunking"
+canonical: "https://www.chaitanyaprabuddha.com/blog/advanced-rag-contextual-retrieval-late-chunking"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["AGENTS.md","Codex","AI coding agents","developer tooling","prompt engineering","OpenAI Codex","repository documentation"]
 readTime: "31 min read"
 ogImage: "/og/how-to-write-agents-md-that-codex-follows.png"
-canonical: "https://chaitanyaprabuddha.com/blog/how-to-write-agents-md-that-codex-follows"
+canonical: "https://www.chaitanyaprabuddha.com/blog/how-to-write-agents-md-that-codex-follows"
 published: true
 ---
 

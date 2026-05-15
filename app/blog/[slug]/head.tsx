@@ -1,7 +1,7 @@
 import { BlogJsonLd } from "@/components/BlogJsonLd";
 import { getPostBySlug } from "@/lib/blog";
 
-const SITE_URL = "https://chaitanyaprabuddha.com";
+const SITE_URL = "https://www.chaitanyaprabuddha.com";
 
 type BlogPostHeadProps = {
   params: Promise<{

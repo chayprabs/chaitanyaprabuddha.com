@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["LLM Inference Optimization","prompt caching LLM","Claude prompt caching"]
 readTime: "33 min read"
 ogImage: "/og/prompt-caching-economics.png"
-canonical: "https://chaitanyaprabuddha.com/blog/prompt-caching-economics"
+canonical: "https://www.chaitanyaprabuddha.com/blog/prompt-caching-economics"
 published: true
 ---
 

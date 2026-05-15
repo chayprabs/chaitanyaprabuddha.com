@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["coding agents","best-of-n","codex","ai coding","test-time compute","agent workflows","multiple solutions","exploration strategies"]
 readTime: "33 min read"
 ogImage: "/og/best-of-n-for-coding-agents.png"
-canonical: "https://chaitanyaprabuddha.com/blog/best-of-n-for-coding-agents"
+canonical: "https://www.chaitanyaprabuddha.com/blog/best-of-n-for-coding-agents"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["OpenAI Docs MCP","AI coding hallucinations","AGENTS.md","MCP servers","docs-first coding agent","Claude Code","Codex","Cursor","AI-assisted development"]
 readTime: "32 min read"
 ogImage: "/og/how-to-make-coding-agents-cite-docs-instead-of-hallucinating.png"
-canonical: "https://chaitanyaprabuddha.com/blog/how-to-make-coding-agents-cite-docs-instead-of-hallucinating"
+canonical: "https://www.chaitanyaprabuddha.com/blog/how-to-make-coding-agents-cite-docs-instead-of-hallucinating"
 published: true
 ---
 

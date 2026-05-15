@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["Claude Code","CLAUDE.md","auto memory","Claude Code setup","AI coding","developer tools","Claude Code configuration","memory management"]
 readTime: "28 min read"
 ogImage: "/og/claude-code-memory-claude-md-vs-auto-memory.png"
-canonical: "https://chaitanyaprabuddha.com/blog/claude-code-memory-claude-md-vs-auto-memory"
+canonical: "https://www.chaitanyaprabuddha.com/blog/claude-code-memory-claude-md-vs-auto-memory"
 published: true
 ---
 

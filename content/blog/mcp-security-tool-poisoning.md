@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","MCP security tool poisoning","Model Context Protocol security"]
 readTime: "20 min read"
 ogImage: "/og/mcp-security-tool-poisoning.png"
-canonical: "https://chaitanyaprabuddha.com/blog/mcp-security-tool-poisoning"
+canonical: "https://www.chaitanyaprabuddha.com/blog/mcp-security-tool-poisoning"
 published: true
 ---
 

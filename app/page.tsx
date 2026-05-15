@@ -12,7 +12,7 @@ import Research from "@/components/Research";
 
 const HOME_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const HOME_DESCRIPTION =
-  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos. Projects, research, writing, and achievements.";
+  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos, a remote tool platform for coding agents.";
 
 export const metadata: Metadata = {
   title: HOME_TITLE,

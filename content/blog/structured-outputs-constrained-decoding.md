@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","structured outputs LLM","constrained decoding LLM"]
 readTime: "24 min read"
 ogImage: "/og/structured-outputs-constrained-decoding.png"
-canonical: "https://chaitanyaprabuddha.com/blog/structured-outputs-constrained-decoding"
+canonical: "https://www.chaitanyaprabuddha.com/blog/structured-outputs-constrained-decoding"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["Claude Code","Claude Code hooks","PreToolUse hook","PostToolUse hook","SessionStart hook","Claude automation","AI coding workflows","developer productivity","agentic coding","Claude settings.json"]
 readTime: "39 min read"
 ogImage: "/og/claude-code-hooks-turning-prompts-into-workflows.png"
-canonical: "https://chaitanyaprabuddha.com/blog/claude-code-hooks-turning-prompts-into-workflows"
+canonical: "https://www.chaitanyaprabuddha.com/blog/claude-code-hooks-turning-prompts-into-workflows"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","LLM forward pass in C","transformer inference C implementation"]
 readTime: "29 min read"
 ogImage: "/og/anatomy-of-a-token-forward-pass-in-c.png"
-canonical: "https://chaitanyaprabuddha.com/blog/anatomy-of-a-token-forward-pass-in-c"
+canonical: "https://www.chaitanyaprabuddha.com/blog/anatomy-of-a-token-forward-pass-in-c"
 published: true
 ---
 

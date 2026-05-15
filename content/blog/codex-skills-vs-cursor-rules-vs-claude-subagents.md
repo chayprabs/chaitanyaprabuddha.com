@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["Codex skills","Cursor rules","Claude subagents","AI workflow design","Claude Code","OpenAI Codex","Cursor IDE","AI coding agents","developer tools","agent configuration"]
 readTime: "35 min read"
 ogImage: "/og/codex-skills-vs-cursor-rules-vs-claude-subagents.png"
-canonical: "https://chaitanyaprabuddha.com/blog/codex-skills-vs-cursor-rules-vs-claude-subagents"
+canonical: "https://www.chaitanyaprabuddha.com/blog/codex-skills-vs-cursor-rules-vs-claude-subagents"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","AI agent evaluation","agent benchmarking"]
 readTime: "23 min read"
 ogImage: "/og/ai-agent-evaluation-benchmarking.png"
-canonical: "https://chaitanyaprabuddha.com/blog/ai-agent-evaluation-benchmarking"
+canonical: "https://www.chaitanyaprabuddha.com/blog/ai-agent-evaluation-benchmarking"
 published: true
 ---
 

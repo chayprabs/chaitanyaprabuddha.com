@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["Cursor Bugbot","AI PR review","automated code review","code quality","developer tools","pull request workflow","Bugbot review","AI code review tools"]
 readTime: "26 min read"
 ogImage: "/og/can-cursor-bugbot-replace-first-pass-pr-review.png"
-canonical: "https://chaitanyaprabuddha.com/blog/can-cursor-bugbot-replace-first-pass-pr-review"
+canonical: "https://www.chaitanyaprabuddha.com/blog/can-cursor-bugbot-replace-first-pass-pr-review"
 published: true
 ---
 

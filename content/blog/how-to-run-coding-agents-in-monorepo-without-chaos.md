@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["monorepo AI coding","CLAUDE.md","AGENTS.md","Cursor rules","Claude Code monorepo","nested instructions","AI coding agents","developer tools","monorepo configuration","rule sprawl","agentsignore"]
 readTime: "35 min read"
 ogImage: "/og/how-to-run-coding-agents-in-monorepo-without-chaos.png"
-canonical: "https://chaitanyaprabuddha.com/blog/how-to-run-coding-agents-in-monorepo-without-chaos"
+canonical: "https://www.chaitanyaprabuddha.com/blog/how-to-run-coding-agents-in-monorepo-without-chaos"
 published: true
 ---
 

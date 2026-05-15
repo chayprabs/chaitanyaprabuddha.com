@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","speculative decoding LLM","speculative decoding implementation"]
 readTime: "20 min read"
 ogImage: "/og/speculative-decoding-llm-inference.png"
-canonical: "https://chaitanyaprabuddha.com/blog/speculative-decoding-llm-inference"
+canonical: "https://www.chaitanyaprabuddha.com/blog/speculative-decoding-llm-inference"
 published: true
 ---
 

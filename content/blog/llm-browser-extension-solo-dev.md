@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","LLM browser extension development","build AI Chrome extension"]
 readTime: "16 min read"
 ogImage: "/og/llm-browser-extension-solo-dev.png"
-canonical: "https://chaitanyaprabuddha.com/blog/llm-browser-extension-solo-dev"
+canonical: "https://www.chaitanyaprabuddha.com/blog/llm-browser-extension-solo-dev"
 published: true
 ---
 

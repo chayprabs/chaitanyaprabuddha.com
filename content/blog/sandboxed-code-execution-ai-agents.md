@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","sandboxed code execution AI agents","E2B sandbox"]
 readTime: "18 min read"
 ogImage: "/og/sandboxed-code-execution-ai-agents.png"
-canonical: "https://chaitanyaprabuddha.com/blog/sandboxed-code-execution-ai-agents"
+canonical: "https://www.chaitanyaprabuddha.com/blog/sandboxed-code-execution-ai-agents"
 published: true
 ---
 

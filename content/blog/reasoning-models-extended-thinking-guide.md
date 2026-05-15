@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","reasoning models LLM","extended thinking Claude"]
 readTime: "20 min read"
 ogImage: "/og/reasoning-models-extended-thinking-guide.png"
-canonical: "https://chaitanyaprabuddha.com/blog/reasoning-models-extended-thinking-guide"
+canonical: "https://www.chaitanyaprabuddha.com/blog/reasoning-models-extended-thinking-guide"
 published: true
 ---
 

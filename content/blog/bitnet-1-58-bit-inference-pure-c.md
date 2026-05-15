@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","BitNet inference C implementation","1.58 bit quantization C"]
 readTime: "17 min read"
 ogImage: "/og/bitnet-1-58-bit-inference-pure-c.png"
-canonical: "https://chaitanyaprabuddha.com/blog/bitnet-1-58-bit-inference-pure-c"
+canonical: "https://www.chaitanyaprabuddha.com/blog/bitnet-1-58-bit-inference-pure-c"
 published: true
 ---
 

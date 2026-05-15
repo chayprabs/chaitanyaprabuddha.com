@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","FlashAttention internals","FlashAttention algorithm explained"]
 readTime: "24 min read"
 ogImage: "/og/flashattention-internals-io-aware-attention.png"
-canonical: "https://chaitanyaprabuddha.com/blog/flashattention-internals-io-aware-attention"
+canonical: "https://www.chaitanyaprabuddha.com/blog/flashattention-internals-io-aware-attention"
 published: true
 ---
 

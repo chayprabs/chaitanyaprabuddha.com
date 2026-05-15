@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI SEO/GEO","what gets cited by AI search","how to get cited by ChatGPT"]
 readTime: "16 min read"
 ogImage: "/og/what-gets-cited-by-chatgpt-and-perplexity.png"
-canonical: "https://chaitanyaprabuddha.com/blog/what-gets-cited-by-chatgpt-and-perplexity"
+canonical: "https://www.chaitanyaprabuddha.com/blog/what-gets-cited-by-chatgpt-and-perplexity"
 published: true
 ---
 

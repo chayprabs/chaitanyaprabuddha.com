@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["PR reviewer agent","AI code review","reviewer subagent","docs research agent","multi-agent workflow","Claude Code","GitHub Actions","automated code review","CLAUDE.md","AGENTS.md","agentic coding","developer tools"]
 readTime: "37 min read"
 ogImage: "/og/build-a-pr-reviewer-agent-stack.png"
-canonical: "https://chaitanyaprabuddha.com/blog/build-a-pr-reviewer-agent-stack"
+canonical: "https://www.chaitanyaprabuddha.com/blog/build-a-pr-reviewer-agent-stack"
 published: true
 ---
 

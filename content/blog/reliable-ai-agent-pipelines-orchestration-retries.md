@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","AI agent pipeline reliability","AI agent orchestration"]
 readTime: "30 min read"
 ogImage: "/og/reliable-ai-agent-pipelines-orchestration-retries.png"
-canonical: "https://chaitanyaprabuddha.com/blog/reliable-ai-agent-pipelines-orchestration-retries"
+canonical: "https://www.chaitanyaprabuddha.com/blog/reliable-ai-agent-pipelines-orchestration-retries"
 published: true
 ---
 

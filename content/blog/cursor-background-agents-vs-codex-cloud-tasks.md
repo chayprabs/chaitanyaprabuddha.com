@@ -5,7 +5,7 @@ date: "2026-04-02"
 tags: ["cursor background agents","codex cloud tasks","async coding agents","remote AI developer","cloud coding","AI pair programming","background coding","developer productivity"]
 readTime: "35 min read"
 ogImage: "/og/cursor-background-agents-vs-codex-cloud-tasks.png"
-canonical: "https://chaitanyaprabuddha.com/blog/cursor-background-agents-vs-codex-cloud-tasks"
+canonical: "https://www.chaitanyaprabuddha.com/blog/cursor-background-agents-vs-codex-cloud-tasks"
 published: true
 ---
 

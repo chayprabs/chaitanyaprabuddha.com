@@ -3,10 +3,10 @@ import { Caveat, Inter } from "next/font/google";
 
 import "./globals.css";
 
-const SITE_URL = "https://chaitanyaprabuddha.com";
+const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const SITE_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const SITE_DESCRIPTION =
-  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos. Explore projects, research, writing, and achievements.";
+  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos, a remote tool platform for coding agents.";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,8 +40,10 @@ export const metadata: Metadata = {
     "BITS Pilani",
     "LLM engineering",
     "AI agents",
+    "coding agents",
     "technical writing",
     "Authos",
+    "remote tool platform",
     "machine learning projects"
   ],
   openGraph: {

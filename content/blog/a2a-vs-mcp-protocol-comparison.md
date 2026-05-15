@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","A2A vs MCP","Agent2Agent protocol vs Model Context Protocol"]
 readTime: "17 min read"
 ogImage: "/og/a2a-vs-mcp-protocol-comparison.png"
-canonical: "https://chaitanyaprabuddha.com/blog/a2a-vs-mcp-protocol-comparison"
+canonical: "https://www.chaitanyaprabuddha.com/blog/a2a-vs-mcp-protocol-comparison"
 published: true
 ---
 

@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","mixture of experts inference","sparse MoE LLM"]
 readTime: "21 min read"
 ogImage: "/og/mixture-of-experts-inference.png"
-canonical: "https://chaitanyaprabuddha.com/blog/mixture-of-experts-inference"
+canonical: "https://www.chaitanyaprabuddha.com/blog/mixture-of-experts-inference"
 published: true
 ---
 

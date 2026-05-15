@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI SEO/GEO","topical authority SEO","topical authority AI search"]
 readTime: "25 min read"
 ogImage: "/og/topical-authority-ai-search-era.png"
-canonical: "https://chaitanyaprabuddha.com/blog/topical-authority-ai-search-era"
+canonical: "https://www.chaitanyaprabuddha.com/blog/topical-authority-ai-search-era"
 published: true
 ---
 

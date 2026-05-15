@@ -1,4 +1,4 @@
-const SITE_URL = "https://chaitanyaprabuddha.com";
+const SITE_URL = "https://www.chaitanyaprabuddha.com";
 
 export const dynamic = "force-static";
 
@@ -7,7 +7,6 @@ export async function GET() {
 Allow: /
 
 Sitemap: ${SITE_URL}/sitemap.xml
-Host: ${SITE_URL}
 `;
 
   return new Response(body, {

@@ -5,7 +5,7 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 
 const BLOG_DIRECTORY = path.join(process.cwd(), "content", "blog");
-const SITE_URL = "https://chaitanyaprabuddha.com";
+const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const MARKDOWN_EXTENSIONS = new Set([".md", ".mdx"]);
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -283,6 +283,28 @@ function normalizeTags(value) {
   return unique;
 }
 
+function normalizeCanonical(value, slug) {
+  const fallback = `${SITE_URL}/blog/${slug}`;
+  const canonical = normalizeInlineWhitespace(value) || fallback;
+
+  try {
+    const url = new URL(canonical, SITE_URL);
+
+    if (
+      url.hostname === "chaitanyaprabuddha.com" ||
+      url.hostname === "www.chaitanyaprabuddha.com"
+    ) {
+      return new URL(url.pathname, SITE_URL).toString();
+    }
+
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return fallback;
+  }
+}
+
 function cleanTagPhrase(value) {
   const cleaned = normalizeInlineWhitespace(value)
     .replace(/^(the|a|an)\s+/i, "")
@@ -402,8 +424,7 @@ function main() {
       tags: tags.length > 0 ? tags : inferTags(title, content),
       readTime: readingTime(content).text,
       ogImage: normalizeInlineWhitespace(data.ogImage) || `/og/${slug}.png`,
-      canonical:
-        normalizeInlineWhitespace(data.canonical) || `${SITE_URL}/blog/${slug}`,
+      canonical: normalizeCanonical(data.canonical, slug),
       published: data.published !== false
     };
 

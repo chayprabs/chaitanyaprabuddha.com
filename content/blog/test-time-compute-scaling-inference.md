@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","test-time compute scaling","inference-time scaling"]
 readTime: "26 min read"
 ogImage: "/og/test-time-compute-scaling-inference.png"
-canonical: "https://chaitanyaprabuddha.com/blog/test-time-compute-scaling-inference"
+canonical: "https://www.chaitanyaprabuddha.com/blog/test-time-compute-scaling-inference"
 published: true
 ---
 

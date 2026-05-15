@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","AI agent memory architecture","episodic memory AI agents"]
 readTime: "33 min read"
 ogImage: "/og/ai-agent-memory-architectures.png"
-canonical: "https://chaitanyaprabuddha.com/blog/ai-agent-memory-architectures"
+canonical: "https://www.chaitanyaprabuddha.com/blog/ai-agent-memory-architectures"
 published: true
 ---
 

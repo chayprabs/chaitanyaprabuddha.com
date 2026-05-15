@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["AI Agents","MCP server tutorial","Model Context Protocol server Python"]
 readTime: "20 min read"
 ogImage: "/og/building-production-mcp-server-from-scratch.png"
-canonical: "https://chaitanyaprabuddha.com/blog/building-production-mcp-server-from-scratch"
+canonical: "https://www.chaitanyaprabuddha.com/blog/building-production-mcp-server-from-scratch"
 published: true
 ---
 

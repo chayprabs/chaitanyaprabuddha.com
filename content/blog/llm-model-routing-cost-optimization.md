@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Dev Tools","LLM model routing","LLM routing cost optimization"]
 readTime: "18 min read"
 ogImage: "/og/llm-model-routing-cost-optimization.png"
-canonical: "https://chaitanyaprabuddha.com/blog/llm-model-routing-cost-optimization"
+canonical: "https://www.chaitanyaprabuddha.com/blog/llm-model-routing-cost-optimization"
 published: true
 ---
 

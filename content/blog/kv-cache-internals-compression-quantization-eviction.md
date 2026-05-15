@@ -5,7 +5,7 @@ date: "2026-03-29"
 tags: ["Edge Inference","KV cache LLM","KV cache quantization"]
 readTime: "28 min read"
 ogImage: "/og/kv-cache-internals-compression-quantization-eviction.png"
-canonical: "https://chaitanyaprabuddha.com/blog/kv-cache-internals-compression-quantization-eviction"
+canonical: "https://www.chaitanyaprabuddha.com/blog/kv-cache-internals-compression-quantization-eviction"
 published: true
 ---
 

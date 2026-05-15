@@ -30,7 +30,23 @@ function formatDate(date: string) {
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Writing on AI, systems, and building things."
+  description: "Writing on AI, systems, and building things.",
+  alternates: {
+    canonical: "/blog"
+  },
+  openGraph: {
+    title: "Blog",
+    description: "Writing on AI, systems, and building things.",
+    url: "/blog",
+    siteName: "Chaitanya Prabuddha",
+    type: "website"
+  },
+  twitter: {
+    card: "summary",
+    title: "Blog",
+    description: "Writing on AI, systems, and building things.",
+    creator: "@chayprabs"
+  }
 };
 
 export default function BlogPage() {
