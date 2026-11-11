@@ -342,10 +342,6 @@ p {
   text-wrap: balance;
 }
 
-.hero-kicker time {
-  font-variant-numeric: tabular-nums;
-}
-
 .hero-title em {
   font-style: normal;
   color: var(--accent);
@@ -403,85 +399,161 @@ p {
 
 .about-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 168px;
-  gap: 44px;
+  grid-template-columns: minmax(0, 1fr) 186px;
+  grid-template-areas:
+    "lede photo"
+    "facts photo"
+    "links photo";
+  column-gap: 48px;
   align-items: start;
 }
 
 .about-text {
-  font-size: 16.5px;
-  line-height: 1.8;
+  grid-area: lede;
+  max-width: 500px;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.012em;
   color: var(--ink);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.about-meta {
-  margin-top: 14px;
+/* labelled fact rows */
+.about-facts {
+  grid-area: facts;
+  display: grid;
+  gap: 9px;
+  margin: 20px 0 0;
+  border-top: 1px solid rgba(38, 36, 31, 0.13);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  padding-top: 17px;
+}
+
+.about-facts > div {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: baseline;
+}
+
+.about-facts dt {
   font-family: var(--serif);
   font-size: 14.5px;
   font-style: italic;
   color: var(--hint);
 }
 
+.about-facts dd {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
 .about-links {
+  grid-area: links;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
-/* polaroid with tape */
+/* instant photo with tape */
 .portrait {
+  grid-area: photo;
   position: relative;
-  margin: 4px 0 0;
+  margin: 6px 0 0;
   transform: rotate(2.5deg);
-  transition: transform 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .portrait:hover {
-  transform: rotate(0deg);
+  transform: rotate(0deg) translateY(-3px) scale(1.02);
 }
 
+/* washi tape with torn ends */
 .portrait::before {
   content: "";
   position: absolute;
-  top: -11px;
+  top: -12px;
   left: 50%;
   z-index: 1;
-  width: 74px;
-  height: 22px;
+  width: 80px;
+  height: 23px;
   transform: translateX(-50%) rotate(-3deg);
-  border-left: 1px dashed rgba(38, 36, 31, 0.12);
-  border-right: 1px dashed rgba(38, 36, 31, 0.12);
-  background: rgba(240, 222, 160, 0.72);
-  box-shadow: 0 1px 2px rgba(38, 36, 31, 0.14);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 45%),
+    rgba(238, 217, 150, 0.78);
+  clip-path: polygon(
+    0 0, 100% 0,
+    97.5% 17%, 100% 33%, 97.5% 50%, 100% 67%, 97.5% 83%, 100% 100%,
+    0 100%,
+    2.5% 83%, 0 67%, 2.5% 50%, 0 33%, 2.5% 17%
+  );
 }
 
 .portrait-frame {
   border: 1px solid var(--edge);
-  background: #fff;
+  border-radius: 2px;
+  background: linear-gradient(#ffffff, #f8f6f1);
   box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 2px rgba(38, 36, 31, 0.14),
+    0 6px 10px -6px rgba(38, 36, 31, 0.28),
+    0 22px 30px -18px rgba(38, 36, 31, 0.5);
+  padding: 10px 10px 5px;
+  transition: box-shadow 0.3s ease;
+}
+
+.portrait:hover .portrait-frame {
+  box-shadow:
+    inset 0 1px 0 #fff,
     0 1px 2px rgba(38, 36, 31, 0.12),
-    0 14px 26px -12px rgba(38, 36, 31, 0.4);
-  padding: 9px 9px 4px;
+    0 10px 16px -8px rgba(38, 36, 31, 0.26),
+    0 30px 38px -20px rgba(38, 36, 31, 0.5);
+}
+
+/* glossy print: soft sheen, darkened edges */
+.portrait-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1px;
+  background: linear-gradient(#e6dfd1, #d4cbb9);
+}
+
+.portrait-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0) 38%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(38, 36, 31, 0.14),
+    inset 0 0 22px rgba(60, 45, 20, 0.2);
+  pointer-events: none;
+}
+
+.portrait-photo img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center 6%;
+  filter: saturate(0.94) contrast(1.03);
 }
 
 .portrait figcaption {
-  padding-top: 3px;
+  padding-top: 5px;
   font-family: var(--font-caveat), cursive;
-  font-size: 19px;
+  font-size: 20px;
   line-height: 1.5;
   text-align: center;
   color: var(--muted);
-}
-
-.portrait-frame img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: linear-gradient(#e6dfd1, #d4cbb9);
-  box-shadow: inset 0 0 0 1px rgba(38, 36, 31, 0.1);
-  object-fit: cover;
-  object-position: center 6%;
+  white-space: nowrap;
 }
 
 /* ---------- venture cards ---------- */
@@ -613,7 +685,10 @@ p {
   color: var(--text);
 }
 
-.about-text,
+.about-text {
+  text-wrap: balance;
+}
+
 .card-text,
 .entry-text,
 .trio p {
@@ -874,7 +949,8 @@ p {
     animation: none;
   }
 
-  .portrait {
+  .portrait,
+  .portrait-frame {
     transition: none;
   }
 }
@@ -1339,7 +1415,16 @@ p {
 
   .masthead {
     position: static;
-    padding: 16px 0 0;
+    padding: 18px 0 0;
+  }
+
+  .masthead-row {
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .masthead-name {
+    transform-origin: center;
   }
 
   .section {
@@ -1370,18 +1455,46 @@ p {
   }
 
   .about-body {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 26px;
+    grid-template-columns: minmax(0, 1fr) 124px;
+    grid-template-areas:
+      "lede photo"
+      "facts facts"
+      "links links";
+    column-gap: 20px;
   }
 
   .about-text {
-    font-size: 15.5px;
+    align-self: center;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .about-facts {
+    margin-top: 26px;
+  }
+
+  .about-facts > div {
+    grid-template-columns: 54px minmax(0, 1fr);
+    column-gap: 10px;
   }
 
   .portrait {
-    order: -1;
-    width: 132px;
-    margin-left: 6px;
+    margin: 8px 4px 0 0;
+  }
+
+  .portrait::before {
+    top: -10px;
+    width: 60px;
+    height: 19px;
+  }
+
+  .portrait-frame {
+    padding: 7px 7px 3px;
+  }
+
+  .portrait figcaption {
+    padding-top: 3px;
+    font-size: 16px;
   }
 
   .card-main {
@@ -1441,5 +1554,29 @@ p {
 
   .blog-content table {
     min-width: 540px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: min(11.4vw, 40px);
+  }
+
+  .masthead-nav a {
+    padding: 3px 4px;
+    font-size: 11.5px;
+  }
+
+  .about-body {
+    grid-template-columns: minmax(0, 1fr) 112px;
+    column-gap: 16px;
+  }
+
+  .about-text {
+    font-size: 16px;
+  }
+
+  .portrait figcaption {
+    font-size: 14.5px;
   }
 }

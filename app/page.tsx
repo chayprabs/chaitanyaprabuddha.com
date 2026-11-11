@@ -5,7 +5,6 @@ import About from "@/components/About";
 import BuiltInSchool from "@/components/BuiltInSchool";
 import Contact from "@/components/Contact";
 import Colophon from "@/components/Colophon";
-import LocalTime from "@/components/LocalTime";
 import Masthead from "@/components/Masthead";
 import Now from "@/components/Now";
 import Projects from "@/components/Projects";
@@ -45,14 +44,7 @@ export default function HomePage() {
     <div id="top">
       <Masthead current="home" />
       <main>
-        <PageTitle
-          kicker={
-            <>
-              Pilani, India
-              <LocalTime />
-            </>
-          }
-        >
+        <PageTitle>
           I build products, <em>not just code.</em>
         </PageTitle>
         <About />
