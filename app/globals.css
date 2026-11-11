@@ -256,12 +256,21 @@ p {
 }
 
 .masthead-name {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  display: inline-block;
+  font-family: var(--font-caveat), cursive;
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 1;
   color: var(--ink);
   text-shadow: var(--emboss);
   white-space: nowrap;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+  transition: color 0.15s ease;
+}
+
+.masthead-name:hover {
+  color: var(--accent-text);
 }
 
 /* inset trough with raised tabs */
