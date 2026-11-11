@@ -57,7 +57,17 @@ export default function BlogPage() {
           I write when I <em>figure something out.</em>
         </PageTitle>
 
-        <Section id="writing" title={`Writing \u2013 ${posts.length} posts`}>
+        <Section
+          id="writing"
+          title={
+            posts.length > 0 ? `Writing \u2013 ${posts.length} posts` : "Writing"
+          }
+        >
+          {posts.length === 0 ? (
+            <p className="post-empty">
+              Nothing published yet. Posts will show up here.
+            </p>
+          ) : null}
           <div className="post-list">
             {posts.map((post) => (
               <article key={post.slug}>
