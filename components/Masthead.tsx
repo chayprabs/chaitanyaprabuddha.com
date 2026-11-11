@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const navLinks = [
   { href: "/", label: "Home", key: "home" },
@@ -20,6 +20,38 @@ type MastheadProps = {
 export default function Masthead({ current }: MastheadProps) {
   const [active, setActive] = useState<string | undefined>(current);
   const [stuck, setStuck] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const [pill, setPill] = useState<{ x: number; width: number } | null>(null);
+  const [pillMoves, setPillMoves] = useState(false);
+
+  // Slide one raised tab between the links instead of switching each
+  // link's background on and off.
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+
+    if (!nav) {
+      return;
+    }
+
+    const measure = () => {
+      const link = nav.querySelector<HTMLElement>("a[aria-current]");
+
+      setPill(link ? { x: link.offsetLeft, width: link.offsetWidth } : null);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure);
+
+    return () => window.removeEventListener("resize", measure);
+  }, [active]);
+
+  useEffect(() => {
+    // Turn the slide on only after the tab has been placed once.
+    const frame = window.requestAnimationFrame(() => setPillMoves(true));
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -79,7 +111,23 @@ export default function Masthead({ current }: MastheadProps) {
             Chaitanya Prabuddha
           </Link>
 
-          <nav className="masthead-nav" aria-label="Primary">
+          <nav
+            ref={navRef}
+            className="masthead-nav"
+            aria-label="Primary"
+            data-pill={pill ? "true" : undefined}
+          >
+            {pill ? (
+              <span
+                className="masthead-nav-pill"
+                aria-hidden="true"
+                data-moves={pillMoves ? "true" : undefined}
+                style={{
+                  width: pill.width,
+                  transform: `translateX(${pill.x}px)`
+                }}
+              />
+            ) : null}
             {navLinks.map((link) => (
               <Link
                 key={link.key}

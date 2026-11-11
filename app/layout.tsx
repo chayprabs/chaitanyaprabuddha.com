@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Inter } from "next/font/google";
 
+import Reveal from "@/components/Reveal";
+
 import "./globals.css";
 
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
@@ -101,9 +103,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${caveat.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Lets CSS hide scroll-reveal blocks only when scripts will run. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')"
+          }}
+        />
+      </head>
       <body className="antialiased">
         {children}
+        <Reveal />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const contactLinks = [
   { href: "https://github.com/chayprabs", label: "GitHub" },
@@ -9,28 +9,78 @@ const contactLinks = [
   { href: "mailto:hi@chaitanyaprabuddha.com", label: "Email" }
 ];
 
+// Floating pill that widens to reveal the contact links. Hovering opens it
+// with a mouse; a tap or click pins it open until the next tap, an outside
+// press, or Escape.
 export default function Contact() {
   const [isHovered, setIsHovered] = useState(false);
   const [isPinnedOpen, setIsPinnedOpen] = useState(false);
-  const isExpanded = isHovered || isPinnedOpen;
+  const rootRef = useRef<HTMLElement>(null);
+  const closeTimer = useRef<number | undefined>(undefined);
+  const isOpen = isHovered || isPinnedOpen;
+
+  useEffect(() => {
+    if (!isPinnedOpen) {
+      return;
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setIsPinnedOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [isPinnedOpen]);
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   return (
     <section
+      ref={rootRef}
       id="contact"
       aria-label="Contact"
       className="contact-tab"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      data-open={isOpen ? "true" : undefined}
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") {
+          window.clearTimeout(closeTimer.current);
+          setIsHovered(true);
+        }
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === "mouse") {
+          // A short grace period so brushing past the edge does not snap shut.
+          closeTimer.current = window.setTimeout(() => setIsHovered(false), 180);
+        }
+      }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           setIsPinnedOpen(false);
+          setIsHovered(false);
         }
       }}
     >
-      {isExpanded ? (
-        <div id="contact-links" className="contact-links">
-          <span className="label">Reach out</span>
-          {contactLinks.map((link) => {
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls="contact-links"
+        onClick={() => setIsPinnedOpen((open) => !open)}
+        className="contact-toggle"
+      >
+        <span className="contact-dot" aria-hidden="true" />
+        <span className="contact-toggle-text">
+          <span>
+            <span className="contact-toggle-label">say hello</span>
+          </span>
+        </span>
+      </button>
+
+      <div className="contact-reveal">
+        <div id="contact-links" className="contact-links" inert={!isOpen}>
+          {contactLinks.map((link, index) => {
             const isEmail = link.href.startsWith("mailto:");
 
             return (
@@ -40,35 +90,15 @@ export default function Contact() {
                 target={isEmail ? undefined : "_blank"}
                 rel={isEmail ? undefined : "noopener noreferrer"}
                 className="contact-link"
+                style={{ "--i": index } as React.CSSProperties}
                 onClick={() => setIsPinnedOpen(false)}
               >
                 {link.label}
               </a>
             );
           })}
-          <button
-            type="button"
-            aria-label="Close contact links"
-            onClick={() => {
-              setIsPinnedOpen(false);
-              setIsHovered(false);
-            }}
-            className="cursor-pointer border-0 bg-transparent p-0 text-[18px] leading-none text-[var(--hint)] md:hidden"
-          >
-            {"×"}
-          </button>
         </div>
-      ) : (
-        <button
-          type="button"
-          aria-expanded={false}
-          onClick={() => setIsPinnedOpen(true)}
-          className="contact-toggle"
-        >
-          <span className="contact-dot" aria-hidden="true" />
-          say hello
-        </button>
-      )}
+      </div>
     </section>
   );
 }

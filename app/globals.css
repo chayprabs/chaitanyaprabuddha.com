@@ -275,6 +275,7 @@ p {
 
 /* inset trough with raised tabs */
 .masthead-nav {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
@@ -288,6 +289,7 @@ p {
 }
 
 .masthead-nav a {
+  position: relative;
   border: 1px solid transparent;
   border-radius: 6px;
   padding: 3px 13px;
@@ -314,6 +316,33 @@ p {
     0 1px 2px rgba(38, 36, 31, 0.16);
   font-weight: 600;
   color: var(--ink);
+}
+
+/* one raised tab that slides to the current link */
+.masthead-nav-pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border: 1px solid var(--edge-dark);
+  border-radius: 6px;
+  background: linear-gradient(#ffffff, #f1eee8);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 2px rgba(38, 36, 31, 0.16);
+  pointer-events: none;
+}
+
+.masthead-nav-pill[data-moves] {
+  transition:
+    transform 0.42s cubic-bezier(0.3, 1.2, 0.4, 1),
+    width 0.42s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.masthead-nav[data-pill] a[aria-current] {
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
 }
 
 /* ---------- hero ---------- */
@@ -849,10 +878,11 @@ p {
 .contact-tab {
   position: fixed;
   bottom: 22px;
-  left: 50%;
+  left: 12px;
+  right: 12px;
   z-index: 100;
-  max-width: calc(100vw - 24px);
-  transform: translateX(-50%);
+  width: fit-content;
+  margin-inline: auto;
   border: 1px solid var(--edge-dark);
   border-bottom-color: #a9a192;
   border-radius: 999px;
@@ -863,23 +893,38 @@ p {
     0 12px 24px -8px rgba(38, 36, 31, 0.35);
 }
 
+.contact-tab {
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.contact-tab[data-open] {
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 2px 4px rgba(38, 36, 31, 0.14),
+    0 16px 30px -10px rgba(38, 36, 31, 0.42);
+}
+
 .contact-toggle {
   display: flex;
   align-items: center;
-  gap: 9px;
   border: 0;
+  border-radius: 999px;
   background: transparent;
-  padding: 7px 18px 7px 14px;
+  padding: 7px 0 7px 14px;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.5;
   color: var(--ink);
   text-shadow: var(--emboss);
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .contact-dot {
+  flex-shrink: 0;
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -889,35 +934,124 @@ p {
   animation: contactPulse 2s ease-in-out infinite;
 }
 
+/* The label and the links each sit in a one-column grid whose track
+   animates between 0fr and 1fr, so the pill widens to its real content
+   width without any measuring. */
+.contact-toggle-text,
+.contact-reveal {
+  display: grid;
+  transition: grid-template-columns 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-toggle-text {
+  grid-template-columns: 1fr;
+}
+
+.contact-toggle-text > span {
+  overflow: hidden;
+  min-width: 0;
+}
+
+.contact-toggle-label {
+  display: block;
+  padding: 0 18px 0 9px;
+}
+
+.contact-reveal {
+  grid-template-columns: 0fr;
+}
+
+.contact-tab[data-open] .contact-reveal {
+  grid-template-columns: 1fr;
+}
+
 .contact-links {
   display: flex;
   align-items: center;
-  gap: 2px 4px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 5px 12px 5px 18px;
+  overflow: hidden;
+  min-width: 0;
   font-size: 13px;
+  white-space: nowrap;
 }
 
-.contact-links .label {
-  margin-right: 8px;
-  font-family: var(--serif);
-  font-size: 14px;
-  font-style: italic;
+.contact-links::before {
+  content: "";
+  flex-shrink: 0;
+  width: 1px;
+  height: 16px;
+  margin-right: 6px;
+  background: rgba(38, 36, 31, 0.16);
+  box-shadow: 1px 0 0 #fff;
 }
 
 .contact-link {
+  flex-shrink: 0;
   border-radius: 999px;
-  padding: 2px 11px;
+  padding: 2px 10px;
   font-weight: 600;
   color: var(--ink);
   text-shadow: var(--emboss);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.contact-link:last-child {
+  margin-right: 8px;
+}
+
+.contact-tab[data-open] .contact-link {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.34s ease calc(90ms + var(--i) * 45ms),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) calc(90ms + var(--i) * 45ms),
+    color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .contact-link:hover {
   background: var(--well);
   box-shadow: inset 0 1px 2px rgba(38, 36, 31, 0.16);
   color: var(--accent-text);
+}
+
+/* On phones the open pill drops its label so the four links fit. */
+@media (max-width: 520px) {
+  .contact-tab[data-open] .contact-toggle-text {
+    grid-template-columns: 0fr;
+  }
+
+  .contact-toggle-label {
+    padding-right: 14px;
+  }
+
+  .contact-tab[data-open] .contact-links::before {
+    margin-left: 10px;
+  }
+
+  .contact-link {
+    padding: 2px 8px;
+  }
+}
+
+/* ---------- scroll reveal ---------- */
+
+.js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row) {
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row):not(.is-in) {
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 @keyframes contactPulse {
@@ -935,7 +1069,7 @@ p {
   .contact-tab {
     left: auto;
     right: 26px;
-    transform: none;
+    margin-inline: 0;
   }
 }
 
@@ -947,6 +1081,20 @@ p {
   .contact-dot,
   .progress span {
     animation: none;
+  }
+
+  .contact-toggle-text,
+  .contact-reveal,
+  .contact-link,
+  .contact-tab[data-open] .contact-link,
+  .masthead-nav-pill[data-moves] {
+    transition: none;
+  }
+
+  .js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row) {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .portrait,
