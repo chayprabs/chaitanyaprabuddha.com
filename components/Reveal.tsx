@@ -13,6 +13,8 @@ export default function Reveal() {
   const pathname = usePathname();
 
   useEffect(() => {
+    (window as Window & { __reveal?: boolean }).__reveal = true;
+
     const targets = Array.from(
       document.querySelectorAll<HTMLElement>(SELECTOR)
     ).filter((element) => !element.classList.contains("is-in"));

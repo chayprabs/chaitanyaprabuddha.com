@@ -1168,17 +1168,72 @@ p {
 /* ---------- sign-off & footer ---------- */
 
 .signoff {
-  padding: 8px 0 52px;
-  text-align: center;
+  padding: 14px 0 56px;
 }
 
-.signoff p {
-  display: inline-block;
-  font-family: var(--font-caveat), cursive;
-  font-size: 34px;
+.signoff-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px 48px;
+  align-items: end;
+}
+
+.signoff-lede {
+  text-wrap: balance;
+  font-size: 26px;
+  font-weight: 800;
   line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.signoff-text {
+  max-width: 430px;
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+.signoff-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* handwritten signature with an underline that draws itself */
+.signoff-sign {
+  margin: 0 10px 2px 0;
+  font-family: var(--font-caveat), cursive;
+  font-size: 36px;
+  line-height: 1.12;
   color: var(--muted);
   transform: rotate(-3deg);
+}
+
+.signoff-sign svg {
+  display: block;
+  width: 132px;
+  height: 12px;
+  margin-top: 2px;
+  overflow: visible;
+}
+
+.signoff-sign path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.6, 0, 0.3, 1) 0.45s;
+}
+
+.js .signoff:not(.is-in) .signoff-sign path {
+  stroke-dashoffset: 1;
 }
 
 .colophon {
@@ -1196,6 +1251,25 @@ p {
   font-size: 12.5px;
   color: var(--hint);
   text-shadow: var(--emboss);
+}
+
+.colophon-top {
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.colophon-top span {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.colophon-top:hover {
+  color: var(--accent-text);
+}
+
+.colophon-top:hover span {
+  transform: translateY(-3px);
 }
 
 /* ---------- floating contact ---------- */
@@ -1416,6 +1490,8 @@ p {
     animation: none;
   }
 
+  .signoff-sign path,
+  .colophon-top span,
   .record-disc,
   .book-cover,
   .chess-piece,
@@ -1431,10 +1507,15 @@ p {
     transition: none;
   }
 
-  .js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row) {
+  .js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row),
+  .js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row):not(.is-in) {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .js .signoff:not(.is-in) .signoff-sign path {
+    stroke-dashoffset: 0;
   }
 
   .portrait,
@@ -2033,6 +2114,29 @@ p {
     gap: 30px;
   }
 
+  .signoff {
+    padding: 6px 0 44px;
+  }
+
+  .signoff-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .signoff-lede {
+    font-size: 23px;
+  }
+
+  .signoff-sign {
+    justify-self: end;
+    margin-top: 6px;
+    font-size: 32px;
+  }
+
+  .signoff-actions .btn-primary {
+    flex: 1 0 100%;
+    justify-content: center;
+  }
+
   .trio-object {
     height: auto;
     min-height: 150px;
@@ -2106,5 +2210,16 @@ p {
 
   .portrait figcaption {
     font-size: 14.5px;
+  }
+}
+
+@media print {
+  .js :is(.hero-kicker, .hero-title, .section-label, .about-body, .sheet, .card, .signoff, .colophon-row):not(.is-in) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .contact-tab {
+    display: none;
   }
 }

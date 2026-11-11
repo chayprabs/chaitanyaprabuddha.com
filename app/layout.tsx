@@ -109,10 +109,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Lets CSS hide scroll-reveal blocks only when scripts will run. */}
+        {/* Lets CSS hide scroll-reveal blocks only when scripts will run,
+            and shows everything again if the reveal script never starts. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')"
+            __html:
+              "document.documentElement.classList.add('js');setTimeout(function(){if(!window.__reveal)document.documentElement.classList.remove('js')},3000)"
           }}
         />
       </head>

@@ -10,9 +10,12 @@ export default function Colophon() {
       <div className="container">
         <div className="colophon-row">
           <span>
-            {"©"} {new Date().getFullYear()} Chaitanya Prabuddha
+            {"©"} {new Date().getFullYear()} Chaitanya Prabuddha {"·"}{" "}
+            Updated {updated}
           </span>
-          <span>Last updated {updated}</span>
+          <a href="#top" className="colophon-top">
+            Back to top <span aria-hidden="true">{"↑"}</span>
+          </a>
         </div>
       </div>
     </footer>

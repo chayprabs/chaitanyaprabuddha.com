@@ -9,6 +9,7 @@ import Masthead from "@/components/Masthead";
 import Now from "@/components/Now";
 import Projects from "@/components/Projects";
 import Research from "@/components/Research";
+import Signoff from "@/components/Signoff";
 import Ventures from "@/components/Ventures";
 import PageTitle from "@/components/PageTitle";
 
@@ -54,13 +55,7 @@ export default function HomePage() {
         <Achievements />
         <BuiltInSchool />
         <Now />
-        <section className="signoff">
-          <p>
-            Cheers,
-            <br />
-            Chaitanya Prabuddha
-          </p>
-        </section>
+        <Signoff />
       </main>
       <Colophon />
       <Contact />
