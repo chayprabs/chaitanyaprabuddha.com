@@ -5,7 +5,7 @@ const achievements = [
     tone: "silver",
     placement: "2nd Place",
     name: "Eightfold AI Hackathon",
-    org: "Eightfold AI - Apogee Fest 2026, BITS Pilani",
+    org: "Eightfold AI \u00b7 Apogee Fest 2026, BITS Pilani",
     description: (
       <>
         Built{" "}
@@ -17,9 +17,9 @@ const achievements = [
         >
           Candor
         </a>
-        , an agentic system that detects AI-agent assistance during interviews
-        to make hiring fairer and more reliable. I competed solo against 700+
-        teams and finished 2nd.
+        , which detects when a candidate is getting help from an AI agent
+        during an interview. I competed solo against 700+ teams and finished
+        2nd.
       </>
     )
   },
@@ -27,7 +27,7 @@ const achievements = [
     tone: "blue",
     placement: "Featured Builder",
     name: "OpenAI Codex Hackathon",
-    org: "OpenAI x GrowthX - Bengaluru",
+    org: "OpenAI \u00d7 GrowthX \u00b7 Bengaluru",
     description: (
       <>
         One of 100 builders selected from 5,000+ applicants for{" "}
@@ -39,7 +39,7 @@ const achievements = [
         >
           OpenAI Codex Hackathon - Bengaluru
         </a>
-        , India&apos;s first Codex hackathon. I built{" "}
+        , India&rsquo;s first Codex hackathon. I built{" "}
         <a
           href="https://github.com/chayprabs/codex-hack-bengaluru"
           target="_blank"
@@ -48,8 +48,7 @@ const achievements = [
         >
           codex-hack-bengaluru
         </a>{" "}
-        in a one-day sprint on agentic coding, developer tools, and AI-native
-        product workflows.
+        there in one day.
       </>
     )
   },
@@ -57,7 +56,7 @@ const achievements = [
     tone: "slate",
     placement: "Top 10",
     name: "ContextCon",
-    org: "Crustdata x Y Combinator - Bengaluru",
+    org: "Crustdata \u00d7 Y Combinator \u00b7 Bengaluru",
     description: (
       <>
         One of the top 100 selected from roughly 2,000 applicants for{" "}
@@ -69,8 +68,7 @@ const achievements = [
         >
           ContextCon
         </a>
-        , Crustdata&apos;s YC-partnered hackathon for developers, AI agent
-        builders, and technical founders. I built{" "}
+        , Crustdata&rsquo;s YC-partnered hackathon. I built{" "}
         <a
           href="https://github.com/chayprabs/contextkings"
           target="_blank"
@@ -87,9 +85,9 @@ const achievements = [
     tone: "gold",
     placement: "1st Place",
     name: "Solve for Pilani",
-    org: "BITS Pilani - Apogee Fest 2025",
+    org: "BITS Pilani \u00b7 Apogee Fest 2025",
     description:
-      "Marketed a professor's campus bakery at Apogee Fest and generated \u20b93L+ in revenue in 5 days, with the lowest average order value in the room. Every other team ran cash only. We didn't."
+      "Marketed a professor\u2019s campus bakery at Apogee Fest and generated \u20b93L+ in revenue in 5 days, with the lowest average order value in the room. Every other team ran cash only. We didn\u2019t."
   },
   {
     tone: "bronze",
@@ -97,15 +95,13 @@ const achievements = [
     name: "BITSpreneur",
     org: "BITS Pilani",
     description:
-      "Built Gurja, a bio-CNG system that turns campus mess food waste into usable energy. It placed 3rd. Then Blue Chip Food Management picked the idea up and it went live on campus in 2025. The competition ended. The project didn't."
+      "Built Gurja, a bio-CNG system that turns campus mess food waste into usable energy. It placed 3rd. Then Blue Chip Food Management picked the idea up and it went live on campus in 2025. The competition ended. The project didn\u2019t."
   }
 ];
 
 export default function Achievements() {
   return (
-    <Section id="achievements" title="Achievements"
-      intro="Where the work got tested against other builders."
-    >
+    <Section id="achievements" title="Achievements">
       {achievements.map((achievement) => (
         <article key={achievement.name} className="entry">
           <div className="entry-head">

@@ -1,7 +1,6 @@
 type SectionProps = {
   id: string;
   title: string;
-  intro?: string;
   sheet?: boolean;
   children: React.ReactNode;
 };
@@ -9,7 +8,6 @@ type SectionProps = {
 export default function Section({
   id,
   title,
-  intro,
   sheet = true,
   children
 }: SectionProps) {
@@ -19,7 +17,6 @@ export default function Section({
         <h2 id={`${id}-title`} className="section-label">
           <span>{title}</span>
         </h2>
-        {intro ? <p className="section-intro">{intro}</p> : null}
 
         {sheet ? <div className="sheet">{children}</div> : children}
       </div>

@@ -17,7 +17,7 @@ const schoolProjects = [
     date: "Mar 2022 – Jun 2022",
     displayUrl: "trymonial.app",
     description:
-      "An embeddable testimonial SaaS for founders: one script tag, instant social proof on any website. It grew to 18 paying customers and $450+ MRR before JEE prep forced a shutdown.",
+      "An embeddable testimonial SaaS for founders: one script tag puts customer testimonials on any website. It grew to 18 paying customers and $450+ MRR before JEE prep forced a shutdown.",
     stats: [
       { value: "18", label: "Customers" },
       { value: "$450+", label: "MRR" }
@@ -27,19 +27,18 @@ const schoolProjects = [
 
 export default function BuiltInSchool() {
   return (
-    <Section id="beforebits" title="Before BITS" intro="Where the habit started.">
+    <Section id="beforebits" title="Before BITS">
       {schoolProjects.map((project) => (
         <article key={project.name} className="entry">
           <div className="entry-head">
             <h3 className="entry-title">{project.name}</h3>
             <span className="leader" aria-hidden="true" />
-            <span className="entry-aside" title="No longer active">
+            <span className="entry-aside">
               {project.date ? `${project.date} · ` : ""}
-              {project.displayUrl}
+              <s title="No longer active">{project.displayUrl}</s>
+              <span className="sr-only"> (no longer active)</span>
             </span>
           </div>
-
-          <p className="entry-meta">No longer active</p>
 
           <p className="entry-text">{project.description}</p>
 
@@ -57,10 +56,9 @@ export default function BuiltInSchool() {
       <article className="entry">
         <h3 className="entry-title">Writing</h3>
         <p className="entry-text">
-          The writing that started all of it. It front-paged{" "}
-          <i>Hacker News</i>, reached 80k+ readers on <i>freeCodeCamp</i>, and
-          earned Author of the Week on both <i>Hashnode</i> and{" "}
-          <i>daily.dev</i>.
+          Front page of <i>Hacker News</i>, 80k+ readers on{" "}
+          <i>freeCodeCamp</i>, and Author of the Week on both <i>Hashnode</i>{" "}
+          and <i>daily.dev</i>.
         </p>
       </article>
     </Section>

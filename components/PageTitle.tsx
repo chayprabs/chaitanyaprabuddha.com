@@ -1,5 +1,5 @@
 type PageTitleProps = {
-  kicker: string;
+  kicker: React.ReactNode;
   children: React.ReactNode;
 };
 

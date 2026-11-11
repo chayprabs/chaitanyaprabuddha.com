@@ -6,8 +6,8 @@ const ventures = [
     name: "Authos",
     role: "Founder",
     lede: "Remote tools for coding agents like Claude Code and Codex.",
-    text: "Coding agents need reliable tools outside the prompt. Authos runs browser sessions, Office and PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, and artifact storage in controlled infrastructure, then returns structured JSON and signed artifact links through one API and MCP layer. The agent spends fewer tokens, needs less setup, and gets more accurate.",
-    audience: ["Agent builders", "Developers", "Engineering teams"],
+    text: "Coding agents need reliable tools outside the prompt. Authos runs browser sessions, Office and PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, and artifact storage in controlled infrastructure, then returns structured JSON and signed artifact links through one API and MCP layer. The agent spends fewer tokens, needs less setup, and makes fewer mistakes.",
+    audience: "For agent builders, developers, and engineering teams",
     href: "https://authors.app",
     cta: "Visit site",
     mail: { href: "mailto:authos@chaitanyaprabuddha.com", label: "Ask about Authos" }
@@ -16,9 +16,9 @@ const ventures = [
     id: "stemlm",
     name: "StemLM",
     role: "Co-founder",
-    lede: "The structured way to solve STEM problems with AI.",
-    text: "ChatGPT, Claude, and Gemini give students answers. StemLM works alongside them and adds the exact step-by-step framework each subject demands, turning those answers into curriculum-aligned study views with the methods, formulas, diagrams, and missing steps students need to actually understand them.",
-    audience: ["Undergrad students", "Structured STEM solutions", "Exam-ready understanding"],
+    lede: "Step-by-step STEM solutions on top of the AI you already use.",
+    text: "ChatGPT, Claude, and Gemini give students an answer. StemLM works alongside them and lays that answer out the way the subject is taught: the method, the formulas, the diagrams, and the steps the AI skipped, all aligned to the curriculum.",
+    audience: "For undergrad STEM students",
     href: "https://www.stemlm.app/",
     cta: "Try StemLM",
     mail: null
@@ -27,9 +27,7 @@ const ventures = [
 
 export default function Ventures() {
   return (
-    <Section id="ventures" title="Ventures"
-      intro="The two products I'm building right now."
-      sheet={false}>
+    <Section id="ventures" title="Ventures" sheet={false}>
       {ventures.map((venture) => (
         <article key={venture.id} id={venture.id} className="card">
           <div className="card-main">
@@ -43,7 +41,7 @@ export default function Ventures() {
           </div>
 
           <div className="card-foot">
-            <p className="label">{venture.audience.join(" · ")}</p>
+            <p className="label">{venture.audience}</p>
 
             <div className="card-actions">
               {venture.mail ? (
@@ -57,7 +55,7 @@ export default function Ventures() {
                 rel="noopener noreferrer"
                 className="btn btn-primary"
               >
-                {venture.cta} &rarr;
+                {venture.cta} {"\u2197"}
               </a>
             </div>
           </div>

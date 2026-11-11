@@ -18,7 +18,7 @@ const infoColumns = [
 export default function Now() {
   return (
     <Section id="beyondthecode" title="Beyond the code">
-      <p className="aside-intro">When I&apos;m not building &mdash;</p>
+      <p className="aside-intro">When I&rsquo;m not building &mdash;</p>
 
       <div className="trio">
         {infoColumns.map((column) => (

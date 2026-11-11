@@ -7,20 +7,20 @@ const researchEntries = [
     meta: "Independent",
     status: "In progress",
     description:
-      "A C inference engine, written from scratch, pushing 3B-parameter LLMs to 100-120 tok/s on consumer Intel hardware with no discrete GPU. The same hardware manages 5-7 tok/s today. It combines BitNet 1.58-bit ternary quantization, hand-tuned AVX2/AVX-VNNI SIMD kernels, and hybrid CPU plus iGPU compute, and it is the foundation for an upcoming research paper."
+      "A C inference engine, written from scratch, pushing 3B-parameter LLMs to 100\u2013120 tok/s on consumer Intel hardware with no discrete GPU. The same hardware manages 5\u20137 tok/s today. It combines BitNet 1.58-bit ternary quantization, hand-tuned AVX2/AVX-VNNI SIMD kernels, and hybrid CPU plus iGPU compute, and is the basis for an upcoming paper."
   },
   {
     title: "Can LLMs Be Computers?",
     meta: "Under the supervision of Dr. Dhruv Kumar · CSIS Department, BITS Pilani",
     status: "In progress",
     description:
-      "An ongoing research collaboration on whether LLMs can natively replicate classical computing primitives. I'm exploring 2D grid transformers, cutting attention complexity from O(n\u00b2) to O(n log n), and whether transformer architectures can simulate deterministic state machines."
+      "An ongoing research collaboration on whether LLMs can natively replicate classical computing primitives. I\u2019m exploring 2D grid transformers, cutting attention complexity from O(n\u00b2) to O(n log n), and whether transformer architectures can simulate deterministic state machines."
   }
 ];
 
 export default function Research() {
   return (
-    <Section id="research" title="Research" intro="The questions underneath the products.">
+    <Section id="research" title="Research">
       {researchEntries.map((entry) => (
         <article key={entry.title} className="entry">
           <div className="entry-head">

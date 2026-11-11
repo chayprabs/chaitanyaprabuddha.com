@@ -1,3 +1,9 @@
+const updated = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+  timeZone: "Asia/Kolkata"
+}).format(new Date());
+
 export default function Colophon() {
   return (
     <footer className="colophon">
@@ -6,7 +12,7 @@ export default function Colophon() {
           <span>
             {"©"} {new Date().getFullYear()} Chaitanya Prabuddha
           </span>
-          <span>Built in Pilani, India</span>
+          <span>Last updated {updated}</span>
         </div>
       </div>
     </footer>

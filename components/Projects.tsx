@@ -13,13 +13,13 @@ const projects = [
     href: "https://github.com/chayprabs/newsroom-socialmediamanager",
     linkType: "github",
     description:
-      "An editorial AI pipeline that turns live X trends into Crustdata-style data posts. I built it after ContextCon. Grok finds the story, Claude scores and reframes it, Crustdata proves it with real data, and GPT-Image-2 renders the final social post. Every run gets endpoint validation, prompt caching, usage logs, and its own artifacts."
+      "A pipeline that turns live X trends into Crustdata-style data posts. I built it after ContextCon. Grok finds the story, Claude scores and reframes it, Crustdata backs it with real data, and GPT-Image-2 renders the post. Every run has endpoint validation, prompt caching, usage logs, and saved artifacts."
   }
 ];
 
 export default function Projects() {
   return (
-    <Section id="projects" title="Projects" intro="Open source, built on the side.">
+    <Section id="projects" title="Projects">
       {projects.map((project) => (
         <article key={project.name} className="entry">
           <div className="entry-head">
