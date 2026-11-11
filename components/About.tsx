@@ -11,7 +11,7 @@ const socialLinks = [
 
 export default function About() {
   return (
-    <Section id="about" title="About">
+    <Section id="about" title="About" sheet={false}>
       <div className="about-body">
         <div>
           <p className="about-text">

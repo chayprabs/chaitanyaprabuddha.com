@@ -1,11 +1,11 @@
 /* rehype-pretty-code wrapper */
 [data-rehype-pretty-code-figure] {
   margin: 1.75rem 0;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
-  border: 1px solid #c9dbea;
-  background: #f5f9fc;
+  border: 1px solid #d6d0c4;
+  background: #f6f3ee;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
@@ -74,8 +74,8 @@
 
 [data-rehype-pretty-code-figure] .highlighted,
 [data-rehype-pretty-code-figure] [data-highlighted-line] {
-  background: rgba(63, 154, 227, 0.12);
-  border-left: 3px solid #3f9ae3;
+  background: rgba(204, 79, 46, 0.09);
+  border-left: 3px solid #cc4f2e;
   padding-left: calc(1.25rem - 3px);
 }
 

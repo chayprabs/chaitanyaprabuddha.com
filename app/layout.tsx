@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Open_Sans } from "next/font/google";
+import { Caveat, Inter } from "next/font/google";
 
 import "./globals.css";
 
@@ -8,9 +8,9 @@ const SITE_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const SITE_DESCRIPTION =
   "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos, a remote tool platform for coding agents.";
 
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-open-sans"
+  variable: "--font-inter"
 });
 
 const caveat = Caveat({
@@ -83,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${openSans.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
       <body className="antialiased">
         {children}
       </body>

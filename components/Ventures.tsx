@@ -27,16 +27,18 @@ const ventures = [
 
 export default function Ventures() {
   return (
-    <Section id="ventures" title="Ventures">
+    <Section id="ventures" title="Ventures" sheet={false}>
       {ventures.map((venture) => (
         <article key={venture.id} id={venture.id} className="card">
-          <div className="card-head">
-            <h3 className="card-name">{venture.name}</h3>
-            <span className="badge badge-blue">{venture.role}</span>
-          </div>
+          <div className="card-main">
+            <div className="card-head">
+              <h3 className="card-name">{venture.name}</h3>
+              <span className="role">{venture.role}</span>
+            </div>
 
-          <p className="card-lede">{venture.lede}</p>
-          <p className="card-text">{venture.text}</p>
+            <p className="card-lede">{venture.lede}</p>
+            <p className="card-text">{venture.text}</p>
+          </div>
 
           <div className="card-foot">
             <p className="label">{venture.audience.join(" · ")}</p>

@@ -18,7 +18,6 @@ export default function Masthead({ current }: MastheadProps) {
       <div className="container">
         <div className="masthead-row">
           <Link href="/" className="masthead-name">
-            <span className="masthead-orb" aria-hidden="true" />
             Chaitanya Prabuddha
           </Link>
 

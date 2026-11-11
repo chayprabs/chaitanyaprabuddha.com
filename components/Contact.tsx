@@ -53,7 +53,7 @@ export default function Contact() {
               setIsPinnedOpen(false);
               setIsHovered(false);
             }}
-            className="cursor-pointer border-0 bg-transparent p-0 text-[18px] leading-none text-white/70 hover:text-white md:hidden"
+            className="cursor-pointer border-0 bg-transparent p-0 text-[18px] leading-none text-[var(--hint)] md:hidden"
           >
             {"×"}
           </button>
