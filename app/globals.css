@@ -337,6 +337,19 @@ p {
   text-shadow: var(--emboss);
 }
 
+.section-label:has(+ .section-intro) {
+  margin-bottom: 6px;
+}
+
+.section-intro {
+  margin-bottom: 18px;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--muted);
+  text-shadow: var(--emboss);
+}
+
 .section-label::after {
   content: "";
   flex: 1;

@@ -15,12 +15,12 @@ export default function About() {
       <div className="about-body">
         <div>
           <p className="about-text">
-            I&apos;m Chaitanya, CS student at BITS Pilani, AI/ML researcher -
-            while constantly vibe shipping. At 16, my technical writing hit
-            80k+ readers and front-paged Hacker News. That obsession never
-            left. Today I&apos;m founding Authos, shipping open source, and
-            sitting somewhere at the frontier of what these models can
-            actually do.
+            I&apos;m Chaitanya, a CS student at BITS Pilani who builds
+            products, researches AI/ML, and writes about both. At 16, my
+            technical writing front-paged Hacker News and reached 80k+
+            readers. I&apos;ve been shipping ever since: first articles, then
+            a SaaS, and now Authos, open source, and research into what these
+            models can actually do.
           </p>
 
           <p className="about-meta">

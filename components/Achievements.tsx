@@ -17,9 +17,9 @@ const achievements = [
         >
           Candor
         </a>
-        , an agentic interview integrity system that detects AI-agent
-        assistance during interviews to make hiring fairer and more reliable. I
-        competed solo among 700+ teams and finished 2nd.
+        , an agentic system that detects AI-agent assistance during interviews
+        to make hiring fairer and more reliable. I competed solo against 700+
+        teams and finished 2nd.
       </>
     )
   },
@@ -30,7 +30,7 @@ const achievements = [
     org: "OpenAI x GrowthX - Bengaluru",
     description: (
       <>
-        Selected for{" "}
+        One of 100 builders selected from 5,000+ applicants for{" "}
         <a
           href="https://luma.com/x495vdw1?tk=AWqy9y&utm_source=growthx"
           target="_blank"
@@ -39,8 +39,7 @@ const achievements = [
         >
           OpenAI Codex Hackathon - Bengaluru
         </a>
-        , India&apos;s first Codex hackathon, from 5,000+ applicants into a
-        100-builder offline cohort. Built{" "}
+        , India&apos;s first Codex hackathon. I built{" "}
         <a
           href="https://github.com/chayprabs/codex-hack-bengaluru"
           target="_blank"
@@ -49,8 +48,8 @@ const achievements = [
         >
           codex-hack-bengaluru
         </a>{" "}
-        in a one-day sprint focused on agentic coding, developer tools, and
-        AI-native product workflows.
+        in a one-day sprint on agentic coding, developer tools, and AI-native
+        product workflows.
       </>
     )
   },
@@ -61,8 +60,7 @@ const achievements = [
     org: "Crustdata x Y Combinator - Bengaluru",
     description: (
       <>
-        Selected among the top 100 participants from roughly 2,000 applicants
-        for{" "}
+        One of the top 100 selected from roughly 2,000 applicants for{" "}
         <a
           href="https://luma.com/6ftay6mq"
           target="_blank"
@@ -72,7 +70,7 @@ const achievements = [
           ContextCon
         </a>
         , Crustdata&apos;s YC-partnered hackathon for developers, AI agent
-        builders, and technical founders. Built{" "}
+        builders, and technical founders. I built{" "}
         <a
           href="https://github.com/chayprabs/contextkings"
           target="_blank"
@@ -81,7 +79,7 @@ const achievements = [
         >
           ContextKings
         </a>{" "}
-        with Crustdata APIs in a 6-hour sprint and finished in the top 10.
+        on Crustdata APIs in a 6-hour sprint and finished in the top 10.
       </>
     )
   },
@@ -91,7 +89,7 @@ const achievements = [
     name: "Solve for Pilani",
     org: "BITS Pilani - Apogee Fest 2025",
     description:
-      "Marketed a professor's campus bakery at BITS Pilani's Apogee Fest and generated \u20b93L+ revenue in 5 days - with the lowest average order value in the room. Every other team ran cash only. We didn't."
+      "Marketed a professor's campus bakery at Apogee Fest and generated \u20b93L+ in revenue in 5 days, with the lowest average order value in the room. Every other team ran cash only. We didn't."
   },
   {
     tone: "bronze",
@@ -99,13 +97,15 @@ const achievements = [
     name: "BITSpreneur",
     org: "BITS Pilani",
     description:
-      "Built Gurja, a bio-CNG system converting campus mess food waste into usable energy. Placed 3rd - then watched the idea get picked up by Blue Chip Food Management and go live on campus in 2025. The competition ended. The project didn't."
+      "Built Gurja, a bio-CNG system that turns campus mess food waste into usable energy. It placed 3rd. Then Blue Chip Food Management picked the idea up and it went live on campus in 2025. The competition ended. The project didn't."
   }
 ];
 
 export default function Achievements() {
   return (
-    <Section id="achievements" title="Achievements">
+    <Section id="achievements" title="Achievements"
+      intro="Where the work got tested against other builders."
+    >
       {achievements.map((achievement) => (
         <article key={achievement.name} className="entry">
           <div className="entry-head">

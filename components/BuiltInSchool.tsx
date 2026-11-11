@@ -6,7 +6,7 @@ const schoolProjects = [
     date: "",
     displayUrl: "developernoon.com",
     description:
-      "A technical publishing platform I built and ran - writing and publishing 100+ developer articles across web development, Python, and open source. Reached a domain authority of 42 and 15,000 monthly visitors within 4 months, entirely through content.",
+      "A technical publishing platform I built and ran. I wrote and published 100+ developer articles on web development, Python, and open source. It reached a domain authority of 42 and 15,000 monthly visitors within 4 months, entirely through content.",
     stats: [
       { value: "42", label: "Domain authority" },
       { value: "15k", label: "Monthly visitors" }
@@ -17,7 +17,7 @@ const schoolProjects = [
     date: "Mar 2022 – Jun 2022",
     displayUrl: "trymonial.app",
     description:
-      "An embeddable testimonial SaaS for founders - one script tag, instant social proof on any website. Grew to 18 paying customers and $450+ MRR before JEE prep forced a shutdown.",
+      "An embeddable testimonial SaaS for founders: one script tag, instant social proof on any website. It grew to 18 paying customers and $450+ MRR before JEE prep forced a shutdown.",
     stats: [
       { value: "18", label: "Customers" },
       { value: "$450+", label: "MRR" }
@@ -27,7 +27,7 @@ const schoolProjects = [
 
 export default function BuiltInSchool() {
   return (
-    <Section id="beforebits" title="Before BITS">
+    <Section id="beforebits" title="Before BITS" intro="Where the habit started.">
       {schoolProjects.map((project) => (
         <article key={project.name} className="entry">
           <div className="entry-head">
@@ -57,9 +57,10 @@ export default function BuiltInSchool() {
       <article className="entry">
         <h3 className="entry-title">Writing</h3>
         <p className="entry-text">
-          Technical writing that front-paged <i>Hacker News</i>, hit 80k+
-          readers on <i>freeCodeCamp</i>, and earned Author of the Week on both{" "}
-          <i>Hashnode</i> and <i>daily.dev</i>.
+          The writing that started all of it. It front-paged{" "}
+          <i>Hacker News</i>, reached 80k+ readers on <i>freeCodeCamp</i>, and
+          earned Author of the Week on both <i>Hashnode</i> and{" "}
+          <i>daily.dev</i>.
         </p>
       </article>
     </Section>

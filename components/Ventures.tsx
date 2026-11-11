@@ -5,8 +5,8 @@ const ventures = [
     id: "authos",
     name: "Authos",
     role: "Founder",
-    lede: "Claude Code and Codex need reliable tools outside the prompt: remote execution that saves tokens, cuts setup cost, and improves accuracy.",
-    text: "Authos runs browser sessions, Office and PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, and artifact storage in controlled infrastructure, then returns structured JSON plus signed artifact links through one API and MCP layer.",
+    lede: "Remote tools for coding agents like Claude Code and Codex.",
+    text: "Coding agents need reliable tools outside the prompt. Authos runs browser sessions, Office and PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, and artifact storage in controlled infrastructure, then returns structured JSON and signed artifact links through one API and MCP layer. The agent spends fewer tokens, needs less setup, and gets more accurate.",
     audience: ["Agent builders", "Developers", "Engineering teams"],
     href: "https://authors.app",
     cta: "Visit site",
@@ -17,7 +17,7 @@ const ventures = [
     name: "StemLM",
     role: "Co-founder",
     lede: "The structured way to solve STEM problems with AI.",
-    text: "StemLM works alongside ChatGPT, Claude, and Gemini, adding the exact step-by-step framework each subject demands. It turns AI answers into curriculum-aligned study views with methods, formulas, diagrams, and the missing steps students actually need to understand.",
+    text: "ChatGPT, Claude, and Gemini give students answers. StemLM works alongside them and adds the exact step-by-step framework each subject demands, turning those answers into curriculum-aligned study views with the methods, formulas, diagrams, and missing steps students need to actually understand them.",
     audience: ["Undergrad students", "Structured STEM solutions", "Exam-ready understanding"],
     href: "https://www.stemlm.app/",
     cta: "Try StemLM",
@@ -27,7 +27,9 @@ const ventures = [
 
 export default function Ventures() {
   return (
-    <Section id="ventures" title="Ventures" sheet={false}>
+    <Section id="ventures" title="Ventures"
+      intro="The two products I'm building right now."
+      sheet={false}>
       {ventures.map((venture) => (
         <article key={venture.id} id={venture.id} className="card">
           <div className="card-main">

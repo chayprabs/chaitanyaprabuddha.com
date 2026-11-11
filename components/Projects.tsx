@@ -6,20 +6,20 @@ const projects = [
     href: "https://github.com/chayprabs/localyapper",
     linkType: "github",
     description:
-      "A privacy-first voice dictation tool that runs entirely on-device. No cloud, no API calls, no data leaving your machine - just local models that adapt to how you speak. Open source alternative to Wispr Flow and Superwhisper."
+      "Voice dictation that never leaves your machine. No cloud and no API calls, just local models that adapt to how you speak. An open source alternative to Wispr Flow and Superwhisper."
   },
   {
     name: "Newsroom",
     href: "https://github.com/chayprabs/newsroom-socialmediamanager",
     linkType: "github",
     description:
-      "An editorial AI pipeline I built after ContextCon to turn live X trends into Crustdata-style data posts. Grok finds the story, Claude scores and reframes it, Crustdata proves it with real data, and GPT-Image-2 renders the final social post - with endpoint validation, prompt caching, usage logs, and per-run artifacts."
+      "An editorial AI pipeline that turns live X trends into Crustdata-style data posts. I built it after ContextCon. Grok finds the story, Claude scores and reframes it, Crustdata proves it with real data, and GPT-Image-2 renders the final social post. Every run gets endpoint validation, prompt caching, usage logs, and its own artifacts."
   }
 ];
 
 export default function Projects() {
   return (
-    <Section id="projects" title="Projects">
+    <Section id="projects" title="Projects" intro="Open source, built on the side.">
       {projects.map((project) => (
         <article key={project.name} className="entry">
           <div className="entry-head">

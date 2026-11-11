@@ -3,15 +3,15 @@ import Section from "@/components/Section";
 const infoColumns = [
   {
     label: "Music",
-    text: "Beatles to Bob Dylan to Peter Cat Recording Co at 2am. Rock, pop, and anything with a soul in it."
+    text: "Beatles to Bob Dylan to Peter Cat Recording Co at 2am. Rock, pop, anything with a soul in it."
   },
   {
     label: "Chess",
-    text: "1600 on chess.com. Decent enough to enjoy it, humble enough to lose interestingly. Play me sometime."
+    text: "1600 on chess.com. Good enough to enjoy it, humble enough to lose interestingly. Play me sometime."
   },
   {
     label: "Books",
-    text: "Currently: Sapiens. Generally: biographies, anything that reframes how I see things."
+    text: "Currently Sapiens. Usually biographies, and anything that reframes how I see things."
   }
 ];
 
