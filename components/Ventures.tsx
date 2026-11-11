@@ -1,27 +1,34 @@
 import Section from "@/components/Section";
 
-const ventures = [
+type Venture = {
+  id: string;
+  name: string;
+  role: string;
+  lede?: string;
+  text?: string;
+  audience: string;
+  href: string;
+  cta: string;
+};
+
+const ventures: Venture[] = [
   {
-    id: "authos",
-    name: "Authos",
+    id: "cruxo",
+    name: "Cruxo",
     role: "Founder",
-    lede: "Remote tools for coding agents like Claude Code and Codex.",
-    text: "Coding agents need reliable tools outside the prompt. Authos runs browser sessions, Office and PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, and artifact storage in controlled infrastructure, then returns structured JSON and signed artifact links through one API and MCP layer. The agent spends fewer tokens, needs less setup, and makes fewer mistakes.",
-    audience: "For agent builders, developers, and engineering teams",
-    href: "https://authors.app",
-    cta: "Visit site",
-    mail: { href: "mailto:authos@chaitanyaprabuddha.com", label: "Ask about Authos" }
+    audience: "trycruxo.com",
+    href: "https://trycruxo.com",
+    cta: "Visit site"
   },
   {
     id: "stemlm",
     name: "StemLM",
     role: "Co-founder",
     lede: "Step-by-step STEM solutions on top of the AI you already use.",
-    text: "ChatGPT, Claude, and Gemini give students an answer. StemLM works alongside them and lays that answer out the way the subject is taught: the method, the formulas, the diagrams, and the steps the AI skipped, all aligned to the curriculum.",
+    text: "AI gives students the answer. StemLM shows the working: the method, formulas, diagrams, and the steps it skipped.",
     audience: "For undergrad STEM students",
     href: "https://www.stemlm.app/",
-    cta: "Try StemLM",
-    mail: null
+    cta: "Try StemLM"
   }
 ];
 
@@ -36,19 +43,18 @@ export default function Ventures() {
               <span className="role">{venture.role}</span>
             </div>
 
-            <p className="card-lede">{venture.lede}</p>
-            <p className="card-text">{venture.text}</p>
+            {venture.lede ? (
+              <p className="card-lede">{venture.lede}</p>
+            ) : null}
+            {venture.text ? (
+              <p className="card-text">{venture.text}</p>
+            ) : null}
           </div>
 
           <div className="card-foot">
             <p className="label">{venture.audience}</p>
 
             <div className="card-actions">
-              {venture.mail ? (
-                <a href={venture.mail.href} className="btn">
-                  {venture.mail.label}
-                </a>
-              ) : null}
               <a
                 href={venture.href}
                 target="_blank"

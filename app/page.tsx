@@ -14,7 +14,7 @@ import PageTitle from "@/components/PageTitle";
 
 const HOME_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const HOME_DESCRIPTION =
-  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Authos, remote tools for coding agents.";
+  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Cruxo.";
 
 export const metadata: Metadata = {
   title: { absolute: HOME_TITLE },

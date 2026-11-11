@@ -6,7 +6,7 @@ import "./globals.css";
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const SITE_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const SITE_DESCRIPTION =
-  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Authos, remote tools for coding agents.";
+  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Cruxo.";
 
 const OG_IMAGE = {
   url: "/og.png",
@@ -51,8 +51,7 @@ export const metadata: Metadata = {
     "AI agents",
     "coding agents",
     "technical writing",
-    "Authos",
-    "remote tools for coding agents",
+    "Cruxo",
     "machine learning projects"
   ],
   openGraph: {

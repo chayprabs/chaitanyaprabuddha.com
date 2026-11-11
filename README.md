@@ -1,17 +1,17 @@
 # chaitanyaprabuddha.com
 
-Personal website of Chaitanya Prabuddha: CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos.
+Personal website of Chaitanya Prabuddha: CS student at BITS Pilani, AI/ML researcher, builder, and founder of Cruxo.
 
 ## Public Site
 
-- **Home** - portfolio landing page with profile, Authos, StemLM, projects, research, achievements, current work, and contact links.
+- **Home** - portfolio landing page with profile, Cruxo, StemLM, projects, research, achievements, current work, and contact links.
 - **Blog** - long-form writing on AI agents, LLM systems, inference, MCP, RAG, autonomous SEO, and developer tooling.
 - **Sitemap** - generated from published markdown posts with canonical `https://www.chaitanyaprabuddha.com` URLs.
 - **Robots** - static `robots.txt` route pointing crawlers to the canonical sitemap.
 
 ## Homepage Sections
 
-- **Authos** - standalone founder section for the remote tool platform for coding agents at `authors.app`. The copy focuses on Claude Code, Codex, agent builders, developers, and engineering teams that need reliable remote execution, artifacts, state, and infrastructure outside the prompt.
+- **Cruxo** - founder section linking to `trycruxo.com`.
 - **StemLM** - standalone co-founder section for the structured STEM problem-solving product at `stemlm.app`. The section now positions StemLM around undergrad students, structured STEM solutions, and exam-ready understanding.
 - **Projects** - focused project list currently featuring LocalYapper and Newsroom. IPL2026-LM and StemLM are no longer listed as ordinary projects.
 - **Research** - AI/ML and systems research work.
@@ -19,8 +19,8 @@ Personal website of Chaitanya Prabuddha: CS student at BITS Pilani, AI/ML resear
 
 ## Featured Work
 
-- **Authos** - controlled remote infrastructure for coding agents: browser sessions, Office/PDF conversion, large-file inspection, webhooks, sandboxes, temporary databases, logs, signed artifacts, and one API/MCP layer.
-- **StemLM** - structured AI study layer that works alongside ChatGPT, Claude, and Gemini to turn answers into curriculum-aligned steps, methods, formulas, diagrams, and missing reasoning.
+- **Cruxo** - founded by Chaitanya, at `trycruxo.com`.
+- **StemLM** - study layer on top of ChatGPT, Claude, and Gemini that shows the working behind an answer: method, formulas, diagrams, and skipped steps.
 - **LocalYapper** - privacy-first on-device voice dictation tool and open source alternative to cloud-first dictation apps.
 - **Newsroom** - editorial AI pipeline built after ContextCon to turn live X trends into Crustdata-style data posts with Grok, Claude, Crustdata APIs, GPT-Image-2, endpoint validation, prompt caching, usage logs, and per-run artifacts.
 

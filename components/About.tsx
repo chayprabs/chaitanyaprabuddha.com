@@ -23,8 +23,8 @@ export default function About() {
             <dt>Now</dt>
             <dd>
               Building{" "}
-              <a href="#authos" className="link">
-                Authos
+              <a href="#cruxo" className="link">
+                Cruxo
               </a>{" "}
               and researching{" "}
               <a href="#research" className="link">
