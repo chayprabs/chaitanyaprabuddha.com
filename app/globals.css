@@ -1657,9 +1657,35 @@ p {
     font-size: 15.5px;
   }
 
+  /* title on the left, ribbon or link pinned top right; a long title
+     wraps under itself instead of pushing the ribbon to a new line */
   .entry-head {
-    flex-wrap: wrap;
-    gap: 6px 10px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .entry-title {
+    min-width: 0;
+  }
+
+  .leader {
+    flex: 1 1 0;
+  }
+
+  .entry-head > .badge {
+    margin-top: 2px;
+  }
+
+  .entry-head > .entry-aside {
+    flex-shrink: 1;
+    margin-top: 3px;
+    text-align: right;
+    white-space: normal;
+  }
+
+  .entry-head > .progress-wrap {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .stat {
@@ -1706,6 +1732,12 @@ p {
 }
 
 @media (max-width: 380px) {
+  .badge {
+    padding: 3px 17px 3px 8px;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+
   .hero-title {
     font-size: min(11.4vw, 40px);
   }

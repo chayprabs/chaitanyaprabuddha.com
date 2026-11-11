@@ -5,10 +5,10 @@ const achievements = [
     tone: "silver",
     placement: "2nd Place",
     name: "Eightfold AI Hackathon",
-    org: "Eightfold AI \u00b7 Apogee Fest 2026, BITS Pilani",
+    org: "Eightfold AI \u00b7 Apogee tech fest 2026, BITS Pilani",
     description: (
       <>
-        Built{" "}
+        <i>2nd out of 700+ teams, as a team of one.</i> I built{" "}
         <a
           href="https://github.com/chayprabs/candor"
           target="_blank"
@@ -16,10 +16,8 @@ const achievements = [
           className="link"
         >
           Candor
-        </a>
-        , which detects when a candidate is getting help from an AI agent
-        during an interview. I competed solo against 700+ teams and finished
-        2nd.
+        </a>, which catches a candidate getting help from an AI agent in the
+        middle of an interview.
       </>
     )
   },
@@ -30,25 +28,24 @@ const achievements = [
     org: "OpenAI \u00d7 GrowthX \u00b7 Bengaluru",
     description: (
       <>
-        One of 100 builders selected from 5,000+ applicants for{" "}
+        <i>One of 100 builders picked from 5,000+ applicants</i> for{" "}
         <a
           href="https://luma.com/x495vdw1?tk=AWqy9y&utm_source=growthx"
           target="_blank"
           rel="noopener noreferrer"
           className="link"
         >
-          OpenAI Codex Hackathon - Bengaluru
-        </a>
-        , India&rsquo;s first Codex hackathon. I built{" "}
+          India&rsquo;s first Codex hackathon
+        </a>. I built and shipped{" "}
         <a
           href="https://github.com/chayprabs/codex-hack-bengaluru"
           target="_blank"
           rel="noopener noreferrer"
           className="link"
         >
-          codex-hack-bengaluru
+          my entry
         </a>{" "}
-        there in one day.
+        there in a single day.
       </>
     )
   },
@@ -59,7 +56,7 @@ const achievements = [
     org: "Crustdata \u00d7 Y Combinator \u00b7 Bengaluru",
     description: (
       <>
-        One of the top 100 selected from roughly 2,000 applicants for{" "}
+        <i>Top 10 of the 100 builders chosen from roughly 2,000 applicants.</i>{" "}
         <a
           href="https://luma.com/6ftay6mq"
           target="_blank"
@@ -67,8 +64,8 @@ const achievements = [
           className="link"
         >
           ContextCon
-        </a>
-        , Crustdata&rsquo;s YC-partnered hackathon. I built{" "}
+        </a>{" "}
+        is Crustdata&rsquo;s YC-partnered hackathon. I built{" "}
         <a
           href="https://github.com/chayprabs/contextkings"
           target="_blank"
@@ -77,7 +74,7 @@ const achievements = [
         >
           ContextKings
         </a>{" "}
-        on Crustdata APIs in a 6-hour sprint and finished in the top 10.
+        on Crustdata&rsquo;s APIs in a 6-hour sprint.
       </>
     )
   },
@@ -85,17 +82,31 @@ const achievements = [
     tone: "gold",
     placement: "1st Place",
     name: "Solve for Pilani",
-    org: "BITS Pilani \u00b7 Apogee Fest 2025",
-    description:
-      "Marketed a professor\u2019s campus bakery at Apogee Fest and generated \u20b93L+ in revenue in 5 days, with the lowest average order value in the room. Every other team ran cash only. We didn\u2019t."
+    org: "BITS Pilani \u00b7 Apogee tech fest 2025",
+    description: (
+      <>
+        <i>
+          {"\u20b9"}3 lakh+ (about $3,500) in sales in 5 days, for a
+          professor&rsquo;s campus bakery.
+        </i>{" "}
+        We did it with the lowest average order value in the room. Every other
+        team took cash only. We didn&rsquo;t.
+      </>
+    )
   },
   {
     tone: "bronze",
     placement: "3rd Place",
     name: "BITSpreneur",
     org: "BITS Pilani",
-    description:
-      "Built Gurja, a bio-CNG system that turns campus mess food waste into usable energy. It placed 3rd. Then Blue Chip Food Management picked the idea up and it went live on campus in 2025. The competition ended. The project didn\u2019t."
+    description: (
+      <>
+        <i>The competition ended. The project didn&rsquo;t.</i> I built Gurja,
+        a bio-CNG system that turns food waste from the campus dining halls
+        into usable energy. It placed 3rd, then Blue Chip Food Management
+        picked it up and it went live on campus in 2025.
+      </>
+    )
   }
 ];
 
