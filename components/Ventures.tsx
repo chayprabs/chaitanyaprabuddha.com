@@ -6,7 +6,6 @@ type Venture = {
   role: string;
   lede: string;
   text: string;
-  audience: string;
   href: string;
   cta: string;
 };
@@ -18,7 +17,6 @@ const ventures: Venture[] = [
     role: "Founder",
     lede: "LeetCode for the prompting era.",
     text: "You write one plain-English prompt, an AI turns it into code, and hidden tests score the result. There is a new challenge every day and a leaderboard for who prompts best.",
-    audience: "For anyone who codes with AI",
     href: "https://trycruxo.com",
     cta: "Try Cruxo"
   },
@@ -28,7 +26,6 @@ const ventures: Venture[] = [
     role: "Co-founder",
     lede: "Step-by-step STEM solutions on top of the AI you already use.",
     text: "AI gives students the answer. StemLM shows the working: the method, formulas, diagrams, and the steps it skipped.",
-    audience: "For undergrad STEM students",
     href: "https://www.stemlm.app/",
     cta: "Try StemLM"
   }
@@ -50,8 +47,6 @@ export default function Ventures() {
           </div>
 
           <div className="card-foot">
-            <p className="label">{venture.audience}</p>
-
             <div className="card-actions">
               <a
                 href={venture.href}
