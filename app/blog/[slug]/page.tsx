@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import Colophon from "@/components/Colophon";
 import Contact from "@/components/Contact";
+import Masthead from "@/components/Masthead";
+import Section from "@/components/Section";
 import BlogTableOfContents from "@/components/BlogTableOfContents";
 import { getAdjacentPosts, getAllSlugs, getPostBySlug } from "@/lib/blog";
 
@@ -78,95 +81,66 @@ export default async function PostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div>
+      <Masthead />
       <main>
-        <article className="w-full pb-20 pt-10">
-          <div className="container">
-            <Link
-              href="/blog"
-              className="inline-flex text-[14px] font-normal text-[#9a9890] transition-colors duration-150 ease-in-out hover:text-[#1a1a18]"
-            >
-              {"\u2190"} Writing
-            </Link>
+        <div className="container article-shell">
+          <Link href="/blog" className="btn article-back">
+            {"\u2190"} Writing
+          </Link>
+        </div>
 
-            <header className="mt-12 max-w-[680px]">
-              <h1 className="text-[34px] font-bold leading-[1.15] text-[#1a1a18] md:text-[48px]">
-                {post.title}
-              </h1>
-              <p className="mt-5 text-[15px] font-light leading-[1.8] text-[#6b6860]">
-                {post.description}
-              </p>
-              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] font-light text-[#9a9890]">
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
-                <span>{post.readTime}</span>
-              </div>
+        <Section id="post" title="Writing">
+          <article className="article">
+
+          <header>
+            <h1 id="post-heading" className="article-title">{post.title}</h1>
+            <p className="article-desc">{post.description}</p>
+            <div className="article-meta label">
+              <time dateTime={post.date}>{formatDate(post.date)}</time>
+              <span>{post.readTime}</span>
               {post.tags.length > 0 ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-[rgba(0,0,0,0.1)] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.08em] text-[#6b6860]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <span className="tags">{post.tags.join(" \u00b7 ")}</span>
               ) : null}
-            </header>
-
-            <div className="my-8 max-w-[680px] border-t border-[rgba(0,0,0,0.08)]" />
-
-            <BlogTableOfContents items={post.tableOfContents} />
-
-            <div className="max-w-[680px]">
-              <div
-                className="blog-content prose prose-neutral max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.html }}
-              />
             </div>
+          </header>
 
-            {prev || next ? (
-              <nav className="mt-16 grid max-w-[680px] gap-4 border-t border-[rgba(0,0,0,0.08)] pt-8 md:grid-cols-2">
-                {prev ? (
-                  <Link
-                    href={`/blog/${prev.slug}`}
-                    className="rounded-[24px] border border-[rgba(0,0,0,0.08)] p-5 transition-colors duration-150 ease-in-out hover:border-[rgba(0,0,0,0.18)]"
-                  >
-                    <span className="block text-[11px] font-medium uppercase tracking-[0.08em] text-[#9a9890]">
-                      Previous Post
-                    </span>
-                    <span className="mt-2 block text-[16px] font-medium leading-[1.5] text-[#1a1a18]">
-                      {prev.title}
-                    </span>
-                  </Link>
-                ) : (
-                  <div />
-                )}
+          <BlogTableOfContents items={post.tableOfContents} />
 
-                {next ? (
-                  <Link
-                    href={`/blog/${next.slug}`}
-                    className="rounded-[24px] border border-[rgba(0,0,0,0.08)] p-5 text-left transition-colors duration-150 ease-in-out hover:border-[rgba(0,0,0,0.18)]"
-                  >
-                    <span className="block text-[11px] font-medium uppercase tracking-[0.08em] text-[#9a9890]">
-                      Next Post
-                    </span>
-                    <span className="mt-2 block text-[16px] font-medium leading-[1.5] text-[#1a1a18]">
-                      {next.title}
-                    </span>
-                  </Link>
-                ) : (
-                  <div />
-                )}
-              </nav>
-            ) : null}
+          <div
+            className="blog-content prose prose-neutral"
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
 
-            <p className="mt-10 max-w-[680px] text-[13px] font-light text-[#9a9890]">
-              Written &amp; published by Chaitanya Prabuddha
-            </p>
-          </div>
-        </article>
+          {prev || next ? (
+            <nav className="article-nav" aria-label="More posts">
+              {prev ? (
+                <Link href={`/blog/${prev.slug}`}>
+                  <span className="label">Previous post</span>
+                  <span className="article-nav-title">{prev.title}</span>
+                </Link>
+              ) : (
+                <div />
+              )}
+
+              {next ? (
+                <Link href={`/blog/${next.slug}`}>
+                  <span className="label">Next post</span>
+                  <span className="article-nav-title">{next.title}</span>
+                </Link>
+              ) : (
+                <div />
+              )}
+            </nav>
+          ) : null}
+
+          <p className="article-byline">
+            Written &amp; published by Chaitanya Prabuddha
+          </p>
+          </article>
+        </Section>
       </main>
+      <Colophon />
       <Contact />
     </div>
   );
