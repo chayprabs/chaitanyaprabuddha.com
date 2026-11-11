@@ -64,7 +64,7 @@ export async function generateMetadata({
     };
   } catch {
     return {
-      title: "Writing | Chaitanya Prabuddha"
+      title: "Writing"
     };
   }
 }

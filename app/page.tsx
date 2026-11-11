@@ -15,10 +15,10 @@ import PageTitle from "@/components/PageTitle";
 
 const HOME_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const HOME_DESCRIPTION =
-  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos, a remote tool platform for coding agents.";
+  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Authos, remote tools for coding agents.";
 
 export const metadata: Metadata = {
-  title: HOME_TITLE,
+  title: { absolute: HOME_TITLE },
   description: HOME_DESCRIPTION,
   alternates: {
     canonical: "/"
@@ -28,13 +28,15 @@ export const metadata: Metadata = {
     description: HOME_DESCRIPTION,
     url: "/",
     siteName: "Chaitanya Prabuddha",
-    type: "website"
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630 }]
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: HOME_TITLE,
     description: HOME_DESCRIPTION,
-    creator: "@chayprabs"
+    creator: "@chayprabs",
+    images: ["/og.png"]
   }
 };
 

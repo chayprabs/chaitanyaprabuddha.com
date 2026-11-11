@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Caveat, Inter } from "next/font/google";
 
 import "./globals.css";
@@ -6,7 +6,14 @@ import "./globals.css";
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const SITE_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const SITE_DESCRIPTION =
-  "Personal website of Chaitanya Prabuddha, CS student at BITS Pilani, AI/ML researcher, builder, and founder of Authos, a remote tool platform for coding agents.";
+  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Authos, remote tools for coding agents.";
+
+const OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "Chaitanya Prabuddha: I build products, not just code."
+};
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,7 +28,10 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: SITE_TITLE,
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Chaitanya Prabuddha"
+  },
   description: SITE_DESCRIPTION,
   applicationName: "Chaitanya Prabuddha",
   authors: [
@@ -42,7 +52,7 @@ export const metadata: Metadata = {
     "coding agents",
     "technical writing",
     "Authos",
-    "remote tool platform",
+    "remote tools for coding agents",
     "machine learning projects"
   ],
   openGraph: {
@@ -51,13 +61,15 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Chaitanya Prabuddha",
     locale: "en_US",
-    type: "website"
+    type: "website",
+    images: [OG_IMAGE]
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    creator: "@chayprabs"
+    creator: "@chayprabs",
+    images: [OG_IMAGE.url]
   },
   robots: {
     index: true,
@@ -71,10 +83,17 @@ export const metadata: Metadata = {
     }
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" }
+    ],
     shortcut: "/favicon.ico",
-    apple: "/favicon.ico"
+    apple: "/apple-touch-icon.png"
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#efece5"
 };
 
 export default function RootLayout({

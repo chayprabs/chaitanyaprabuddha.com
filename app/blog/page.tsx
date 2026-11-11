@@ -34,13 +34,15 @@ export const metadata: Metadata = {
     description: "Writing on AI, systems, and building things.",
     url: "/blog",
     siteName: "Chaitanya Prabuddha",
-    type: "website"
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630 }]
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Blog",
     description: "Writing on AI, systems, and building things.",
-    creator: "@chayprabs"
+    creator: "@chayprabs",
+    images: ["/og.png"]
   }
 };
 
