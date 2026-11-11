@@ -848,7 +848,7 @@ p {
   gap: 0 26px;
   margin-top: 12px;
   border-top: 1px solid rgba(38, 36, 31, 0.11);
-  padding: 18px 0 16px;
+  padding: 22px 0 18px;
 }
 
 .trio h3 {
@@ -864,6 +864,305 @@ p {
   font-size: 14px;
   line-height: 1.7;
   color: var(--text);
+}
+
+/* each interest gets an object you can play with */
+.trio-object {
+  display: flex;
+  align-items: center;
+  height: 208px;
+  margin-bottom: 14px;
+}
+
+/* record that slides out of its sleeve and spins */
+.record {
+  position: relative;
+  width: 136px;
+  height: 136px;
+  transform: rotate(-3deg);
+}
+
+.record-sleeve {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 3px;
+  background:
+    var(--noise),
+    linear-gradient(140deg, #dd6a45, #b5421f);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 0 1px rgba(110, 36, 14, 0.5),
+    0 1px 2px rgba(38, 36, 31, 0.2),
+    0 14px 22px -14px rgba(38, 36, 31, 0.6);
+  padding: 10px 12px 9px;
+  color: #fff;
+}
+
+.record-sleeve span {
+  font-family: var(--font-caveat), cursive;
+  font-size: 40px;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(110, 36, 14, 0.6);
+}
+
+.record-sleeve small {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.record-disc {
+  position: absolute;
+  top: 6px;
+  left: 40px;
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(38, 36, 31, 0.35);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* fixed sheen so the light stays put while the grooves turn */
+.record-disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 35deg,
+    rgba(255, 255, 255, 0) 0deg 30deg,
+    rgba(255, 255, 255, 0.16) 48deg,
+    rgba(255, 255, 255, 0) 66deg 210deg,
+    rgba(255, 255, 255, 0.12) 228deg,
+    rgba(255, 255, 255, 0) 246deg
+  );
+}
+
+.record-grooves {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #26241f 0 3px, #f0c648 3.5px 20px, #1b1916 20.5px 23px, transparent 23.5px),
+    conic-gradient(from 0deg, #f0c648 0 12deg, transparent 12deg) center / 40px 40px no-repeat,
+    repeating-radial-gradient(circle, #1b1916 0 1.4px, #2e2b26 1.4px 2.8px);
+  animation: recordSpin 2.6s linear infinite;
+  animation-play-state: paused;
+}
+
+.trio-item:hover .record-disc {
+  transform: translateX(36px);
+}
+
+.trio-item:hover .record-grooves {
+  animation-play-state: running;
+}
+
+@keyframes recordSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* mate-in-one board */
+.chess {
+  width: calc(100% - 8px);
+  max-width: 184px;
+  margin-left: 4px;
+}
+
+.chess-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid #8f8068;
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 3px #e3d9c6,
+    0 0 0 4px var(--edge-dark),
+    0 12px 20px -14px rgba(38, 36, 31, 0.6);
+}
+
+.chess-board[data-status="wrong"] {
+  animation: chessShake 0.36s ease;
+}
+
+@keyframes chessShake {
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.chess-square {
+  border: 0;
+  background: #f1eadb;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chess-square[data-dark] {
+  background: #c9b999;
+}
+
+.chess-square:hover {
+  background: #f7e7b6;
+}
+
+.chess-square[data-dark]:hover {
+  background: #d9c489;
+}
+
+.chess-square[data-selected] {
+  background: #f0c648;
+}
+
+.chess-square[data-mated] {
+  background: #e0795a;
+}
+
+.chess-square:focus-visible {
+  position: relative;
+  z-index: 3;
+  outline-offset: -2px;
+}
+
+.chess-piece {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12.5%;
+  height: 12.5%;
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", "DejaVu Sans", serif;
+  font-size: 18px;
+  line-height: 1;
+  color: #26241f;
+  pointer-events: none;
+  transition:
+    left 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chess-piece[data-white] {
+  color: #fffdf8;
+  text-shadow:
+    0 0 1px #26241f,
+    0 0 1px #26241f,
+    0 1px 1px rgba(38, 36, 31, 0.8);
+}
+
+.trio .chess-status {
+  margin-top: 9px;
+  font-family: var(--serif);
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--hint);
+}
+
+.chess-reset {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-color: rgba(181, 66, 31, 0.35);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* book whose cover lifts open */
+.book {
+  position: relative;
+  width: 108px;
+  height: 148px;
+  margin-left: 6px;
+  transform: rotate(2deg);
+  perspective: 700px;
+}
+
+.book-pages {
+  position: absolute;
+  inset: 3px 0 3px 4px;
+  border-radius: 0 2px 2px 0;
+  background:
+    repeating-linear-gradient(rgba(38, 36, 31, 0) 0 9px, rgba(38, 36, 31, 0.1) 9px 10px) 14px 22px / 64px 96px no-repeat,
+    linear-gradient(90deg, #fffdf8 0, #f3eee2 88%, #d9d1bf 100%);
+  box-shadow:
+    inset -3px 0 0 -1px #cfc6b2,
+    inset -5px 0 0 -1px #f3eee2,
+    0 14px 20px -14px rgba(38, 36, 31, 0.65);
+}
+
+.book-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 2px 4px 4px 2px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.28) 0, rgba(0, 0, 0, 0) 7px, rgba(255, 255, 255, 0.12) 9px, rgba(255, 255, 255, 0) 12px),
+    var(--noise),
+    linear-gradient(150deg, #3f7a66, #2b5647);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(20, 45, 36, 0.6),
+    0 1px 2px rgba(38, 36, 31, 0.25);
+  padding: 20px 10px 12px 20px;
+  color: #f6efdd;
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.book-cover span {
+  border-top: 1px solid rgba(246, 239, 221, 0.5);
+  border-bottom: 1px solid rgba(246, 239, 221, 0.5);
+  padding: 6px 0 7px;
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.1;
+}
+
+.book-cover small {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.book-ribbon {
+  position: absolute;
+  top: 100%;
+  right: 26px;
+  width: 9px;
+  height: 18px;
+  margin-top: -4px;
+  background: linear-gradient(#cc4f2e, #a63b1f);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
+}
+
+.trio-item:hover .book-cover {
+  transform: rotateY(-34deg);
 }
 
 /* ---------- sign-off & footer ---------- */
@@ -1113,6 +1412,18 @@ p {
   .contact-reveal,
   .contact-link,
   .contact-tab[data-open] .contact-link,
+  .record-grooves {
+    animation: none;
+  }
+
+  .record-disc,
+  .book-cover,
+  .chess-piece,
+  .chess-board[data-status="wrong"] {
+    animation: none;
+    transition: none;
+  }
+
   .masthead-nav-pill[data-moves],
   .retired-flag,
   .retired:hover .retired-flag,
@@ -1719,7 +2030,20 @@ p {
 
   .trio {
     grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    gap: 30px;
+  }
+
+  .trio-object {
+    height: auto;
+    min-height: 150px;
+  }
+
+  .chess {
+    max-width: 240px;
+  }
+
+  .chess-piece {
+    font-size: 23px;
   }
 
   .post-row {
