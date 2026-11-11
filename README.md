@@ -11,7 +11,7 @@ Personal website of Chaitanya Prabuddha: CS student at BITS Pilani, AI/ML resear
 
 ## Homepage Sections
 
-- **Cruxo** - founder section linking to `trycruxo.com`.
+- **Cruxo** - founder section for the prompt-coding challenge site at `trycruxo.com`.
 - **StemLM** - standalone co-founder section for the structured STEM problem-solving product at `stemlm.app`. The section now positions StemLM around undergrad students, structured STEM solutions, and exam-ready understanding.
 - **Projects** - focused project list currently featuring LocalYapper and Newsroom. IPL2026-LM and StemLM are no longer listed as ordinary projects.
 - **Research** - AI/ML and systems research work.
@@ -19,7 +19,7 @@ Personal website of Chaitanya Prabuddha: CS student at BITS Pilani, AI/ML resear
 
 ## Featured Work
 
-- **Cruxo** - founded by Chaitanya, at `trycruxo.com`.
+- **Cruxo** - LeetCode for the prompting era: write one plain-English prompt, an AI turns it into code, and hidden tests score it.
 - **StemLM** - study layer on top of ChatGPT, Claude, and Gemini that shows the working behind an answer: method, formulas, diagrams, and skipped steps.
 - **LocalYapper** - privacy-first on-device voice dictation tool and open source alternative to cloud-first dictation apps.
 - **Newsroom** - editorial AI pipeline built after ContextCon to turn live X trends into Crustdata-style data posts with Grok, Claude, Crustdata APIs, GPT-Image-2, endpoint validation, prompt caching, usage logs, and per-run artifacts.

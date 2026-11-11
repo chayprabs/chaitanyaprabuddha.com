@@ -6,7 +6,7 @@ import "./globals.css";
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
 const SITE_TITLE = "Chaitanya Prabuddha | AI/ML Researcher, Builder, Founder";
 const SITE_DESCRIPTION =
-  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Cruxo.";
+  "Chaitanya Prabuddha is a CS student at BITS Pilani who builds products, researches AI/ML, and writes about both. Founder of Cruxo, LeetCode for the prompting era.";
 
 const OG_IMAGE = {
   url: "/og.png",

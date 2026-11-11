@@ -4,8 +4,8 @@ type Venture = {
   id: string;
   name: string;
   role: string;
-  lede?: string;
-  text?: string;
+  lede: string;
+  text: string;
   audience: string;
   href: string;
   cta: string;
@@ -16,9 +16,11 @@ const ventures: Venture[] = [
     id: "cruxo",
     name: "Cruxo",
     role: "Founder",
-    audience: "trycruxo.com",
+    lede: "LeetCode for the prompting era.",
+    text: "You write one plain-English prompt, an AI turns it into code, and hidden tests score the result. There is a new challenge every day and a leaderboard for who prompts best.",
+    audience: "For anyone who codes with AI",
     href: "https://trycruxo.com",
-    cta: "Visit site"
+    cta: "Try Cruxo"
   },
   {
     id: "stemlm",
@@ -43,12 +45,8 @@ export default function Ventures() {
               <span className="role">{venture.role}</span>
             </div>
 
-            {venture.lede ? (
-              <p className="card-lede">{venture.lede}</p>
-            ) : null}
-            {venture.text ? (
-              <p className="card-text">{venture.text}</p>
-            ) : null}
+            <p className="card-lede">{venture.lede}</p>
+            <p className="card-text">{venture.text}</p>
           </div>
 
           <div className="card-foot">
