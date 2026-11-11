@@ -4,8 +4,8 @@ import Section from "@/components/Section";
 
 const socialLinks = [
   { href: "https://github.com/chayprabs", label: "GitHub" },
-  { href: "https://x.com/chayprabs", label: "X" },
-  { href: "https://linkedin.com/in/chaitanya-prabuddha-bits94", label: "LinkedIn" },
+  { href: "https://x.com/chayp05", label: "X" },
+  { href: "https://linkedin.com/in/chayprabs", label: "LinkedIn" },
   { href: "mailto:hi@chaitanyaprabuddha.com", label: "Email" }
 ];
 
@@ -55,8 +55,7 @@ export default function About() {
               >
                 BITS Pilani
               </a>
-              , one of India&rsquo;s top engineering universities. It sits in
-              a small desert town about 200&nbsp;km from Delhi.
+              , one of India&rsquo;s top engineering universities.
             </dd>
           </div>
         </dl>

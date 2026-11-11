@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Blog",
     description: "Writing on AI, systems, and building things.",
-    creator: "@chayprabs",
+    creator: "@chayp05",
     images: ["/og.png"]
   }
 };

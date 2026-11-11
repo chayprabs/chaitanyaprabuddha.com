@@ -1,7 +1,7 @@
 const links = [
   { href: "https://github.com/chayprabs", label: "GitHub" },
-  { href: "https://x.com/chayprabs", label: "X" },
-  { href: "https://linkedin.com/in/chaitanya-prabuddha-bits94", label: "LinkedIn" }
+  { href: "https://x.com/chayp05", label: "X" },
+  { href: "https://linkedin.com/in/chayprabs", label: "LinkedIn" }
 ];
 
 // The end of the page, written like the end of a letter: a closing line,
