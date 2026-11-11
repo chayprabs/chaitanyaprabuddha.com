@@ -37,7 +37,7 @@ export default function About() {
             <dt>Before</dt>
             <dd>
               Front page of Hacker News at 16, with 80k+ readers. Then ran{" "}
-              <a href="#beforebits" className="link">
+              <a href="#highschool" className="link">
                 Monial
               </a>
               , a SaaS with paying customers.

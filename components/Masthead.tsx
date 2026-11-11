@@ -70,7 +70,7 @@ export default function Masthead({ current }: MastheadProps) {
         const section = document.getElementById(id);
 
         // A section owns the tab from its top until the next spied section;
-        // past the last one (Before BITS onward) the tab returns to Home.
+        // past the last one (the high school section onward) the tab returns to Home.
         if (section && section.getBoundingClientRect().top <= 140) {
           next = id;
         }

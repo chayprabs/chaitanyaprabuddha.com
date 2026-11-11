@@ -694,9 +694,74 @@ p {
   white-space: nowrap;
 }
 
-.entry-aside s {
+/* retired sites: struck-through domain that raises a small flag */
+.retired {
+  position: relative;
+  display: inline-block;
+}
+
+.retired-domain {
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.retired-domain:hover {
+  color: var(--text);
+}
+
+.retired-domain s {
   text-decoration-color: rgba(38, 36, 31, 0.45);
-  cursor: help;
+}
+
+.retired-flag {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 7px);
+  z-index: 2;
+  border-radius: 5px;
+  background: var(--ink);
+  box-shadow: 0 6px 14px -6px rgba(38, 36, 31, 0.6);
+  padding: 3px 9px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.2s;
+}
+
+.retired-flag::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 14px;
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+  border-bottom: 0;
+}
+
+.retired:hover .retired-flag,
+.retired[data-open] .retired-flag {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
 }
 
 .entry-meta {
@@ -722,10 +787,6 @@ p {
 .entry-text,
 .trio p {
   text-wrap: pretty;
-}
-
-.stat-value {
-  font-variant-numeric: tabular-nums;
 }
 
 .entry-text i {
@@ -769,41 +830,6 @@ p {
   to {
     transform: translateX(-19.8px);
   }
-}
-
-/* debossed number wells */
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.stat {
-  min-width: 132px;
-  border: 1px solid var(--edge);
-  border-radius: 6px;
-  background: #f2efe9;
-  box-shadow:
-    inset 0 2px 4px rgba(38, 36, 31, 0.1),
-    0 1px 0 #fff;
-  padding: 9px 15px 10px;
-}
-
-.stat-value {
-  font-size: 27px;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  text-shadow: var(--emboss);
-}
-
-.stat .label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 /* ---------- beyond the code ---------- */
@@ -1087,7 +1113,10 @@ p {
   .contact-reveal,
   .contact-link,
   .contact-tab[data-open] .contact-link,
-  .masthead-nav-pill[data-moves] {
+  .masthead-nav-pill[data-moves],
+  .retired-flag,
+  .retired:hover .retired-flag,
+  .retired[data-open] .retired-flag {
     transition: none;
   }
 
@@ -1686,11 +1715,6 @@ p {
   .entry-head > .progress-wrap {
     flex-shrink: 0;
     white-space: nowrap;
-  }
-
-  .stat {
-    min-width: 0;
-    flex: 1 1 120px;
   }
 
   .trio {
