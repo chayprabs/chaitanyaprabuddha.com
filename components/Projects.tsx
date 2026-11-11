@@ -5,15 +5,32 @@ const projects = [
     name: "LocalYapper",
     href: "https://github.com/chayprabs/localyapper",
     linkType: "github",
-    description:
-      "Voice dictation that never leaves your machine. No cloud and no API calls, just local models that adapt to how you speak. An open source alternative to Wispr Flow and Superwhisper."
+    description: (
+      <>
+        <i>Press a key, speak, and your words land in whatever app you&rsquo;re
+        using.</i>{" "}
+        Speech recognition runs entirely on your own machine, in Rust, so no
+        audio is ever uploaded or even written to disk. It idles at about
+        30&nbsp;MB of RAM and runs on Windows, macOS, and Linux. A free, open
+        source alternative to Wispr Flow and Superwhisper.
+      </>
+    )
   },
   {
     name: "Newsroom",
     href: "https://github.com/chayprabs/newsroom-socialmediamanager",
     linkType: "github",
-    description:
-      "A pipeline that turns live X trends into Crustdata-style data posts. I built it after ContextCon. Grok finds the story, Claude scores and reframes it, Crustdata backs it with real data, and GPT-Image-2 renders the post. Every run has endpoint validation, prompt caching, usage logs, and saved artifacts."
+    description: (
+      <>
+        <i>I built this to show Crustdata how I&rsquo;d run their data posts.
+        It got me an internship offer from them.</i>{" "}
+        One click turns a live X trend into a finished chart post in their
+        style: Grok finds the story, Claude scores and reframes it,
+        Crustdata&rsquo;s API supplies the numbers, and GPT-Image-2 draws the
+        chart. Every query is checked against an audited list of Crustdata
+        endpoints before it runs, so the charts are built on real data.
+      </>
+    )
   }
 ];
 
