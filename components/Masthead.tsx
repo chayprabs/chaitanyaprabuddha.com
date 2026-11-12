@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const navLinks = [
@@ -13,11 +14,10 @@ const navLinks = [
 
 const spySections = ["projects", "research", "achievements"];
 
-type MastheadProps = {
-  current?: "home" | "blog";
-};
-
-export default function Masthead({ current }: MastheadProps) {
+export default function Masthead() {
+  const pathname = usePathname();
+  const current =
+    pathname === "/" ? "home" : pathname.startsWith("/blog") ? "blog" : undefined;
   const [active, setActive] = useState<string | undefined>(current);
   const [stuck, setStuck] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -61,6 +61,7 @@ export default function Masthead({ current }: MastheadProps) {
       setStuck(window.scrollY > 8);
 
       if (current !== "home") {
+        setActive(current);
         return;
       }
 

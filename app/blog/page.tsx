@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import Contact from "@/components/Contact";
-import Colophon from "@/components/Colophon";
-import Masthead from "@/components/Masthead";
-import PageTitle from "@/components/PageTitle";
-import Section from "@/components/Section";
 import { getAllPosts } from "@/lib/blog";
 
 function formatDate(date: string) {
@@ -50,44 +45,56 @@ export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
-    <div>
-      <Masthead current="blog" />
-      <main>
-        <PageTitle kicker="Blog">
-          I write when I <em>figure something out.</em>
-        </PageTitle>
+    <main>
+      <section className="section blog-index" aria-labelledby="blog-title">
+        <div className="container">
+          <h1 id="blog-title" className="section-label">
+            <span>
+              {posts.length > 0 ? `Blog \u2013 ${posts.length} posts` : "Blog"}
+            </span>
+          </h1>
 
-        <Section
-          id="writing"
-          title={
-            posts.length > 0 ? `Writing \u2013 ${posts.length} posts` : "Writing"
-          }
-        >
           {posts.length === 0 ? (
-            <p className="post-empty">
-              Nothing published yet. Posts will show up here.
-            </p>
-          ) : null}
-          <div className="post-list">
-            {posts.map((post) => (
-              <article key={post.slug}>
-                <Link href={`/blog/${post.slug}`} className="post-row">
-                  <time dateTime={post.date} className="post-date label">
-                    {formatDate(post.date)}
-                  </time>
-                  <div>
-                    <h2 className="post-title">{post.title}</h2>
-                    <p className="post-desc">{post.description}</p>
-                    <p className="post-time">{post.readTime}</p>
-                  </div>
+            <div className="notepad">
+              <p className="notepad-hand">Nothing published yet.</p>
+              <p className="notepad-text">
+                The first posts are still drafts. Until they&rsquo;re out,
+                everything I&rsquo;ve built is on the home page.
+              </p>
+              <div className="notepad-actions">
+                <Link href="/" className="btn btn-primary">
+                  See my work
                 </Link>
-              </article>
-            ))}
-          </div>
-        </Section>
-      </main>
-      <Colophon />
-      <Contact />
-    </div>
+                <a
+                  href="https://x.com/chayp05"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                >
+                  Follow on X {"\u2197"}
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="sheet post-list">
+              {posts.map((post) => (
+                <article key={post.slug}>
+                  <Link href={`/blog/${post.slug}`} className="post-row">
+                    <time dateTime={post.date} className="post-date label">
+                      {formatDate(post.date)}
+                    </time>
+                    <div>
+                      <h2 className="post-title">{post.title}</h2>
+                      <p className="post-desc">{post.description}</p>
+                      <p className="post-time">{post.readTime}</p>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }

@@ -3,9 +3,6 @@ import type { Metadata } from "next";
 import Achievements from "@/components/Achievements";
 import About from "@/components/About";
 import BuiltInSchool from "@/components/BuiltInSchool";
-import Contact from "@/components/Contact";
-import Colophon from "@/components/Colophon";
-import Masthead from "@/components/Masthead";
 import Now from "@/components/Now";
 import Projects from "@/components/Projects";
 import Research from "@/components/Research";
@@ -42,23 +39,18 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div id="top">
-      <Masthead current="home" />
-      <main>
-        <PageTitle>
-          I build products, <em>not just code.</em>
-        </PageTitle>
-        <About />
-        <Ventures />
-        <Projects />
-        <Research />
-        <Achievements />
-        <BuiltInSchool />
-        <Now />
-        <Signoff />
-      </main>
-      <Colophon />
-      <Contact />
-    </div>
+    <main>
+      <PageTitle>
+        I build products, <em>not just code.</em>
+      </PageTitle>
+      <About />
+      <Ventures />
+      <Projects />
+      <Research />
+      <Achievements />
+      <BuiltInSchool />
+      <Now />
+      <Signoff />
+    </main>
   );
 }

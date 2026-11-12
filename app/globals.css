@@ -55,6 +55,19 @@ body {
   line-height: 1.75;
   font-weight: 400;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* a new page eases in instead of snapping */
+main {
+  animation: pageIn 0.32s ease both;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+  }
 }
 
 ::selection {
@@ -1283,6 +1296,7 @@ p {
 }
 
 .colophon {
+  margin-top: auto;
   padding-bottom: 96px;
 }
 
@@ -1510,6 +1524,7 @@ p {
     scroll-behavior: auto;
   }
 
+  main,
   .contact-dot,
   .progress span,
   .record-vinyl {
@@ -1548,12 +1563,69 @@ p {
   box-shadow: inset 0 1px 0 #fff;
 }
 
-.post-empty {
-  padding: 22px 0;
-  font-family: var(--serif);
-  font-size: 16px;
-  font-style: italic;
-  color: var(--muted);
+.blog-index {
+  padding-top: 44px;
+}
+
+/* empty state: a page from a ruled notepad, taped to the desk */
+.notepad {
+  position: relative;
+  max-width: 540px;
+  margin: 34px auto 30px;
+  border: 1px solid var(--edge);
+  border-bottom-color: var(--edge-dark);
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(204, 79, 46, 0) 53px, rgba(204, 79, 46, 0.32) 53px 54px, rgba(204, 79, 46, 0) 54px),
+    repeating-linear-gradient(rgba(70, 95, 140, 0) 0 31px, rgba(70, 95, 140, 0.16) 31px 32px) 0 26px,
+    linear-gradient(#ffffff, var(--sheet));
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 2px rgba(38, 36, 31, 0.1),
+    0 18px 30px -18px rgba(38, 36, 31, 0.45);
+  padding: 58px 34px 40px 76px;
+  transform: rotate(-0.7deg);
+}
+
+.notepad::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 92px;
+  height: 24px;
+  transform: translateX(-50%) rotate(1.5deg);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 45%),
+    rgba(238, 217, 150, 0.78);
+  clip-path: polygon(
+    0 0, 100% 0,
+    97.5% 17%, 100% 33%, 97.5% 50%, 100% 67%, 97.5% 83%, 100% 100%,
+    0 100%,
+    2.5% 83%, 0 67%, 2.5% 50%, 0 33%, 2.5% 17%
+  );
+}
+
+.notepad-hand {
+  font-family: var(--font-caveat), cursive;
+  font-size: 38px;
+  line-height: 32px;
+  color: var(--ink);
+}
+
+.notepad-text {
+  max-width: 380px;
+  margin-top: 32px;
+  font-size: 15.5px;
+  line-height: 32px;
+  color: var(--text);
+}
+
+.notepad-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
 }
 
 .post-date {
@@ -2159,6 +2231,23 @@ p {
   .chess-rank,
   .chess-file {
     font-size: 8px;
+  }
+
+  .blog-index {
+    padding-top: 34px;
+  }
+
+  .notepad {
+    margin: 28px 2px 22px;
+    background:
+      linear-gradient(90deg, rgba(204, 79, 46, 0) 33px, rgba(204, 79, 46, 0.32) 33px 34px, rgba(204, 79, 46, 0) 34px),
+      repeating-linear-gradient(rgba(70, 95, 140, 0) 0 31px, rgba(70, 95, 140, 0.16) 31px 32px) 0 26px,
+      linear-gradient(#ffffff, var(--sheet));
+    padding: 58px 20px 34px 48px;
+  }
+
+  .notepad-hand {
+    font-size: 33px;
   }
 
   .post-row {

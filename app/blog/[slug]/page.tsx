@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import Colophon from "@/components/Colophon";
-import Contact from "@/components/Contact";
-import Masthead from "@/components/Masthead";
 import Section from "@/components/Section";
 import BlogTableOfContents from "@/components/BlogTableOfContents";
 import { getAdjacentPosts, getAllSlugs, getPostBySlug } from "@/lib/blog";
@@ -82,7 +79,6 @@ export default async function PostPage({ params }: BlogPostPageProps) {
 
   return (
     <div>
-      <Masthead />
       <main>
         <div className="container article-shell">
           <Link href="/blog" className="btn article-back">
@@ -140,8 +136,6 @@ export default async function PostPage({ params }: BlogPostPageProps) {
           </article>
         </Section>
       </main>
-      <Colophon />
-      <Contact />
     </div>
   );
 }

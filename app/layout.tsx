@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Inter } from "next/font/google";
 
+import Colophon from "@/components/Colophon";
+import Contact from "@/components/Contact";
+import Masthead from "@/components/Masthead";
+
 import "./globals.css";
 
 const SITE_URL = "https://www.chaitanyaprabuddha.com";
@@ -103,7 +107,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
       <body className="antialiased">
+        {/* These live in the layout so they persist between pages: the nav
+            tab can slide from Blog to Home instead of being rebuilt. */}
+        <Masthead />
         {children}
+        <Colophon />
+        <Contact />
       </body>
     </html>
   );
